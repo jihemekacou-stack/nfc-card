@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #f9fafb; /* light gray for main content */
+    --foreground: #09090b; /* near black text */
+    
+    --sidebar-bg: #121212; /* dark sidebar */
+    --sidebar-fg: #f4f4f5; /* light text on dark sidebar */
+    --sidebar-accent: #27272a; /* active item bg in sidebar */
+    
+    --border: #e4e4e7;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)] antialiased;
+  }
+}
