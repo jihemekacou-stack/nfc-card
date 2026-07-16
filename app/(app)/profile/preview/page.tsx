@@ -1,12 +1,10 @@
 "use client";
 
-import { useProfile } from "@/lib/contexts/ProfileContext";
 import { ArrowLeft, ExternalLink, Share2 } from "lucide-react";
 import Link from "next/link";
 import { ProfilePreview } from "@/components/profile/ProfilePreview";
 
 export default function ProfilePreviewPage() {
-  const { profile } = useProfile();
 
   return (
     <div className="max-w-3xl mx-auto px-4 md:px-8 pb-12 w-full pt-6">
