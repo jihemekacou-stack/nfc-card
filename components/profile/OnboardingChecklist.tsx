@@ -27,17 +27,7 @@ const steps = [
     statusLeftColor: "text-gray-400 dark:text-gray-500",
     statusRight: "Ajouter",
   },
-  {
-    id: 3,
-    title: "Portefeuille numérique",
-    description: "Ajoutez votre carte à Apple Wallet ou Google Wallet",
-    icon: Wallet,
-    color: "text-purple-500",
-    bg: "bg-purple-50 dark:bg-purple-500/20",
-    statusLeft: "Terminé",
-    statusLeftColor: "text-emerald-500",
-    statusRight: "Voir",
-  },
+
   {
     id: 4,
     title: "Collecter des contacts",
@@ -63,7 +53,7 @@ export function OnboardingChecklist() {
         <div className="flex items-center gap-3">
           <h2 className="font-bold text-gray-900 dark:text-white text-[15px]">Commencer</h2>
           <span className="rounded-full bg-blue-50 dark:bg-blue-500/20 px-2 py-0.5 text-[11px] font-semibold text-blue-600 dark:text-blue-400">
-            2/5 Terminé
+            2/4 Terminé
           </span>
         </div>
         <button 

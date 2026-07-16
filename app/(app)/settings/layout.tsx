@@ -11,7 +11,6 @@ const settingsNav = [
   { href: "/settings/domain", label: "Domaine", icon: Globe },
   { href: "/settings/marketing", label: "Marketing", icon: Megaphone },
   { href: "/settings/account", label: "Compte", icon: Settings },
-  { href: "/settings/billing", label: "Facturation", icon: CreditCard },
 ];
 
 export default function SettingsLayout({
@@ -22,13 +21,8 @@ export default function SettingsLayout({
   const pathname = usePathname();
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-      {/* Breadcrumb */}
-      <div className="mb-6 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-        <span className="font-medium text-gray-900 dark:text-gray-200">Tableau de bord</span>
-        <ChevronRight className="h-4 w-4" />
-        <span className="font-medium text-gray-900 dark:text-gray-200">Paramètres</span>
-      </div>
+    <div className="mx-auto w-full max-w-[1400px] px-4 py-8 sm:px-6 lg:px-8">
+
 
       <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>

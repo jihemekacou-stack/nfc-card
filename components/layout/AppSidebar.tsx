@@ -21,7 +21,6 @@ const navItems = [
   { href: "/profile", label: "Mon profil", icon: User },
   { href: "/contacts", label: "Contacts", icon: Users },
   { href: "/stats", label: "Statistiques", icon: BarChart2 },
-  { href: "/wallet", label: "Portefeuille", icon: CreditCard },
   { href: "/settings", label: "Paramètres", icon: Settings },
 ];
 
