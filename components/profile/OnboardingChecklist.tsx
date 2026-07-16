@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, User, PlusSquare, Wallet, Users, X, ChevronRight } from "lucide-react";
+import { ArrowRight, User, PlusSquare, Users, X, ChevronRight } from "lucide-react";
 
 const steps = [
   {

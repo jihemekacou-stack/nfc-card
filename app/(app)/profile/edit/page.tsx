@@ -1,7 +1,7 @@
 "use client";
 
 import { useProfile } from "@/lib/contexts/ProfileContext";
-import { ArrowLeft, Save, Plus, X, ChevronUp, ChevronDown, Check } from "lucide-react";
+import { ArrowLeft, Plus, X, ChevronUp, ChevronDown, Check } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { ProfilePreview } from "@/components/profile/ProfilePreview";
@@ -340,7 +340,7 @@ export default function EditProfilePage() {
             <div className="bg-white dark:bg-gray-900 rounded-[24px] p-6 shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Social media</h2>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 font-medium">
-                Ajoutez des étiquettes à vos liens personnels pour en faciliter l'accès aux visiteurs.
+                Ajoutez des étiquettes à vos liens personnels pour en faciliter l&apos;accès aux visiteurs.
               </p>
               
               <hr className="border-gray-200 dark:border-gray-800 mb-6" />

@@ -6,10 +6,7 @@ import Link from "next/link";
 import { ProfilePreview } from "@/components/profile/ProfilePreview";
 
 export default function ProfilePreviewPage() {
-  const { profile, contacts } = useProfile();
-  const displayName = profile.displayName || 'David Martine';
-  const jobTitle = profile.jobTitle || 'Business Development Manager';
-  const company = profile.company || 'Flexcard ci';
+  const { profile } = useProfile();
 
   return (
     <div className="max-w-3xl mx-auto px-4 md:px-8 pb-12 w-full pt-6">
