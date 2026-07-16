@@ -9,6 +9,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const userId = (session.user as any).id;
     if (!userId) {
        return NextResponse.json({ error: 'ID manquant dans la session' }, { status: 401 });

@@ -35,7 +35,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   const [contacts, setContacts] = useState<ContactItem[]>(defaultContacts);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [sections, setSections] = useState<any[]>([]);
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   useEffect(() => {
     if (status === "authenticated") {

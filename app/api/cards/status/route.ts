@@ -12,6 +12,7 @@ export async function GET() {
     }
 
     const profile = await prisma.profile.findUnique({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       where: { userId: (session.user as any).id },
       include: { cards: true }
     });

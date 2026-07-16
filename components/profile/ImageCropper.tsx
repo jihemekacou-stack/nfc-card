@@ -21,7 +21,7 @@ export function ImageCropper({ imageSrc, onCropComplete, onCancel, aspect = 1 }:
     setZoom(zoom);
   };
 
-  const onCropCompleteCallback = useCallback((croppedArea: unknown, croppedAreaPixels: unknown) => {
+  const onCropCompleteCallback = useCallback((croppedArea: unknown, croppedAreaPixels: { x: number; y: number; width: number; height: number }) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 

@@ -18,6 +18,7 @@ export async function POST(request: Request) {
 
     // 1. Find or create the user's profile
     let profile = await prisma.profile.findUnique({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       where: { userId: (session.user as any).id },
     });
 
@@ -30,6 +31,7 @@ export async function POST(request: Request) {
       // Create a default profile if it doesn't exist (e.g. for users created before the auto-create hook)
       profile = await prisma.profile.create({
         data: {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           userId: (session.user as any).id,
           slug: shortSlug,
           displayName: session.user.name || "Utilisateur Flexcard",

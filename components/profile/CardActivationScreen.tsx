@@ -32,8 +32,9 @@ export function CardActivationScreen() {
         // Succès : on rafraîchit la page, le layout serveur verra la carte et affichera le dashboard
         router.refresh();
       }
-    } catch (e) {
+    } catch (error) {
       setError("Erreur de connexion lors de l'activation.");
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -49,7 +50,7 @@ export function CardActivationScreen() {
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Activez votre Flexcard</h2>
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Pour accéder à votre tableau de bord, veuillez entrer le code à 6 chiffres inscrit sur l'emballage de votre carte NFC.
+            Pour accéder à votre tableau de bord, veuillez entrer le code à 6 chiffres inscrit sur l&apos;emballage de votre carte NFC.
           </p>
         </div>
 
@@ -78,7 +79,7 @@ export function CardActivationScreen() {
           </button>
 
           <div className="pt-6 border-t border-gray-100 dark:border-gray-800 text-center">
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">Vous n'avez pas de carte Flexcard ?</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">Vous n&apos;avez pas de carte Flexcard ?</p>
             <a
               href="/nos-cartes"
               className="inline-flex items-center gap-2 text-sm font-bold text-violet-600 hover:text-violet-700 transition-colors"

@@ -162,7 +162,7 @@ export function SectionModals({ activeModal, onClose, onAdd, initialData }: Sect
               {!selectedSocial ? (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {socialNetworks.map((social) => {
-                    const Icon = social.icon;
+                    const Icon = social.icon as any;
                     return (
                       <button 
                         key={social.id}

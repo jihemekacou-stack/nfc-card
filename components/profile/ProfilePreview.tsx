@@ -37,8 +37,8 @@ export function ProfilePreview({
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const profileUrl = typeof window !== 'undefined' ? `${window.location.origin}/${profile?.publicEmail?.split('@')[0] || 'jean-marc'}` : 'https://flx.id/jean-marc';
 
-  const emailContact = contacts.find(c => c.type === 'email');
-  const phoneContact = contacts.find(c => c.type === 'phone');
+  const emailContact = contacts.find((c: any) => c.type === 'email');
+
 
   const sessionEmail = session?.user?.email || profile.publicEmail || '';
   const displayContacts = [...contacts];
@@ -50,22 +50,22 @@ export function ProfilePreview({
       value: sessionEmail
     });
   } else {
-    displayContacts.forEach(c => {
+    displayContacts.forEach((c: any) => {
       if (c.type === 'email' && !c.value && sessionEmail) {
         c.value = sessionEmail;
       }
     });
   }
 
-  const finalEmailContact = displayContacts.find(c => c.type === 'email');
-  const finalPhoneContact = displayContacts.find(c => c.type === 'phone');
+  const finalEmailContact = displayContacts.find((c: any) => c.type === 'email');
+  const finalPhoneContact = displayContacts.find((c: any) => c.type === 'phone');
 
   // Compute section elements
-  const personalSite = sections?.find(s => s.type === 'link' && s.isPersonalSite);
+  const personalSite = sections?.find((s: any) => s.type === 'link' && s.isPersonalSite);
   
   // App Icons include social links and regular links
-  const appIcons = [];
-  sections?.forEach(s => {
+  const appIcons: any[] = [];
+  sections?.forEach((s: any) => {
     if (s.type === 'socials-group') {
       s.items?.forEach((item: any) => appIcons.push({ ...item, isSocial: true }));
     } else if (s.type === 'link' && !s.isPersonalSite) {
@@ -73,8 +73,8 @@ export function ProfilePreview({
     }
   });
 
-  const galleries = sections?.filter(s => s.type === 'gallery');
-  const videos = sections?.filter(s => s.type === 'video');
+  const galleries = sections?.filter((s: any) => s.type === 'gallery');
+  const videos = sections?.filter((s: any) => s.type === 'video');
 
   return (
     <div className={`w-full max-w-sm mx-auto min-h-full font-sans relative flex flex-col ${isDark ? 'bg-black' : 'bg-[#f4f6f8]'}`}>
