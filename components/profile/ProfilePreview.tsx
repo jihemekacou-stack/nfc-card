@@ -2,10 +2,13 @@
 "use client";
 
 import { useProfile } from "@/lib/contexts/ProfileContext";
+import { useSession } from "next-auth/react";
 import { Mail, Phone, Download, Globe, Image as ImageIcon, User, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { socialNetworks } from "./SectionModals";
+import { ShareModal } from "./ShareModal";
+import { downloadVCF } from "@/lib/utils/vcf";
 
 export function ProfilePreview({ 
   previewTheme = 'light',
@@ -21,16 +24,41 @@ export function ProfilePreview({
   customContacts?: any
 }) {
   const { profile: contextProfile, contacts: contextContacts, sections } = useProfile();
+  const { data: session } = useSession();
+  
   const profile = customProfile || contextProfile;
   const contacts = customContacts || contextContacts;
-  const displayName = profile.displayName || '';
+  const displayName = profile.displayName || session?.user?.name || '';
+  const avatar = profile.avatarUrl || session?.user?.image || '';
   const jobTitle = profile.jobTitle || '';
   const company = profile.company || '';
   const isDark = previewTheme === 'dark';
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const profileUrl = typeof window !== 'undefined' ? `${window.location.origin}/${profile?.publicEmail?.split('@')[0] || 'jean-marc'}` : 'https://flx.id/jean-marc';
 
   const emailContact = contacts.find(c => c.type === 'email');
   const phoneContact = contacts.find(c => c.type === 'phone');
+
+  const sessionEmail = session?.user?.email || profile.publicEmail || '';
+  const displayContacts = [...contacts];
+  if (!emailContact && sessionEmail) {
+    displayContacts.unshift({
+      id: -1,
+      type: 'email',
+      label: 'Email',
+      value: sessionEmail
+    });
+  } else {
+    displayContacts.forEach(c => {
+      if (c.type === 'email' && !c.value && sessionEmail) {
+        c.value = sessionEmail;
+      }
+    });
+  }
+
+  const finalEmailContact = displayContacts.find(c => c.type === 'email');
+  const finalPhoneContact = displayContacts.find(c => c.type === 'phone');
 
   // Compute section elements
   const personalSite = sections?.find(s => s.type === 'link' && s.isPersonalSite);
@@ -71,8 +99,8 @@ export function ProfilePreview({
         <div className="absolute -top-16 left-6 flex">
           <div className="relative">
             <div className={`h-[120px] w-[120px] rounded-full border-[4px] ${isDark ? 'border-[#1a1f36]' : 'border-white'} overflow-hidden shadow-sm bg-gray-200 dark:bg-gray-800 flex items-center justify-center`}>
-              {profile.avatarUrl ? (
-                <img src={profile.avatarUrl} alt={displayName} className="h-full w-full object-cover" />
+              {avatar ? (
+                <img src={avatar} alt={displayName} className="h-full w-full object-cover" />
               ) : (
                 <User className="h-12 w-12 text-gray-400" />
               )}
@@ -107,7 +135,10 @@ export function ProfilePreview({
 
         {/* Primary Actions */}
         <div className="flex items-center gap-3 mt-4">
-          <button className="flex-1 flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white h-[36px] px-4 rounded-[14px] font-semibold text-[15px] transition-colors">
+          <button 
+            onClick={() => setIsShareModalOpen(true)}
+            className="flex-1 flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white h-[36px] px-4 rounded-[14px] font-semibold text-[15px] transition-colors"
+          >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -115,33 +146,36 @@ export function ProfilePreview({
             </svg>
             Partager le Contact
           </button>
-          <button className="h-[36px] w-[36px] shrink-0 flex items-center justify-center border border-gray-200 rounded-[14px] hover:bg-gray-50 transition-colors">
+          <button 
+            onClick={() => downloadVCF(profile, displayContacts)}
+            className="h-[36px] w-[36px] shrink-0 flex items-center justify-center border border-gray-200 rounded-[14px] hover:bg-gray-50 transition-colors"
+          >
             <Download className="h-4 w-4 text-gray-700" />
           </button>
         </div>
 
         {/* Contact Info */}
-        {contacts.length > 0 && (
+        {displayContacts.length > 0 && (
           <div className="flex flex-col gap-4 mt-4">
-          {emailContact && (
+          {finalEmailContact && (
             <div className="flex items-start gap-3">
               <div className="mt-0.5">
                 <Mail className="h-5 w-5 text-gray-400" />
               </div>
               <div className="flex flex-col">
                 <span className="text-[13px] text-gray-400 font-medium">Email</span>
-                <span className={`text-[15px] font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{emailContact.value}</span>
+                <span className={`text-[15px] font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{finalEmailContact.value}</span>
               </div>
             </div>
           )}
-          {phoneContact && (
+          {finalPhoneContact && (
             <div className="flex items-start gap-3">
               <div className="mt-0.5">
                 <Phone className="h-5 w-5 text-gray-400" />
               </div>
               <div className="flex flex-col">
                 <span className="text-[13px] text-gray-400 font-medium">Mobile</span>
-                <span className={`text-[15px] font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>({phoneContact.countryCode}) {phoneContact.value}</span>
+                <span className={`text-[15px] font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>({finalPhoneContact.countryCode}) {finalPhoneContact.value}</span>
               </div>
             </div>
           )}
@@ -262,6 +296,12 @@ export function ProfilePreview({
           </div>
         </div>
       )}
+      
+      <ShareModal 
+        isOpen={isShareModalOpen} 
+        onClose={() => setIsShareModalOpen(false)} 
+        profileUrl={profileUrl} 
+      />
     </div>
   );
 }

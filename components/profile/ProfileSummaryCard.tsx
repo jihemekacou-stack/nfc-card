@@ -1,23 +1,46 @@
 "use client";
 
 import { useProfile } from "@/lib/contexts/ProfileContext";
+import { useSession } from "next-auth/react";
 import { Mail, Edit2, Phone } from "lucide-react";
 import Link from "next/link";
 
 export function ProfileSummaryCard() {
   const { profile, contacts } = useProfile();
+  const { data: session } = useSession();
   
-  const displayName = profile.displayName || '';
+  const displayName = profile.displayName || session?.user?.name || '';
+  const avatar = profile.avatarUrl || session?.user?.image || '';
   const title = profile.jobTitle || '';
   const company = profile.company || '';
+  const sessionEmail = session?.user?.email || profile.publicEmail || '';
+
+  const hasEmailContact = contacts.some(c => c.type === 'email');
+  const displayContacts = [...contacts];
+  if (!hasEmailContact && sessionEmail) {
+    displayContacts.unshift({
+      id: -1,
+      type: 'email',
+      label: 'Email',
+      value: sessionEmail,
+      bg: 'bg-blue-50 dark:bg-blue-500/10',
+      iconColor: 'text-blue-600 dark:text-blue-400'
+    });
+  } else {
+    displayContacts.forEach(c => {
+      if (c.type === 'email' && !c.value && sessionEmail) {
+        c.value = sessionEmail;
+      }
+    });
+  }
 
   return (
     <div className="relative w-full rounded-2xl bg-white dark:bg-gray-950 shadow-sm transition-colors border border-gray-200 dark:border-gray-800 flex flex-col p-6 pt-16 mt-12 mb-6">
       {/* Avatar */}
       <div className="absolute -top-14 left-6 h-[116px] w-[116px] rounded-full border-[4px] border-white dark:border-gray-950 bg-gray-200 dark:bg-gray-800 shadow-sm overflow-hidden z-10">
-        {profile.avatarUrl ? (
+        {avatar ? (
           /* eslint-disable-next-line @next/next/no-img-element */
-          <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
+          <img src={avatar} alt="Avatar" className="h-full w-full object-cover" />
         ) : (
           <div className="h-full w-full flex items-center justify-center bg-gray-200 dark:bg-gray-800">
             <svg className="h-12 w-12 text-white dark:text-gray-500" fill="currentColor" viewBox="0 0 24 24">
@@ -46,7 +69,8 @@ export function ProfileSummaryCard() {
       </div>
 
       <div className="space-y-4">
-        {contacts.map((c) => (
+        <hr className="border-gray-200 dark:border-gray-800 my-4" />
+        {displayContacts.map((c) => (
           <div key={c.id} className="flex items-center gap-4">
             <div className={`h-10 w-10 shrink-0 rounded-xl flex items-center justify-center ${c.bg} ${c.iconColor}`}>
               {c.type === 'email' ? <Mail className="h-5 w-5" /> : <Phone className="h-5 w-5" />}
@@ -55,7 +79,7 @@ export function ProfileSummaryCard() {
               <span className="text-[12px] font-medium text-gray-500 mb-0.5">
                 {c.label || (c.type === 'email' ? 'Professionnel' : 'Mobile')}
               </span>
-              <span className="text-[14px] font-bold text-gray-900 dark:text-white truncate">
+              <span className="text-[14px] font-medium text-gray-900 dark:text-white truncate">
                 {c.type === 'phone' ? `${c.countryCode || '+225'} ${c.value || ''}` : c.value || ''}
               </span>
             </div>

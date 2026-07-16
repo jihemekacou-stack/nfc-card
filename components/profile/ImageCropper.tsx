@@ -12,8 +12,7 @@ interface ImageCropperProps {
 export function ImageCropper({ imageSrc, onCropComplete, onCancel, aspect = 1 }: ImageCropperProps) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<unknown>(null);
-
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
   const onCropChange = (crop: { x: number; y: number }) => {
     setCrop(crop);
   };
@@ -28,6 +27,7 @@ export function ImageCropper({ imageSrc, onCropComplete, onCancel, aspect = 1 }:
 
   const handleSave = async () => {
     try {
+      if (!croppedAreaPixels) return;
       const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
       onCropComplete(croppedImage);
     } catch (e) {
