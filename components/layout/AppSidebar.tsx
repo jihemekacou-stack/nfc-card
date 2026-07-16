@@ -36,9 +36,8 @@ export function AppSidebar() {
     <>
       {/* Desktop Sidebar */}
       <aside className="fixed inset-y-0 left-0 z-50 hidden lg:flex w-[260px] flex-col bg-[#111111] text-gray-400 transition-all">
-        {/* Logo Area */}
         <div className="flex h-16 items-center justify-center px-6 border-b border-white/5">
-          <Link href="/settings" className="flex items-center">
+          <Link href="/profile" className="flex items-center">
             <Image src="/LogoB.png" alt="Flexcard" width={120} height={40} className="object-contain" priority />
           </Link>
         </div>

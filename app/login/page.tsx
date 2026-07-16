@@ -18,7 +18,7 @@ export default function LoginPage() {
     setIsLoading(true);
     // Simulate login delay
     setTimeout(() => {
-      router.push("/settings");
+      router.push("/profile");
     }, 800);
   };
 

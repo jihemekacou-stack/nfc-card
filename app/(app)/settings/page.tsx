@@ -11,6 +11,8 @@ export default function SettingsPage() {
   return (
     <div className="max-w-[1400px] mx-auto px-4 md:px-8 pb-12 w-full pt-4">
       <div className="flex flex-col gap-8">
+
+
       {/* Configuration Card */}
       <section>
         <div className="mb-4 flex items-center gap-2">

@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { useSession } from "next-auth/react";
 import { mockProfile } from "@/lib/data/mock";
 import { Profile } from "@/lib/types";
 
@@ -34,6 +35,22 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   const [contacts, setContacts] = useState<ContactItem[]>(defaultContacts);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [sections, setSections] = useState<any[]>([]);
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      fetch("/api/profile/me")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.profile) {
+            setProfile((prev) => ({ ...prev, ...data.profile }));
+            if (data.profile.contacts) setContacts(data.profile.contacts);
+            if (data.profile.sections) setSections(data.profile.sections);
+          }
+        })
+        .catch((err) => console.error("Failed to load profile", err));
+    }
+  }, [status]);
 
   return (
     <ProfileContext.Provider value={{ profile, setProfile, contacts, setContacts, sections, setSections }}>

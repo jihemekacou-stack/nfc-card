@@ -1,8 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -47,6 +45,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  profile       Profile?
 }
 
 model VerificationToken {
@@ -55,4 +54,72 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Profile {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  organizationId      String?
+  slug                String   @unique
+  displayName         String
+  jobTitle            String?
+  company             String?
+  bio                 String?  @db.Text
+  avatarUrl           String?
+  coverUrl            String?
+  logoUrl             String?
+  linkedInUrl         String?
+  whatsAppCountryCode String?
+  whatsAppNumber      String?
+  publicEmail         String?
+  publicPhone         String?
+  plan                String   @default("free") // "free" | "pro" | "business"
+  visibility          String   @default("public") // "public" | "unlisted" | "private"
+  isPrimary           Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  user                User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sections            ProfileSection[]
+  contacts            Contact[]
+  cards               PhysicalCard[]
+}
+
+model ProfileSection {
+  id        String   @id @default(cuid())
+  profileId String
+  type      String   // 'links' | 'socials' | 'text' | 'gallery' | 'video' | 'calendar'
+  title     String
+  content   Json
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model Contact {
+  id             String   @id @default(cuid())
+  ownerProfileId String
+  firstName      String
+  lastName       String
+  email          String?
+  phone          String?
+  company        String?
+  jobTitle       String?
+  source         String   @default("manual") // 'scan' | 'manual' | 'exchange' | 'import'
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  ownerProfile   Profile  @relation(fields: [ownerProfileId], references: [id], onDelete: Cascade)
+}
+
+model PhysicalCard {
+  id        String   @id @default(cuid())
+  code      String   @unique // Code à 6 chiffres
+  profileId String?
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

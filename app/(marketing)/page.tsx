@@ -7,19 +7,14 @@ export default function Home() {
     <div className="flex flex-col items-center">
       
       {/* Hero Section */}
-      <section className="w-full max-w-7xl px-6 py-20 text-center flex flex-col items-center">
-        <h1 className="text-[3.5rem] md:text-[5rem] font-bold text-gray-900 leading-[1.1] tracking-tight mb-8">
-          Bienvenue <br />
-          <span className="text-3xl md:text-5xl font-medium tracking-normal text-gray-600">dans l&apos;univers</span> <br />
-          sans contact et <br />
-          Flexx
-        </h1>
-        {/* Placeholder for Hand holding phone */}
-        <div className="relative mt-8 h-[500px] w-full max-w-lg rounded-3xl bg-gray-100 overflow-hidden shadow-2xl border border-gray-200">
-          <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-            [Image: Main tenant un téléphone]
-          </div>
-        </div>
+      <section className="w-full aspect-video relative">
+        <Image 
+          src="/Landing page.jpg" 
+          alt="Landing page" 
+          fill
+          className="object-cover" 
+          priority 
+        />
       </section>
 
       {/* Features Section */}
