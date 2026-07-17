@@ -25,6 +25,8 @@ export interface Profile {
   isPrimary: boolean;
   createdAt: string;
   updatedAt: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  cards?: any[];
 }
 
 export interface ProfileSection {

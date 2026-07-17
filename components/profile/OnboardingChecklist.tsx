@@ -101,7 +101,7 @@ export function OnboardingChecklist() {
             </div>
             <div>
               <h3 className="mb-1 font-bold text-gray-900 dark:text-white text-[13px]">Ajouter du contenu</h3>
-              <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-snug">Ajoutez des liens, des réseaux sociaux et d'autres contenus</p>
+              <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-snug">Ajoutez des liens, des réseaux sociaux et d&apos;autres contenus</p>
             </div>
           </div>
           <div className="mt-6 flex items-center justify-between">
