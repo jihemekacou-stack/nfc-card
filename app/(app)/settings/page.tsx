@@ -1,12 +1,17 @@
 "use client";
 
 import { User, Zap, Lock, Eye, MonitorSmartphone } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function SettingsPage() {
   const [isPublic, setIsPublic] = useState(true);
   const [autoOpenForm, setAutoOpenForm] = useState(false);
   const [hideBrand, setHideBrand] = useState(false);
+  const [baseUrl, setBaseUrl] = useState('flx.id');
+
+  useEffect(() => {
+    setBaseUrl(window.location.host.replace('www.', ''));
+  }, []);
 
   return (
     <div className="max-w-[1400px] mx-auto px-4 md:px-8 pb-12 w-full pt-4">
@@ -28,7 +33,9 @@ export default function SettingsPage() {
               <p className="text-xs text-gray-500 dark:text-gray-400">Votre lien personnalisé pour partager votre carte.</p>
             </div>
             <div className="flex-1 flex items-center shadow-sm rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 transition-colors focus-within:border-violet-500 focus-within:ring-1 focus-within:ring-violet-500">
-              <span className="bg-gray-50 dark:bg-gray-800 px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 border-r border-gray-200 dark:border-gray-700">flx.id/</span>
+              <span className="bg-gray-50 dark:bg-gray-800 px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 border-r border-gray-200 dark:border-gray-700">
+                {baseUrl}/
+              </span>
               <input type="text" defaultValue="jean-marc" className="w-full bg-white dark:bg-gray-950 px-4 py-3 text-sm text-gray-900 dark:text-white focus:outline-none" />
             </div>
           </div>

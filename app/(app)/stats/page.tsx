@@ -1,8 +1,29 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Users, Eye, MousePointerClick, Download, Search, Download as DownloadIcon } from "lucide-react";
 
 export default function StatsPage() {
+  const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/stats')
+      .then(res => res.json())
+      .then(data => {
+        setStats(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load stats:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  const metrics = stats?.metrics || { views: 0, contacts: 0, clicks: 0, downloads: 0 };
+  const sources = stats?.sources || {};
+  const totalSources = Object.values(sources).reduce((a: any, b: any) => a + b, 0) || 1; // avoid division by zero
+  const events = stats?.events || [];
   return (
     <div className="mx-auto w-full max-w-[1400px] px-4 py-8 sm:px-6 lg:px-8 flex flex-col gap-8">
       
@@ -28,10 +49,10 @@ export default function StatsPage() {
         {/* Left Column: Vertical KPIs */}
         <div className="lg:col-span-1 flex flex-col gap-4">
           {[
-            { label: "Vues du profil", value: "0", icon: Eye, color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-500/20" },
-            { label: "Nouveaux contacts", value: "0", icon: Users, color: "text-emerald-500", bg: "bg-emerald-50 dark:bg-emerald-500/20" },
-            { label: "Clics sur les liens", value: "0", icon: MousePointerClick, color: "text-purple-500", bg: "bg-purple-50 dark:bg-purple-500/20" },
-            { label: "Téléchargements (vCard)", value: "0", icon: Download, color: "text-orange-500", bg: "bg-orange-50 dark:bg-orange-500/20" }
+            { label: "Vues du profil", value: metrics.views.toString(), icon: Eye, color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-500/20" },
+            { label: "Nouveaux contacts", value: metrics.contacts.toString(), icon: Users, color: "text-emerald-500", bg: "bg-emerald-50 dark:bg-emerald-500/20" },
+            { label: "Clics sur les liens", value: metrics.clicks.toString(), icon: MousePointerClick, color: "text-purple-500", bg: "bg-purple-50 dark:bg-purple-500/20" },
+            { label: "Téléchargements (vCard)", value: metrics.downloads.toString(), icon: Download, color: "text-orange-500", bg: "bg-orange-50 dark:bg-orange-500/20" }
           ].map((stat, i) => (
             <div key={i} className="flex-1 rounded-3xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-sm transition-colors flex items-center justify-between group">
               <div>
@@ -138,7 +159,7 @@ export default function StatsPage() {
                 <circle cx="18" cy="18" r="16" fill="transparent" stroke="currentColor" strokeWidth="3" className="text-gray-100 dark:text-gray-800" strokeDasharray="100 100" />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-3xl font-extrabold text-gray-900 dark:text-white">0</span>
+                <span className="text-3xl font-extrabold text-gray-900 dark:text-white">{metrics.views}</span>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Vues Totales</span>
               </div>
             </div>
@@ -150,8 +171,8 @@ export default function StatsPage() {
                   <span className="text-[13px] font-bold text-gray-700 dark:text-gray-300">Technologie NFC (Carte)</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="font-extrabold text-gray-900 dark:text-white">0</span>
-                  <span className="text-[12px] font-medium text-gray-400 w-8 text-right">0%</span>
+                  <span className="font-extrabold text-gray-900 dark:text-white">{sources.nfc || 0}</span>
+                  <span className="text-[12px] font-medium text-gray-400 w-8 text-right">{Math.round(((sources.nfc || 0) / (totalSources as number)) * 100)}%</span>
                 </div>
               </div>
               <div className="flex items-center justify-between text-sm">
@@ -160,8 +181,8 @@ export default function StatsPage() {
                   <span className="text-[13px] font-bold text-gray-700 dark:text-gray-300">Scan QR Code</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="font-extrabold text-gray-900 dark:text-white">0</span>
-                  <span className="text-[12px] font-medium text-gray-400 w-8 text-right">0%</span>
+                  <span className="font-extrabold text-gray-900 dark:text-white">{sources.qr || 0}</span>
+                  <span className="text-[12px] font-medium text-gray-400 w-8 text-right">{Math.round(((sources.qr || 0) / (totalSources as number)) * 100)}%</span>
                 </div>
               </div>
               <div className="flex items-center justify-between text-sm">
@@ -170,8 +191,8 @@ export default function StatsPage() {
                   <span className="text-[13px] font-bold text-gray-700 dark:text-gray-300">Lien Direct (URL)</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="font-extrabold text-gray-900 dark:text-white">0</span>
-                  <span className="text-[12px] font-medium text-gray-400 w-8 text-right">0%</span>
+                  <span className="font-extrabold text-gray-900 dark:text-white">{sources.direct || 0}</span>
+                  <span className="text-[12px] font-medium text-gray-400 w-8 text-right">{Math.round(((sources.direct || 0) / (totalSources as number)) * 100)}%</span>
                 </div>
               </div>
               <div className="flex items-center justify-between text-sm">
@@ -180,8 +201,8 @@ export default function StatsPage() {
                   <span className="text-[13px] font-bold text-gray-700 dark:text-gray-300">Wallet (Apple/Google)</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="font-extrabold text-gray-900 dark:text-white">0</span>
-                  <span className="text-[12px] font-medium text-gray-400 w-8 text-right">0%</span>
+                  <span className="font-extrabold text-gray-900 dark:text-white">{sources.wallet || 0}</span>
+                  <span className="text-[12px] font-medium text-gray-400 w-8 text-right">{Math.round(((sources.wallet || 0) / (totalSources as number)) * 100)}%</span>
                 </div>
               </div>
             </div>
@@ -221,17 +242,27 @@ export default function StatsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-              <tr>
-                <td colSpan={3} className="px-8 py-16 text-center">
-                  <div className="flex flex-col items-center justify-center gap-2">
-                    <div className="h-12 w-12 rounded-full bg-gray-50 dark:bg-gray-800 flex items-center justify-center mb-2">
-                      <Search className="h-5 w-5 text-gray-400" />
+              {events.length === 0 ? (
+                <tr>
+                  <td colSpan={3} className="px-8 py-16 text-center">
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <div className="h-12 w-12 rounded-full bg-gray-50 dark:bg-gray-800 flex items-center justify-center mb-2">
+                        <Search className="h-5 w-5 text-gray-400" />
+                      </div>
+                      <span className="text-sm font-bold text-gray-900 dark:text-gray-200">Aucune donnée disponible</span>
+                      <span className="text-xs text-gray-500">Les activités récentes s&apos;afficheront ici.</span>
                     </div>
-                    <span className="text-sm font-bold text-gray-900 dark:text-gray-200">Aucune donnée disponible</span>
-                    <span className="text-xs text-gray-500">Les activités récentes s&apos;afficheront ici.</span>
-                  </div>
-                </td>
-              </tr>
+                  </td>
+                </tr>
+              ) : (
+                events.map((event: any) => (
+                  <tr key={event.id}>
+                    <td className="px-8 py-4 font-medium text-gray-900 dark:text-white">{event.type}</td>
+                    <td className="px-8 py-4 text-gray-500">{new Date(event.createdAt).toLocaleString('fr-FR')}</td>
+                    <td className="px-8 py-4 text-right text-gray-500">{JSON.stringify(event.metadata)}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

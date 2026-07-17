@@ -1,7 +1,7 @@
 "use client";
 
 import { Eye, Share, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ShareModal } from "./ShareModal";
 import { useProfile } from "@/lib/contexts/ProfileContext";
@@ -11,9 +11,15 @@ export function ProfileHeader() {
   const { profile } = useProfile();
 
   const cardCode = profile?.cards?.[0]?.code;
+  const [baseUrl, setBaseUrl] = useState('');
+
+  useEffect(() => {
+    setBaseUrl(window.location.origin);
+  }, []);
+
   const profileUrl = cardCode 
-    ? `https://flx.id/${profile?.slug || profile?.id}/${cardCode}`
-    : `https://flx.id/${profile?.slug || profile?.id || 'jihemekacou'}`;
+    ? `${baseUrl || 'https://flx.id'}/${profile?.slug || profile?.id}/${cardCode}`
+    : `${baseUrl || 'https://flx.id'}/${profile?.slug || profile?.id || 'jihemekacou'}`;
 
   return (
     <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 py-6 md:py-8">

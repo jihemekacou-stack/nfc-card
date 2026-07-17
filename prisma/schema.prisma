@@ -84,6 +84,7 @@ model Profile {
   sections            ProfileSection[]
   contacts            Contact[]
   cards               PhysicalCard[]
+  analyticsEvents     AnalyticsEvent[]
 }
 
 model ProfileSection {
@@ -123,4 +124,15 @@ model PhysicalCard {
   profile   Profile? @relation(fields: [profileId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  profileId String
+  type      String   // 'VIEW', 'LINK_CLICK', 'VCARD_DOWNLOAD', 'CONTACT_ADDED'
+  source    String?  // 'nfc', 'qr', 'direct', 'wallet'
+  metadata  Json?    
+  createdAt DateTime @default(now())
+
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
 }

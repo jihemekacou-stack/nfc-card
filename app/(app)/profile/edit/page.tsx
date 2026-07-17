@@ -4,7 +4,7 @@
 import { useProfile } from "@/lib/contexts/ProfileContext";
 import { ArrowLeft, Plus, X, ChevronUp, ChevronDown, Check } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ProfilePreview } from "@/components/profile/ProfilePreview";
 import { ImageCropper } from "@/components/profile/ImageCropper";
 
@@ -27,6 +27,12 @@ export default function EditProfilePage() {
   
   // Crop state
   const [cropData, setCropData] = useState<{ src: string, key: 'avatarUrl' | 'coverUrl' | 'logoUrl', aspect: number } | null>(null);
+
+  const [baseUrl, setBaseUrl] = useState('flx.id');
+
+  useEffect(() => {
+    setBaseUrl(window.location.host.replace('www.', ''));
+  }, []);
 
   const handleProfileChange = (key: string, value: string) => {
     setLocalProfile({ ...profile, [key]: value });
@@ -215,7 +221,7 @@ export default function EditProfilePage() {
                   <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 block mb-2">URL personnalisée</label>
                   <div className="flex rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
                     <div className="bg-gray-100 dark:bg-gray-800 px-3 py-3 text-sm text-gray-500 dark:text-gray-400 border-r border-gray-200 dark:border-gray-700 flex items-center justify-center font-medium">
-                      flx.id/
+                      {baseUrl}/
                     </div>
                     <input 
                       type="text" 

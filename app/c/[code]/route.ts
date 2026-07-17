@@ -29,7 +29,7 @@ export async function GET(
     }
 
     // Redirect to the profile URL (using the slug)
-    return NextResponse.redirect(new URL(`/${card.profile.slug}`, request.url));
+    return NextResponse.redirect(new URL(`/${card.profile.slug}?source=nfc`, request.url));
   } catch (error) {
     console.error('Erreur lors de la redirection de la carte:', error);
     return new NextResponse('Erreur serveur', { status: 500 });

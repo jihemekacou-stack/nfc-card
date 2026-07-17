@@ -5,7 +5,7 @@ import { useProfile } from "@/lib/contexts/ProfileContext";
 import { useSession } from "next-auth/react";
 import { Mail, Phone, Download, Globe, Image as ImageIcon, User, X } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { socialNetworks } from "./SectionModals";
 import { ShareModal } from "./ShareModal";
 import { downloadVCF } from "@/lib/utils/vcf";
@@ -15,13 +15,17 @@ export function ProfilePreview({
   showLinkedIn = true,
   showWhatsApp = true,
   customProfile,
-  customContacts
+  customContacts,
+  isPublicView = false,
+  source = 'direct'
 }: { 
   previewTheme?: 'light' | 'dark',
   showLinkedIn?: boolean,
   showWhatsApp?: boolean,
   customProfile?: any,
-  customContacts?: any
+  customContacts?: any,
+  isPublicView?: boolean,
+  source?: string
 }) {
   const { profile: contextProfile, contacts: contextContacts, sections } = useProfile();
   const { data: session } = useSession();
@@ -36,9 +40,48 @@ export function ProfilePreview({
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const cardCode = profile?.cards?.[0]?.code;
+  const [baseUrl, setBaseUrl] = useState('');
+
+  useEffect(() => {
+    setBaseUrl(window.location.origin);
+  }, []);
+
   const profileUrl = cardCode 
-    ? `https://flx.id/${profile?.slug || profile?.id}/${cardCode}`
-    : `https://flx.id/${profile?.slug || profile?.id || 'jean-marc'}`;
+    ? `${baseUrl || 'https://flx.id'}/${profile?.slug || profile?.id}/${cardCode}`
+    : `${baseUrl || 'https://flx.id'}/${profile?.slug || profile?.id || 'jean-marc'}`;
+
+  // Analytics tracking
+  const hasTrackedView = useRef(false);
+
+  const trackEvent = async (type: string, metadata: any = {}) => {
+    if (!isPublicView || !profile?.id) return;
+    try {
+      await fetch('/api/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          profileId: profile.id,
+          type,
+          source,
+          metadata
+        })
+      });
+    } catch (error) {
+      console.error('Failed to track event:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (isPublicView && profile?.id && !hasTrackedView.current) {
+      hasTrackedView.current = true;
+      trackEvent('VIEW');
+    }
+  }, [isPublicView, profile?.id, source]);
+
+  const handleVCardDownload = () => {
+    trackEvent('VCARD_DOWNLOAD');
+    downloadVCF(profile, displayContacts);
+  };
 
   const emailContact = contacts.find((c: any) => c.type === 'email');
 
@@ -150,7 +193,7 @@ export function ProfilePreview({
             Partager le Contact
           </button>
           <button 
-            onClick={() => downloadVCF(profile, displayContacts)}
+            onClick={handleVCardDownload}
             className="h-[36px] w-[36px] shrink-0 flex items-center justify-center border border-gray-200 rounded-[14px] hover:bg-gray-50 transition-colors"
           >
             <Download className="h-4 w-4 text-gray-700" />
@@ -189,25 +232,43 @@ export function ProfilePreview({
         {(showLinkedIn || showWhatsApp) && (
           <div className="flex items-center gap-3 mt-4">
             {showLinkedIn && (
-              <button className="flex-1 flex items-center justify-center gap-2 border border-blue-100 bg-blue-50/50 h-[36px] rounded-[14px] hover:bg-blue-50 transition-colors">
+              <a 
+                href={profile.linkedInUrl || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent('LINK_CLICK', { network: 'LinkedIn' })}
+                className="flex-1 flex items-center justify-center gap-2 border border-blue-100 bg-blue-50/50 h-[36px] rounded-[14px] hover:bg-blue-50 transition-colors"
+              >
                 <div className="h-5 w-5 rounded-full bg-[#0077B5] flex items-center justify-center text-white font-semibold text-[10px]">in</div>
                 <span className="text-[#0077B5] font-semibold text-[14px]">LinkedIn</span>
-              </button>
+              </a>
             )}
             {showWhatsApp && (
-              <button className="flex-1 flex items-center justify-center gap-2 border border-green-100 bg-green-50/50 h-[36px] rounded-[14px] hover:bg-green-50 transition-colors">
+              <a 
+                href={`https://wa.me/${profile.whatsAppCountryCode?.replace('+','')}${profile.whatsAppNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent('LINK_CLICK', { network: 'WhatsApp' })}
+                className="flex-1 flex items-center justify-center gap-2 border border-green-100 bg-green-50/50 h-[36px] rounded-[14px] hover:bg-green-50 transition-colors"
+              >
                 <div className="h-5 w-5 rounded-full bg-[#25D366] flex items-center justify-center text-white">
                   <Phone className="h-3 w-3 fill-current" />
                 </div>
                 <span className="text-[#25D366] font-semibold text-[14px]">WhatsApp</span>
-              </button>
+              </a>
             )}
           </div>
         )}
 
         {/* Website Button */}
         {personalSite && (
-          <a href={personalSite.url} target="_blank" rel="noopener noreferrer" className={`w-full flex items-center justify-center gap-2 border ${isDark ? 'border-gray-800 hover:bg-gray-800' : 'border-gray-200 hover:bg-gray-50'} h-[36px] rounded-[14px] mt-4 transition-colors shadow-sm`}>
+          <a 
+            href={personalSite.url} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            onClick={() => trackEvent('LINK_CLICK', { url: personalSite.url, title: personalSite.title })}
+            className={`w-full flex items-center justify-center gap-2 border ${isDark ? 'border-gray-800 hover:bg-gray-800' : 'border-gray-200 hover:bg-gray-50'} h-[36px] rounded-[14px] mt-4 transition-colors shadow-sm`}
+          >
             <Globe className="h-4 w-4" />
             <span className="font-semibold text-[15px]">{personalSite.title || 'Notre site'}</span>
           </a>
@@ -226,7 +287,14 @@ export function ProfilePreview({
                 const Icon = network?.icon || Globe;
                 
                 return (
-                  <a key={item.id} href={item.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white dark:bg-[#1a1f36] border border-gray-100 dark:border-gray-800 rounded-2xl py-[7px] px-3 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                  <a 
+                    key={item.id} 
+                    href={item.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    onClick={() => trackEvent('LINK_CLICK', { url: item.url, title: item.title })}
+                    className="flex items-center gap-3 bg-white dark:bg-[#1a1f36] border border-gray-100 dark:border-gray-800 rounded-2xl py-[7px] px-3 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+                  >
                     <div className={`h-10 w-10 shrink-0 rounded-full flex items-center justify-center overflow-hidden ${network?.color || 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'}`}>
                       {network?.imageSrc ? (
                         <Image src={network.imageSrc} alt={network.name} width={40} height={40} className="w-full h-full object-cover" />
