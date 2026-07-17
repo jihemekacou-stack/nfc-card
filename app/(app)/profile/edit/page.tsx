@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useProfile } from "@/lib/contexts/ProfileContext";
