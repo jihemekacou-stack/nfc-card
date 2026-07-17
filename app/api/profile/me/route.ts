@@ -21,6 +21,7 @@ export async function GET() {
       include: {
         sections: true,
         contacts: true,
+        cards: true,
         user: {
           select: { email: true }
         }

@@ -35,7 +35,10 @@ export function ProfilePreview({
   const isDark = previewTheme === 'dark';
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const profileUrl = `https://flx.id/${profile?.slug || profile?.id || 'jean-marc'}`;
+  const cardCode = profile?.cards?.[0]?.code;
+  const profileUrl = cardCode 
+    ? `https://flx.id/${profile?.slug || profile?.id}/${cardCode}`
+    : `https://flx.id/${profile?.slug || profile?.id || 'jean-marc'}`;
 
   const emailContact = contacts.find((c: any) => c.type === 'email');
 

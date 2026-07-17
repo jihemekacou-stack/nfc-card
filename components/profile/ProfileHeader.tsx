@@ -10,7 +10,10 @@ export function ProfileHeader() {
   const [showShareModal, setShowShareModal] = useState(false);
   const { profile } = useProfile();
 
-  const profileUrl = `https://flx.id/${profile?.slug || profile?.id || 'jihemekacou'}`;
+  const cardCode = profile?.cards?.[0]?.code;
+  const profileUrl = cardCode 
+    ? `https://flx.id/${profile?.slug || profile?.id}/${cardCode}`
+    : `https://flx.id/${profile?.slug || profile?.id || 'jihemekacou'}`;
 
   return (
     <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 py-6 md:py-8">
