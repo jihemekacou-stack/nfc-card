@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+
 import { useSession, signOut } from "next-auth/react";
 import { useProfile } from "@/lib/contexts/ProfileContext";
 import {
@@ -29,7 +29,6 @@ export function AppSidebar() {
   const pathname = usePathname();
   const { profile } = useProfile();
   const { data: session } = useSession();
-  const [showLogout, setShowLogout] = useState(false);
 
   return (
     <>
@@ -84,31 +83,27 @@ export function AppSidebar() {
 
         {/* Bottom Actions */}
         <div className="border-t border-white/5 p-4 space-y-1">
-          <Link
-            href="/support"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-gray-400 hover:bg-white/5 hover:text-white transition-colors"
+          <button
+            onClick={() => {
+              // TODO: Integrate JELIA assistant script/modal opening here
+              alert("L'assistant JELIA va s'ouvrir ici.");
+            }}
+            className="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-gray-400 hover:bg-white/5 hover:text-white transition-colors"
           >
             <HelpCircle className="h-5 w-5" />
             Assistance
-          </Link>
-          {/* Logout popup */}
-          {showLogout && (
-            <div className="mt-2 mb-2 px-1">
-              <button
-                onClick={() => signOut({ callbackUrl: '/' })}
-                className="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-red-400 hover:bg-white/5 transition-colors"
-              >
-                <LogOut className="h-4 w-4" />
-                Déconnexion
-              </button>
-            </div>
-          )}
+          </button>
+          
+          <button
+            onClick={() => signOut({ callbackUrl: '/' })}
+            className="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-red-400 hover:bg-white/5 transition-colors"
+          >
+            <LogOut className="h-4 w-4" />
+            Déconnexion
+          </button>
 
           {/* User Snippet */}
-          <div 
-            className="mt-2 flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
-            onClick={() => setShowLogout(!showLogout)}
-          >
+          <div className="mt-2 flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/5 transition-colors">
             <div className="flex items-center gap-3 overflow-hidden">
               <div className="h-8 w-8 rounded-full bg-gray-800 flex-shrink-0 flex items-center justify-center text-xs font-bold text-white border border-gray-700 overflow-hidden">
                 {session?.user?.image ? (

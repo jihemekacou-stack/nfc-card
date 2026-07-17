@@ -14,7 +14,6 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showConsentModal, setShowConsentModal] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -147,7 +146,7 @@ export default function RegisterPage() {
 
             <button 
               type="button"
-              onClick={() => setShowConsentModal(true)}
+              onClick={() => signIn("google", { callbackUrl: "/profile" })}
               className="flex w-full items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white px-4 py-3.5 text-sm font-semibold text-gray-700 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] transition-all hover:bg-gray-50 hover:shadow-[0_8px_16px_-4px_rgba(6,81,237,0.2)] focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2"
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -167,33 +166,6 @@ export default function RegisterPage() {
           </p>
         </div>
       </div>
-
-      {showConsentModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div className="p-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Conditions d&apos;utilisation</h3>
-              <p className="text-sm text-gray-600 mb-6 leading-relaxed">
-                En continuant avec Google, vous acceptez nos conditions générales d&apos;utilisation et notre politique de confidentialité. Nous utiliserons vos informations pour créer et gérer votre profil.
-              </p>
-              <div className="flex flex-col gap-3">
-                <button
-                  onClick={() => signIn("google", { callbackUrl: "/profile" })}
-                  className="w-full rounded-xl bg-violet-600 py-3 text-sm font-bold text-white transition-colors hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2"
-                >
-                  Accepter et continuer avec Google
-                </button>
-                <button
-                  onClick={() => setShowConsentModal(false)}
-                  className="w-full rounded-xl border border-gray-200 bg-white py-3 text-sm font-bold text-gray-700 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200"
-                >
-                  Annuler
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
