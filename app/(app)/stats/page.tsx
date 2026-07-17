@@ -1,6 +1,6 @@
 "use client";
 
-import { Zap, Eye, Users, MousePointerClick, Download, Search, Download as DownloadIcon } from "lucide-react";
+import { Users, Eye, MousePointerClick, Download, Search, Download as DownloadIcon } from "lucide-react";
 
 export default function StatsPage() {
   return (
@@ -21,17 +21,6 @@ export default function StatsPage() {
         </div>
       </div>
 
-      {/* Premium Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-3xl bg-gradient-to-r from-yellow-50 to-yellow-100/50 dark:from-yellow-900/20 dark:to-yellow-900/5 border border-yellow-200/50 dark:border-yellow-900/30 p-6 shadow-sm transition-colors">
-        <div>
-          <h3 className="text-base font-bold text-gray-900 dark:text-gray-200">Débloquez l&apos;historique complet</h3>
-          <p className="text-[13px] text-gray-600 dark:text-gray-400 mt-1">Passez à la version Pro pour obtenir des analyses avancées et un historique illimité.</p>
-        </div>
-        <button className="flex shrink-0 items-center gap-2 rounded-full bg-yellow-400 px-6 py-2.5 text-sm font-bold text-yellow-950 shadow-md shadow-yellow-400/20 transition-transform hover:scale-105 active:scale-95">
-          <Zap className="h-4 w-4 fill-yellow-950 text-yellow-950" />
-          Passer en Pro
-        </button>
-      </div>
 
       {/* Main Grid: Asymmetrical Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">

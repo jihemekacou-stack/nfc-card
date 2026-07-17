@@ -19,13 +19,16 @@ export function MarketingHeader() {
         </nav>
 
         {/* Actions */}
-        <div className="flex items-center">
+        <div className="flex items-center gap-3">
           <Link 
             href="/login" 
-            className="rounded-full bg-violet-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-violet-700"
+            className="rounded-full px-5 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:text-violet-600 hover:bg-gray-50"
           >
             Se connecter
           </Link>
+          <Link href="/register" className="bg-violet-600 text-white hover:bg-violet-700 transition-colors px-5 py-2.5 rounded-full font-semibold text-sm">
+          S&apos;inscrire
+        </Link>
         </div>
       </div>
     </header>

@@ -41,10 +41,8 @@ export function CardActivationScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-900 w-full max-w-md rounded-3xl shadow-xl p-8 border border-gray-100 dark:border-gray-800 animate-in fade-in zoom-in duration-300">
-        
-        <div className="flex flex-col items-center text-center mb-8">
+    <div className="bg-white dark:bg-gray-900 w-full max-w-md rounded-3xl shadow-2xl p-8 border border-gray-100 dark:border-gray-800 animate-in fade-in zoom-in duration-300 relative">
+      <div className="flex flex-col items-center text-center mb-8">
           <div className="h-16 w-16 bg-violet-100 dark:bg-violet-900/30 rounded-2xl flex items-center justify-center mb-6">
             <MonitorSmartphone className="h-8 w-8 text-violet-600 dark:text-violet-400" />
           </div>
@@ -90,6 +88,5 @@ export function CardActivationScreen() {
         </div>
 
       </div>
-    </div>
   );
 }

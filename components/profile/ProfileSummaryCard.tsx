@@ -13,7 +13,7 @@ export function ProfileSummaryCard() {
   const avatar = profile.avatarUrl || session?.user?.image || '';
   const title = profile.jobTitle || '';
   const company = profile.company || '';
-  const sessionEmail = session?.user?.email || profile.publicEmail || '';
+  const sessionEmail = session?.user?.email || profile.loginEmail || profile.publicEmail || '';
 
   const hasEmailContact = contacts.some(c => c.type === 'email');
   const displayContacts = [...contacts];

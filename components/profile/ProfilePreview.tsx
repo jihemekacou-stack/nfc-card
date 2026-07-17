@@ -35,12 +35,12 @@ export function ProfilePreview({
   const isDark = previewTheme === 'dark';
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const profileUrl = typeof window !== 'undefined' ? `${window.location.origin}/${profile?.publicEmail?.split('@')[0] || 'jean-marc'}` : 'https://flx.id/jean-marc';
+  const profileUrl = `https://flx.id/${profile?.slug || profile?.id || 'jean-marc'}`;
 
   const emailContact = contacts.find((c: any) => c.type === 'email');
 
 
-  const sessionEmail = session?.user?.email || profile.publicEmail || '';
+  const sessionEmail = session?.user?.email || profile.loginEmail || profile.publicEmail || '';
   const displayContacts = [...contacts];
   if (!emailContact && sessionEmail) {
     displayContacts.unshift({

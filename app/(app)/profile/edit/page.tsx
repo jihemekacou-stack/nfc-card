@@ -219,8 +219,8 @@ export default function EditProfilePage() {
                     </div>
                     <input 
                       type="text" 
-                      value={profile.publicEmail?.split('@')[0] || ''} 
-                      onChange={(e) => handleProfileChange('publicEmail', `${e.target.value}@flexcard.ci`)}
+                      value={profile.slug || ''} 
+                      onChange={(e) => handleProfileChange('slug', e.target.value)}
                       className="w-full bg-gray-50/50 px-4 py-3 text-sm focus:outline-none" 
                     />
                   </div>

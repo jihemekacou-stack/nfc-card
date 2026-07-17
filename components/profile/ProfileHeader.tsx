@@ -10,8 +10,7 @@ export function ProfileHeader() {
   const [showShareModal, setShowShareModal] = useState(false);
   const { profile } = useProfile();
 
-  // Assuming a public profile URL structure like https://flx.id/[username_or_id]
-  const profileUrl = `https://flx.id/${profile?.id || 'jihemekacou'}`;
+  const profileUrl = `https://flx.id/${profile?.slug || profile?.id || 'jihemekacou'}`;
 
   return (
     <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 py-6 md:py-8">

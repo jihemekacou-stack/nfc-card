@@ -30,14 +30,24 @@ const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 const defaultContacts: ContactItem[] = [];
 
-export function ProfileProvider({ children }: { children: ReactNode }) {
-  const [profile, setProfile] = useState<Profile>(mockProfile);
-  const [contacts, setContacts] = useState<ContactItem[]>(defaultContacts);
+export function ProfileProvider({ 
+  children, 
+  initialData 
+}: { 
+  children: ReactNode,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [sections, setSections] = useState<any[]>([]);
+  initialData?: { profile: Profile; contacts: ContactItem[]; sections: any[] }
+}) {
+  const [profile, setProfile] = useState<Profile>(initialData?.profile || mockProfile);
+  const [contacts, setContacts] = useState<ContactItem[]>(initialData?.contacts || defaultContacts);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [sections, setSections] = useState<any[]>(initialData?.sections || []);
   const { status } = useSession();
 
   useEffect(() => {
+    // Si on a déjà initialData (ex: profil public), on ne fetch pas /api/profile/me
+    if (initialData) return;
+
     if (status === "authenticated") {
       fetch("/api/profile/me")
         .then((res) => res.json())
@@ -50,7 +60,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         })
         .catch((err) => console.error("Failed to load profile", err));
     }
-  }, [status]);
+  }, [status, initialData]);
 
   return (
     <ProfileContext.Provider value={{ profile, setProfile, contacts, setContacts, sections, setSections }}>

@@ -18,6 +18,7 @@ export interface Profile {
   whatsAppCountryCode?: string;
   whatsAppNumber?: string;
   publicEmail?: string;
+  loginEmail?: string | null;
   publicPhone?: string;
   plan: Plan;
   visibility: Visibility;

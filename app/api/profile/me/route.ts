@@ -21,6 +21,9 @@ export async function GET() {
       include: {
         sections: true,
         contacts: true,
+        user: {
+          select: { email: true }
+        }
       }
     });
 
@@ -28,7 +31,13 @@ export async function GET() {
       return NextResponse.json({ error: 'Profil introuvable' }, { status: 404 });
     }
 
-    return NextResponse.json({ profile });
+    // Embed the login email in the profile response for the frontend
+    const profileWithEmail = {
+      ...profile,
+      loginEmail: profile.user?.email || null
+    };
+
+    return NextResponse.json({ profile: profileWithEmail });
   } catch (error) {
     console.error('Error fetching profile:', error);
     return NextResponse.json({ error: 'Erreur interne' }, { status: 500 });

@@ -4,37 +4,54 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Lock, Mail } from "lucide-react";
+import { ArrowRight, Lock, Mail, User } from "lucide-react";
 import { signIn } from "next-auth/react";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showConsentModal, setShowConsentModal] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
 
     try {
-      const res = await signIn("credentials", {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Une erreur est survenue");
+        setIsLoading(false);
+        return;
+      }
+
+      // Automatically sign in the user after successful registration
+      const signInRes = await signIn("credentials", {
         email,
         password,
         redirect: false,
       });
 
-      if (res?.error) {
-        setError(res.error);
+      if (signInRes?.error) {
+        setError(signInRes.error);
         setIsLoading(false);
       } else {
         router.push("/profile");
         router.refresh();
       }
     } catch {
-      setError("Une erreur s'est produite lors de la connexion");
+      setError("Erreur lors de la création du compte");
       setIsLoading(false);
     }
   };
@@ -48,9 +65,9 @@ export default function LoginPage() {
             <Image src="/logo.png" alt="Flexcard" width={140} height={50} className="object-contain" priority />
           </Link>
 
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Bienvenue</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Créer un compte</h1>
           <p className="text-sm text-gray-500 mb-8 text-center">
-            Connectez-vous pour accéder à votre tableau de bord et modifier vos informations.
+            Inscrivez-vous pour configurer votre carte NFC et accéder à votre tableau de bord.
           </p>
 
           {error && (
@@ -59,7 +76,23 @@ export default function LoginPage() {
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="w-full space-y-5">
+          <form onSubmit={handleRegister} className="w-full space-y-5">
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 mb-1.5 ml-1 uppercase tracking-wider">Nom complet</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                  <User className="h-5 w-5" />
+                </div>
+                <input 
+                  type="text" 
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pl-11 pr-4 text-sm focus:bg-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors" 
+                  placeholder="Jean Dupont"
+                />
+              </div>
+            </div>
+
             <div>
               <label className="block text-xs font-semibold text-gray-600 mb-1.5 ml-1 uppercase tracking-wider">Email</label>
               <div className="relative">
@@ -78,10 +111,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <div className="flex justify-between items-end mb-1.5 ml-1">
-                <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wider">Mot de passe</label>
-                <Link href="#" className="text-xs text-violet-600 font-medium hover:underline">Oublié ?</Link>
-              </div>
+              <label className="block text-xs font-semibold text-gray-600 mb-1.5 ml-1 uppercase tracking-wider">Mot de passe</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
                   <Lock className="h-5 w-5" />
@@ -99,10 +129,10 @@ export default function LoginPage() {
 
             <button 
               type="submit" 
-              disabled={isLoading}
+              disabled={isLoading || password.length < 6}
               className="w-full flex items-center justify-center gap-2 rounded-xl bg-violet-600 py-3.5 text-sm font-bold text-white shadow-md transition-all hover:bg-violet-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 disabled:opacity-70 mt-4"
             >
-              {isLoading ? "Connexion..." : "Se connecter"}
+              {isLoading ? "Inscription..." : "S'inscrire"}
               {!isLoading && <ArrowRight className="h-4 w-4" />}
             </button>
 
@@ -117,7 +147,7 @@ export default function LoginPage() {
 
             <button 
               type="button"
-              onClick={() => signIn("google", { callbackUrl: "/profile" })}
+              onClick={() => setShowConsentModal(true)}
               className="flex w-full items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white px-4 py-3.5 text-sm font-semibold text-gray-700 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] transition-all hover:bg-gray-50 hover:shadow-[0_8px_16px_-4px_rgba(6,81,237,0.2)] focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2"
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -126,17 +156,44 @@ export default function LoginPage() {
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
               </svg>
-              Continuer avec Google
+              S&apos;inscrire avec Google
             </button>
           </form>
           
         </div>
         <div className="bg-gray-50 py-4 text-center border-t border-gray-100">
           <p className="text-xs text-gray-500">
-            Pas encore de compte ? <Link href="/register" className="font-bold text-violet-600 hover:underline">S&apos;inscrire</Link>
+            Déjà un compte ? <Link href="/login" className="font-bold text-violet-600 hover:underline">S&apos;identifier</Link>
           </p>
         </div>
       </div>
+
+      {showConsentModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="p-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Conditions d&apos;utilisation</h3>
+              <p className="text-sm text-gray-600 mb-6 leading-relaxed">
+                En continuant avec Google, vous acceptez nos conditions générales d&apos;utilisation et notre politique de confidentialité. Nous utiliserons vos informations pour créer et gérer votre profil.
+              </p>
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={() => signIn("google", { callbackUrl: "/profile" })}
+                  className="w-full rounded-xl bg-violet-600 py-3 text-sm font-bold text-white transition-colors hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2"
+                >
+                  Accepter et continuer avec Google
+                </button>
+                <button
+                  onClick={() => setShowConsentModal(false)}
+                  className="w-full rounded-xl border border-gray-200 bg-white py-3 text-sm font-bold text-gray-700 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                >
+                  Annuler
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

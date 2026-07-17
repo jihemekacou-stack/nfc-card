@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element, @typescript-eslint/no-explicit-any, react/no-unescaped-entities */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link2, Share2, Type, Image as ImageIcon, Video, Calendar, Plus, GripVertical, Trash2, Globe, ChevronDown, X, Edit2, Code, Users, Star, Search } from "lucide-react";
 import { SectionModals, socialNetworks } from "./SectionModals";
 
@@ -33,6 +33,12 @@ export function SectionBuilder({ sections: propSections, setSections: propSetSec
   const [expandedSocials, setExpandedSocials] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState<{ id: string, type: 'section' | 'socialItem' } | null>(null);
   const [editingItem, setEditingItem] = useState<any | null>(null);
+
+  useEffect(() => {
+    const handleOpenSectionMenu = () => setShowSectionMenu(true);
+    window.addEventListener('open-section-menu', handleOpenSectionMenu);
+    return () => window.removeEventListener('open-section-menu', handleOpenSectionMenu);
+  }, []);
 
   const handleAddSection = (data: any) => {
     if (data.type === 'social') {

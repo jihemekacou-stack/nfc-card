@@ -24,13 +24,14 @@ export default async function AppLayout({
     include: { cards: true }
   });
 
-  const hasCard = profile && profile.cards.length > 0;
+  console.log("LAYOUT DEBUG:", {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    userId: (session.user as any).id,
+    profileFound: !!profile,
+    cardsCount: profile ? profile.cards.length : 0
+  });
 
-  if (!hasCard) {
-    // Si l'utilisateur n'a pas de carte, on affiche uniquement l'écran d'activation.
-    // Il n'aura aucun accès au layout du dashboard.
-    return <CardActivationScreen />;
-  }
+  const hasCard = profile && profile.cards.length > 0;
 
   return (
     <ProfileProvider>
@@ -41,6 +42,12 @@ export default async function AppLayout({
           <ChatFloatingButton />
         </main>
       </div>
+
+      {!hasCard && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <CardActivationScreen />
+        </div>
+      )}
     </ProfileProvider>
   );
 }

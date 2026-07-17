@@ -11,7 +11,6 @@ import {
   Users,
   BarChart2,
   Settings,
-  ArrowUpCircle,
   HelpCircle,
   ChevronDown,
   LogOut,
@@ -85,13 +84,6 @@ export function AppSidebar() {
 
         {/* Bottom Actions */}
         <div className="border-t border-white/5 p-4 space-y-1">
-          <Link
-            href="/upgrade"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-gray-400 hover:bg-white/5 hover:text-white transition-colors"
-          >
-            <ArrowUpCircle className="h-5 w-5 text-yellow-500" />
-            <span className="text-yellow-500 font-bold">Passer en Pro</span>
-          </Link>
           <Link
             href="/support"
             className="flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-gray-400 hover:bg-white/5 hover:text-white transition-colors"
