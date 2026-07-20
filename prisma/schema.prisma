@@ -111,6 +111,7 @@ model Contact {
   phone          String?
   company        String?
   jobTitle       String?
+  message        String?  @db.Text
   source         String   @default("manual") // 'scan' | 'manual' | 'exchange' | 'import'
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt

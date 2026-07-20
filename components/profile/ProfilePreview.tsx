@@ -10,6 +10,7 @@ import { socialNetworks } from "./SectionModals";
 import { ShareModal } from "./ShareModal";
 import { downloadVCF } from "@/lib/utils/vcf";
 import { sendGAEvent } from '@next/third-parties/google';
+import { ExchangeContactModal } from "./ExchangeContactModal";
 
 export function ProfilePreview({ 
   previewTheme = 'light',
@@ -25,14 +26,16 @@ export function ProfilePreview({
   showWhatsApp?: boolean,
   customProfile?: any,
   customContacts?: any,
+  customSections?: any,
   isPublicView?: boolean,
   source?: string
 }) {
-  const { profile: contextProfile, contacts: contextContacts, sections } = useProfile();
+  const { profile: contextProfile, contacts: contextContacts, sections: contextSections } = useProfile();
   const { data: session } = useSession();
   
   const profile = customProfile || contextProfile;
   const contacts = customContacts || contextContacts;
+  const sections = customSections || contextSections;
   const displayName = profile.displayName || session?.user?.name || '';
   const avatar = profile.avatarUrl || session?.user?.image || '';
   const jobTitle = profile.jobTitle || '';
@@ -40,6 +43,8 @@ export function ProfilePreview({
   const isDark = previewTheme === 'dark';
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isExchangeModalOpen, setIsExchangeModalOpen] = useState(false);
+  const [showSuccessBubble, setShowSuccessBubble] = useState(false);
   const cardCode = profile?.cards?.[0]?.code;
   const [baseUrl, setBaseUrl] = useState('');
 
@@ -188,23 +193,24 @@ export function ProfilePreview({
         </div>
 
         {/* Primary Actions */}
-        <div className="flex items-center gap-3 mt-4">
+        <div className="flex flex-col sm:flex-row items-center gap-3 mt-4">
+          <button 
+            onClick={() => setIsExchangeModalOpen(true)}
+            className="flex-1 w-full flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white h-[44px] px-4 rounded-xl font-semibold text-[15px] transition-colors"
+          >
+            <User className="h-5 w-5" />
+            Échanger le contact
+          </button>
           <button 
             onClick={() => setIsShareModalOpen(true)}
-            className="flex-1 flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white h-[36px] px-4 rounded-[14px] font-semibold text-[15px] transition-colors"
+            className="flex-1 w-full flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white h-[44px] px-4 rounded-xl font-semibold text-[15px] transition-colors"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M19 8H23M21 6V10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            Partager le Contact
-          </button>
-          <button 
-            onClick={handleVCardDownload}
-            className="h-[36px] w-[36px] shrink-0 flex items-center justify-center border border-gray-200 rounded-[14px] hover:bg-gray-50 transition-colors"
-          >
-            <Download className="h-4 w-4 text-gray-700" />
+            Partager
           </button>
         </div>
 
@@ -393,6 +399,39 @@ export function ProfilePreview({
         onClose={() => setIsShareModalOpen(false)} 
         profileUrl={profileUrl} 
       />
+      <ExchangeContactModal
+        isOpen={isExchangeModalOpen}
+        onClose={() => setIsExchangeModalOpen(false)}
+        profileName={displayName}
+        profileId={profile.id}
+        onSuccess={() => setShowSuccessBubble(true)}
+      />
+
+      {showSuccessBubble && (
+        <div className="fixed bottom-4 left-4 right-4 z-[300] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-4 animate-in slide-in-from-bottom-5 border border-gray-100 dark:border-gray-700">
+          <p className="text-sm font-medium text-gray-900 dark:text-white mb-3 text-center">
+            Vos informations ont été enregistrées avec succès !<br/>
+            Souhaitez-vous enregistrer le contact de {displayName} dans votre téléphone ?
+          </p>
+          <div className="flex gap-2">
+            <button 
+              onClick={() => { 
+                setShowSuccessBubble(false); 
+                handleVCardDownload(); 
+              }} 
+              className="flex-1 bg-violet-600 text-white py-2.5 rounded-xl text-sm font-bold"
+            >
+              Oui, enregistrer
+            </button>
+            <button 
+              onClick={() => setShowSuccessBubble(false)} 
+              className="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white py-2.5 rounded-xl text-sm font-bold"
+            >
+              Non merci
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
