@@ -38,8 +38,12 @@ export default async function PublicProfilePage({ params }: { params: { username
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const initialData: any = {
       profile: profile,
-      contacts: (Array.isArray(profile.contactItems) ? profile.contactItems : []),
-      sections: profile.sections || []
+      contacts: Array.isArray(profile.contactItems) ? profile.contactItems : [],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      sections: profile.sections?.map((s: any) => {
+        const content = typeof s.content === 'object' && s.content ? s.content : {};
+        return { ...s, ...content };
+      }) || []
     };
 
     return (

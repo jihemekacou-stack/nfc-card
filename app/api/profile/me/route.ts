@@ -32,10 +32,15 @@ export async function GET() {
       return NextResponse.json({ error: 'Profil introuvable' }, { status: 404 });
     }
 
-    // Embed the login email in the profile response for the frontend
+    // Embed the login email and flatten sections content for the frontend
     const profileWithEmail = {
       ...profile,
-      loginEmail: profile.user?.email || null
+      loginEmail: profile.user?.email || null,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      sections: profile.sections?.map((s: any) => {
+        const content = typeof s.content === 'object' && s.content ? s.content : {};
+        return { ...s, ...content };
+      }) || []
     };
 
     return NextResponse.json({ profile: profileWithEmail });
