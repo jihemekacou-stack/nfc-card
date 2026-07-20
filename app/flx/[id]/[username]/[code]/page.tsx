@@ -35,7 +35,7 @@ export default async function PublicProfilePage({ params }: { params: { username
       profile.displayName = profile.user?.name || "Nouvel Utilisateur";
     }
 
-    const initialData = {
+    const initialData: any = {
       profile: profile,
       contacts: (Array.isArray(profile.contactItems) ? profile.contactItems : []),
       sections: profile.sections || []
