@@ -372,6 +372,11 @@ export function ProfilePreview({
             </div>
           </div>
         ))}
+
+        {/* Footer Brand */}
+        <div className="mt-12 pb-8 flex justify-center w-full">
+          <span className="text-[10px] font-bold text-gray-400/80 dark:text-gray-600 uppercase tracking-[0.2em]">FlexCard</span>
+        </div>
       </div>
       
       {/* Image Zoom Modal */}
