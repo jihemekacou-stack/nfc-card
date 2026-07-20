@@ -18,6 +18,7 @@ export function ProfilePreview({
   showWhatsApp = true,
   customProfile,
   customContacts,
+  customSections,
   isPublicView = false,
   source = 'direct'
 }: { 
