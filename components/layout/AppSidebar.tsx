@@ -46,7 +46,7 @@ export function AppSidebar() {
             <div className="flex items-center gap-2">
               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-violet-600 overflow-hidden">
                 {profile.avatarUrl ? (
-                  <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
+                  <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                 ) : (
                   <span className="text-[10px] font-bold text-white">{(profile.displayName || 'F').charAt(0).toUpperCase()}</span>
                 )}

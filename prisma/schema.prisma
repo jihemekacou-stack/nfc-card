@@ -74,6 +74,7 @@ model Profile {
   whatsAppNumber      String?
   publicEmail         String?
   publicPhone         String?
+  theme               String   @default("light")
   plan                String   @default("free") // "free" | "pro" | "business"
   visibility          String   @default("public") // "public" | "unlisted" | "private"
   isPrimary           Boolean  @default(true)

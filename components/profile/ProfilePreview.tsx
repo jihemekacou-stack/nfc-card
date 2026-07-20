@@ -13,7 +13,7 @@ import { sendGAEvent } from '@next/third-parties/google';
 import { ExchangeContactModal } from "./ExchangeContactModal";
 
 export function ProfilePreview({ 
-  previewTheme = 'light',
+  previewTheme,
   showLinkedIn = true,
   showWhatsApp = true,
   customProfile,
@@ -41,7 +41,7 @@ export function ProfilePreview({
   const avatar = profile.avatarUrl || session?.user?.image || '';
   const jobTitle = profile.jobTitle || '';
   const company = profile.company || '';
-  const isDark = previewTheme === 'dark';
+  const isDark = previewTheme === 'dark' || (!previewTheme && profile?.theme === 'dark');
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isExchangeModalOpen, setIsExchangeModalOpen] = useState(false);
@@ -116,9 +116,6 @@ export function ProfilePreview({
       }
     });
   }
-
-  const finalEmailContact = displayContacts.find((c: any) => c.type === 'email');
-  const finalPhoneContact = displayContacts.find((c: any) => c.type === 'phone');
 
   // Compute section elements
   const personalSite = sections?.find((s: any) => s.type === 'link' && s.isPersonalSite);
@@ -213,29 +210,40 @@ export function ProfilePreview({
         {/* Contact Info */}
         {displayContacts.length > 0 && (
           <div className="flex flex-col gap-4 mt-4">
-          {finalEmailContact && (
-            <div className="flex items-start gap-3">
-              <div className="mt-0.5">
-                <Mail className="h-5 w-5 text-gray-400" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[13px] text-gray-400 font-medium">Email</span>
-                <span className={`text-[15px] font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{finalEmailContact.value}</span>
-              </div>
-            </div>
-          )}
-          {finalPhoneContact && (
-            <div className="flex items-start gap-3">
-              <div className="mt-0.5">
-                <Phone className="h-5 w-5 text-gray-400" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[13px] text-gray-400 font-medium">Mobile</span>
-                <span className={`text-[15px] font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>({finalPhoneContact.countryCode}) {finalPhoneContact.value}</span>
-              </div>
-            </div>
-          )}
-        </div>
+            {displayContacts.map((contact: any, index: number) => {
+              if (contact.type === 'email') {
+                return (
+                  <div key={contact.id || index} className="flex items-start gap-3">
+                    <div className="mt-0.5">
+                      <Mail className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[13px] text-gray-400 font-medium">{contact.label || 'Email'}</span>
+                      <span className={`text-[15px] font-semibold ${isDark ? 'text-white' : 'text-gray-900'} break-all`}>
+                        {contact.value || '...'}
+                      </span>
+                    </div>
+                  </div>
+                );
+              }
+              if (contact.type === 'phone') {
+                return (
+                  <div key={contact.id || index} className="flex items-start gap-3">
+                    <div className="mt-0.5">
+                      <Phone className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[13px] text-gray-400 font-medium">{contact.label || 'Mobile'}</span>
+                      <span className={`text-[15px] font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {contact.countryCode ? `(${contact.countryCode}) ` : ''}{contact.value || '...'}
+                      </span>
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            })}
+          </div>
         )}
 
         {/* Social Buttons */}

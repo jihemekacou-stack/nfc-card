@@ -83,6 +83,7 @@ export async function PUT(req: Request) {
         linkedInUrl: profile?.linkedInUrl !== undefined ? profile.linkedInUrl : existingProfile.linkedInUrl,
         whatsAppCountryCode: profile?.whatsAppCountryCode !== undefined ? profile.whatsAppCountryCode : existingProfile.whatsAppCountryCode,
         whatsAppNumber: profile?.whatsAppNumber !== undefined ? profile.whatsAppNumber : existingProfile.whatsAppNumber,
+        theme: profile?.theme !== undefined ? profile.theme : existingProfile.theme,
         contactItems: contacts ? contacts : existingProfile.contactItems,
       }
     });

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, User, ChevronLeft, ChevronRight, Users, Filter, Download, Plus, Mail, Phone, Trash2, Edit2, DownloadCloud, X } from "lucide-react";
+import { Search, User, ChevronLeft, ChevronRight, Users, Filter, Download, Plus, Mail, Phone, Trash2, Edit2, DownloadCloud, X, Home, Briefcase, MoreVertical } from "lucide-react";
 
 interface Contact {
   id: string;
@@ -68,6 +68,29 @@ export default function ContactsPage() {
     document.body.removeChild(link);
   };
 
+  const downloadVCard = () => {
+    if (!selectedContact) return;
+    const vcard = `BEGIN:VCARD
+VERSION:3.0
+FN:${selectedContact.firstName} ${selectedContact.lastName}
+N:${selectedContact.lastName};${selectedContact.firstName};;;
+EMAIL;TYPE=INTERNET:${selectedContact.email || ""}
+TEL;TYPE=CELL:${selectedContact.phone || ""}
+ORG:${selectedContact.company || ""}
+TITLE:${selectedContact.jobTitle || ""}
+END:VCARD`;
+
+    const blob = new Blob([vcard], { type: "text/vcard" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${selectedContact.firstName}_${selectedContact.lastName}.vcf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="mx-auto w-full max-w-[1400px] px-4 py-8 sm:px-6 lg:px-8 h-full min-h-[calc(100vh-theme(spacing.16))] flex flex-col">
       <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -79,10 +102,6 @@ export default function ContactsPage() {
           <button onClick={exportCSV} className="flex items-center gap-2 rounded-full bg-violet-100 dark:bg-violet-900/30 px-5 py-2.5 text-sm font-bold text-violet-700 dark:text-violet-400 transition-transform hover:scale-105 active:scale-95">
             <Download className="h-4 w-4" />
             Exporter CSV
-          </button>
-          <button className="flex items-center gap-2 rounded-full bg-violet-600 px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-violet-600/20 transition-transform hover:scale-105 active:scale-95">
-            <Plus className="h-4 w-4" />
-            Nouveau
           </button>
         </div>
       </div>
@@ -176,91 +195,103 @@ export default function ContactsPage() {
         {selectedContact ? (
           <div className="hidden lg:flex w-[400px] shrink-0 rounded-3xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm flex-col p-6 overflow-y-auto no-scrollbar">
             
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-start justify-between mb-6">
               <div className="flex items-center gap-4">
                 <div className="h-14 w-14 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-700 dark:text-violet-400 text-xl font-bold">
                   {selectedContact.firstName.charAt(0).toUpperCase()}
                 </div>
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">{selectedContact.firstName} {selectedContact.lastName}</h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {new Date(selectedContact.createdAt).toLocaleDateString("fr-FR", { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                <div className="flex flex-col">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{selectedContact.firstName} {selectedContact.lastName}</h2>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {new Date(selectedContact.createdAt).toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' })} {new Date(selectedContact.createdAt).toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', hour12: false })}
                   </p>
                 </div>
               </div>
               <div className="flex gap-2">
-                <button className="p-2 text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full transition-colors">
-                  <Edit2 className="w-4 h-4" />
+                <button className="flex h-8 w-8 items-center justify-center text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full transition-colors border border-gray-100 dark:border-gray-700">
+                  <Edit2 className="w-3.5 h-3.5" />
                 </button>
-                <button onClick={() => setSelectedContact(null)} className="p-2 text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full transition-colors">
-                  <X className="w-4 h-4" />
+                <button className="flex h-8 w-8 items-center justify-center text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full transition-colors border border-gray-100 dark:border-gray-700">
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+                <button onClick={() => setSelectedContact(null)} className="flex h-8 w-8 items-center justify-center text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full transition-colors border border-gray-100 dark:border-gray-700">
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
 
-            <div className="flex gap-2 mb-8">
-              <button className="flex-1 py-2 flex items-center justify-center gap-2 rounded-xl bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-sm font-semibold transition-colors">
-                <Phone className="w-4 h-4" /> Appeler
-              </button>
-              <button className="flex-1 py-2 flex items-center justify-center gap-2 rounded-xl bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-sm font-semibold transition-colors">
-                <Mail className="w-4 h-4" /> Courriel
-              </button>
-            </div>
-
-            <div className="space-y-6">
-              <div>
-                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Contact Info</h4>
-                <div className="space-y-4">
-                  {selectedContact.email && (
-                    <div className="flex items-center gap-3">
-                      <Mail className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">{selectedContact.email}</span>
-                    </div>
-                  )}
-                  {selectedContact.phone && (
-                    <div className="flex items-center gap-3">
-                      <Phone className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">{selectedContact.phone}</span>
-                    </div>
-                  )}
-                  {selectedContact.company && (
-                    <div className="flex items-center gap-3">
-                      <Users className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">{selectedContact.company}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Tags</h4>
-                <div className="flex items-center gap-2">
-                  <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                    <Plus className="w-3 h-3" /> Add tag
-                  </button>
-                  <span className="text-xs text-gray-400">No tags assigned</span>
-                </div>
-              </div>
-
-              {selectedContact.message && (
-                <div>
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Message</h4>
-                  <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
-                    <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{selectedContact.message}</p>
-                  </div>
-                </div>
+            <div className="flex gap-3 mb-8">
+              {selectedContact.phone ? (
+                <button onClick={() => window.location.href = `tel:${selectedContact.phone}`} className="flex-1 py-2 flex items-center justify-center gap-2 rounded-full border border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors">
+                  <Phone className="w-4 h-4 text-gray-400" /> Appeler
+                </button>
+              ) : (
+                <button disabled className="flex-1 py-2 flex items-center justify-center gap-2 rounded-full border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800 text-sm font-medium text-gray-400 dark:text-gray-500 opacity-50 cursor-not-allowed transition-colors">
+                  <Phone className="w-4 h-4 text-gray-400" /> Appeler
+                </button>
               )}
+              <button onClick={() => selectedContact.email && (window.location.href = `mailto:${selectedContact.email}`)} className="flex-1 py-2 flex items-center justify-center gap-2 rounded-full border border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors">
+                <Mail className="w-4 h-4 text-gray-400" /> Courriel
+              </button>
+              <button onClick={downloadVCard} className="flex-1 py-2 flex items-center justify-center gap-2 rounded-full border border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors">
+                <DownloadCloud className="w-4 h-4 text-gray-400" /> vCard
+              </button>
+            </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Notes</h4>
-                  <button className="text-xs font-bold text-violet-600 hover:text-violet-700">Ajouter une note</button>
+            <div className="flex flex-col border-t border-gray-100 dark:border-gray-800 py-6">
+              <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Contact Info</h4>
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <User className="w-4 h-4 text-gray-400" />
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">{selectedContact.firstName} {selectedContact.lastName}</span>
                 </div>
-                <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
-                  <p className="text-sm text-gray-700 dark:text-gray-300">Contact added via {selectedContact.source === 'exchange' ? 'contact form' : selectedContact.source}</p>
-                  <p className="text-xs text-gray-400 mt-2">
-                    {new Date(selectedContact.createdAt).toLocaleDateString("fr-FR", { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                  </p>
+                <div className="flex items-center gap-4">
+                  <Mail className="w-4 h-4 text-gray-400" />
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">{selectedContact.email || "—"}</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <Phone className="w-4 h-4 text-gray-400" />
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">{selectedContact.phone || "—"}</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <Home className="w-4 h-4 text-gray-400" />
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">—</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <Briefcase className="w-4 h-4 text-gray-400" />
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">{selectedContact.jobTitle ? `${selectedContact.jobTitle}${selectedContact.company ? ` at ${selectedContact.company}` : ''}` : selectedContact.company || "—"}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col border-t border-gray-100 dark:border-gray-800 py-6">
+              <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Tags</h4>
+              <div className="flex items-center gap-3">
+                <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <Plus className="w-3 h-3" /> Add tag
+                </button>
+                <span className="text-sm text-gray-500">No tags assigned</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col border-t border-gray-100 dark:border-gray-800 py-6">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Notes</h4>
+                <button className="text-sm font-semibold text-blue-600 hover:text-blue-700">+ Ajouter une note</button>
+              </div>
+              <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
+                <div className="flex items-start justify-between">
+                  <div className="flex flex-col">
+                    <p className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">
+                      Contact added via {selectedContact.source === 'exchange' ? 'contact form' : selectedContact.source}
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      {new Date(selectedContact.createdAt).toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' })} {new Date(selectedContact.createdAt).toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', hour12: false })}
+                    </p>
+                  </div>
+                  <button className="text-gray-400 hover:text-gray-600">
+                    <MoreVertical className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             </div>

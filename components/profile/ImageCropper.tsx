@@ -132,10 +132,7 @@ async function getCroppedImg(
   );
 
   return new Promise<string>((resolve) => {
-    canvas.toBlob((file) => {
-      if (file) {
-        resolve(URL.createObjectURL(file));
-      }
-    }, 'image/jpeg');
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.8); // Compress slightly to save space in DB
+    resolve(dataUrl);
   });
 }

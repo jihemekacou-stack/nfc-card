@@ -15,7 +15,16 @@ export default function EditProfilePage() {
   const [contacts, setLocalContacts] = useState(contextContacts);
   
   // Theme state
-  const [theme, setTheme] = useState<'light'|'dark'>('light');
+  const [theme, setTheme] = useState<'light'|'dark'>(contextProfile?.theme as 'light' | 'dark' || 'light');
+
+  useEffect(() => {
+    setLocalProfile(contextProfile);
+    if (contextProfile?.theme) setTheme(contextProfile.theme as 'light' | 'dark');
+  }, [contextProfile]);
+
+  useEffect(() => {
+    setLocalContacts(contextContacts);
+  }, [contextContacts]);
   
   // Social media state
   const [showLinkedIn, setShowLinkedIn] = useState(false);
@@ -50,10 +59,11 @@ export default function EditProfilePage() {
 
   const handleSave = async () => {
     setIsSaving(true);
-    setProfile(profile);
+    const updatedProfile = { ...profile, theme };
+    setProfile(updatedProfile);
     setContacts(contacts);
     
-    const success = await saveProfileData(profile, contacts, sections);
+    const success = await saveProfileData(updatedProfile, contacts, sections);
     
     setIsSaving(false);
     if (success) {
@@ -153,7 +163,7 @@ export default function EditProfilePage() {
                     <label className="h-full w-full rounded-full border border-gray-200 overflow-hidden flex items-center justify-center bg-gray-50 text-gray-400 hover:bg-gray-100 transition-colors cursor-pointer">
                       <input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload('avatarUrl', e)} />
                       {profile.avatarUrl ? (
-                        <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full object-cover group-hover:opacity-50 transition-opacity" />
+                        <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full object-cover group-hover:opacity-50 transition-opacity" referrerPolicy="no-referrer" />
                       ) : (
                         <Plus className="h-6 w-6" />
                       )}
