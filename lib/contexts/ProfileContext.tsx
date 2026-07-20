@@ -32,6 +32,31 @@ const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 const defaultContacts: ContactItem[] = [];
 
+const emptyProfile: Profile = {
+  id: "",
+  userId: "",
+  slug: "",
+  displayName: "",
+  jobTitle: "",
+  company: "",
+  bio: "",
+  avatarUrl: "",
+  coverUrl: "",
+  logoUrl: "",
+  theme: "light",
+  color: "blue",
+  layout: "modern",
+  publicEmail: "",
+  publicPhone: "",
+  publicWhatsApp: "",
+  linkedInUrl: "",
+  whatsAppCountryCode: "",
+  whatsAppNumber: "",
+  isPrimary: true,
+  visibility: "public",
+  plan: "free",
+};
+
 export function ProfileProvider({ 
   children, 
   initialData 
@@ -40,7 +65,7 @@ export function ProfileProvider({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialData?: { profile: Profile; contacts: ContactItem[]; sections: any[] }
 }) {
-  const [profile, setProfile] = useState<Profile>(initialData?.profile || mockProfile);
+  const [profile, setProfile] = useState<Profile>(initialData?.profile || emptyProfile);
   const [contacts, setContacts] = useState<ContactItem[]>(initialData?.contacts || defaultContacts);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [sections, setSections] = useState<any[]>(initialData?.sections || []);
