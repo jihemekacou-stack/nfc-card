@@ -3,29 +3,37 @@ import { ProfileProvider } from "@/lib/contexts/ProfileContext";
 import { notFound } from "next/navigation";
 import { GoogleAnalytics } from '@next/third-parties/google';
 
-// Assurez-vous d'utiliser une URL absolue pour le fetch côté serveur
-const getBaseUrl = () => {
-  if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL;
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return 'http://localhost:3000';
-};
+import { prisma } from "@/lib/auth";
 
 export default async function PublicProfilePage({ params }: { params: { username: string } }) {
   const { username } = params;
 
   try {
-    const res = await fetch(`${getBaseUrl()}/api/profile/${username}`, {
-      // Pas de cache pour toujours avoir la dernière version
-      cache: 'no-store'
+    const profile = await prisma.profile.findFirst({
+      where: {
+        OR: [
+          { slug: username },
+          { id: username }
+        ]
+      },
+      include: {
+        sections: {
+          orderBy: { sortOrder: 'asc' }
+        },
+        contacts: true,
+        user: {
+          select: { email: true, name: true, image: true }
+        }
+      }
     });
 
-    if (!res.ok) {
-      if (res.status === 404) return notFound();
-      throw new Error("Failed to fetch profile");
-    }
+    if (!profile) return notFound();
 
-    const data = await res.json();
-    const { profile } = data;
+    if (!profile.publicEmail && profile.user?.email) profile.publicEmail = profile.user.email;
+    if (!profile.avatarUrl && profile.user?.image) profile.avatarUrl = profile.user.image;
+    if (!profile.displayName || profile.displayName === "Nouvel Utilisateur") {
+      profile.displayName = profile.user?.name || "Nouvel Utilisateur";
+    }
 
     const initialData = {
       profile: profile,
