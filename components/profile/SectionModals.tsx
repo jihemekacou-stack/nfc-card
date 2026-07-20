@@ -172,7 +172,7 @@ export function SectionModals({ activeModal, onClose, onAdd, initialData }: Sect
                         }}
                         className="flex flex-col items-center justify-center p-4 gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-violet-500 transition-colors group"
                       >
-                        <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${social.color} transition-transform group-hover:scale-110 shadow-sm overflow-hidden bg-white`}>
+                        <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${social.color} transition-transform group-hover:scale-110 shadow-sm overflow-hidden ${social.imageSrc ? 'bg-white' : ''}`}>
                           {social.imageSrc ? (
                             <img src={social.imageSrc} alt={social.name} className="h-full w-full object-cover" />
                           ) : (
@@ -187,7 +187,7 @@ export function SectionModals({ activeModal, onClose, onAdd, initialData }: Sect
               ) : (
                 <div className="flex flex-col gap-6">
                   <div className="flex items-center gap-4">
-                    <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${selectedSocialData?.color} shadow-sm shrink-0 overflow-hidden bg-white`}>
+                    <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${selectedSocialData?.color} shadow-sm shrink-0 overflow-hidden ${selectedSocialData?.imageSrc ? 'bg-white' : ''}`}>
                       {selectedSocialData?.imageSrc ? (
                         <img src={selectedSocialData.imageSrc} alt={selectedSocialData.name} className="h-full w-full object-cover" />
                       ) : (
