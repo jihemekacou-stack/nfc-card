@@ -194,24 +194,19 @@ export function ProfilePreview({
         </div>
 
         {/* Primary Actions */}
-        <div className="flex flex-col sm:flex-row items-center gap-3 mt-4">
+        <div className="flex items-center gap-3 mt-4">
           <button 
             onClick={() => setIsExchangeModalOpen(true)}
-            className="flex-1 w-full flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white h-[44px] px-4 rounded-xl font-semibold text-[15px] transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white h-[44px] px-4 rounded-xl font-semibold text-[15px] transition-colors"
           >
             <User className="h-5 w-5" />
             Échanger le contact
           </button>
           <button 
-            onClick={() => setIsShareModalOpen(true)}
-            className="flex-1 w-full flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white h-[44px] px-4 rounded-xl font-semibold text-[15px] transition-colors"
+            onClick={handleVCardDownload}
+            className="h-[44px] w-[44px] shrink-0 flex items-center justify-center border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M19 8H23M21 6V10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Partager
+            <Download className="h-5 w-5 text-gray-700 dark:text-gray-300" />
           </button>
         </div>
 
