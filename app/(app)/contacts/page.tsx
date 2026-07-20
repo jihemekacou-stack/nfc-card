@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { Search, User, ChevronLeft, ChevronRight, Users, Filter, Download, Plus, Mail, Phone, Trash2, Edit2, DownloadCloud, X } from "lucide-react";
-import { format } from "date-fns";
-import { fr } from "date-fns/locale";
 
 interface Contact {
   id: string;
@@ -137,7 +135,7 @@ export default function ContactsPage() {
                   </div>
                   <div className="flex items-center gap-4 text-xs font-medium text-gray-500 dark:text-gray-400">
                     <span className="hidden sm:inline bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md">{contact.source}</span>
-                    {format(new Date(contact.createdAt), "MMM d, yyyy", { locale: fr })}
+                    {new Date(contact.createdAt).toLocaleDateString("fr-FR", { month: 'short', day: 'numeric', year: 'numeric' })}
                   </div>
                 </div>
               ))}
@@ -185,7 +183,9 @@ export default function ContactsPage() {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">{selectedContact.firstName} {selectedContact.lastName}</h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">{format(new Date(selectedContact.createdAt), "MMM d, yyyy HH:mm")}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {new Date(selectedContact.createdAt).toLocaleDateString("fr-FR", { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  </p>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -258,7 +258,9 @@ export default function ContactsPage() {
                 </div>
                 <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
                   <p className="text-sm text-gray-700 dark:text-gray-300">Contact added via {selectedContact.source === 'exchange' ? 'contact form' : selectedContact.source}</p>
-                  <p className="text-xs text-gray-400 mt-2">{format(new Date(selectedContact.createdAt), "MMM d, yyyy HH:mm")}</p>
+                  <p className="text-xs text-gray-400 mt-2">
+                    {new Date(selectedContact.createdAt).toLocaleDateString("fr-FR", { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  </p>
                 </div>
               </div>
             </div>
