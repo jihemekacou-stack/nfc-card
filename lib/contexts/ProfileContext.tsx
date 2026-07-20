@@ -90,7 +90,6 @@ export function ProfileProvider({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sections]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const saveProfileData = async (newProfile: Profile, newContacts: ContactItem[], newSections: any[]) => {
     try {
       const res = await fetch("/api/profile/me", {

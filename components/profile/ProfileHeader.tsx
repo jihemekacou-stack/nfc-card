@@ -17,9 +17,10 @@ export function ProfileHeader() {
     setBaseUrl(window.location.origin);
   }, []);
 
+  const pseudo = profile?.slug || 'profil';
   const profileUrl = cardCode 
-    ? `${baseUrl || 'https://flx.id'}/FLX/${profile?.id}/${profile?.slug || profile?.displayName?.replace(/\\s+/g, '-').toLowerCase() || 'user'}/${cardCode}`
-    : `${baseUrl || 'https://flx.id'}/FLX/${profile?.id}/${profile?.slug || profile?.displayName?.replace(/\\s+/g, '-').toLowerCase() || 'user'}`;
+    ? `${baseUrl || 'https://flexcardci.com'}/flx/${profile?.id}/${pseudo}/${cardCode}`
+    : `${baseUrl || 'https://flexcardci.com'}/flx/${profile?.id}/${pseudo}`;
 
   return (
     <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 py-6 md:py-8">

@@ -10,12 +10,12 @@ const getBaseUrl = () => {
   return 'http://localhost:3000';
 };
 
-export default async function PublicProfilePage({ params, searchParams }: { params: { id: string, username: string }, searchParams: { [key: string]: string | string[] | undefined } }) {
-  const { id } = params;
+export default async function PublicProfilePage({ params, searchParams }: { params: { username: string }, searchParams: { [key: string]: string | string[] | undefined } }) {
+  const { username } = params;
   const source = searchParams?.source as string | undefined;
 
   try {
-    const res = await fetch(`${getBaseUrl()}/api/profile/${id}`, {
+    const res = await fetch(`${getBaseUrl()}/api/profile/${username}`, {
       // Pas de cache pour toujours avoir la dernière version
       cache: 'no-store'
     });

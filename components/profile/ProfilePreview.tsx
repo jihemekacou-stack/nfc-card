@@ -47,9 +47,10 @@ export function ProfilePreview({
     setBaseUrl(window.location.origin);
   }, []);
 
+  const pseudo = profile?.slug || 'profil';
   const profileUrl = cardCode 
-    ? `${baseUrl || 'https://flx.id'}/FLX/${profile?.id}/${profile?.slug || profile?.displayName?.replace(/\\s+/g, '-').toLowerCase() || 'user'}/${cardCode}`
-    : `${baseUrl || 'https://flx.id'}/FLX/${profile?.id}/${profile?.slug || profile?.displayName?.replace(/\\s+/g, '-').toLowerCase() || 'user'}`;
+    ? `${baseUrl || 'https://flexcardci.com'}/flx/${profile?.id}/${pseudo}/${cardCode}`
+    : `${baseUrl || 'https://flexcardci.com'}/flx/${profile?.id}/${pseudo}`;
 
   // Analytics tracking
   const hasTrackedView = useRef(false);
@@ -78,7 +79,6 @@ export function ProfilePreview({
       trackEvent('VIEW');
       sendGAEvent('event', 'VIEW', { profileId: profile.id, source: source });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPublicView, profile?.id, source]);
 
   const handleVCardDownload = () => {
