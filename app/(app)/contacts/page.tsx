@@ -69,6 +69,8 @@ export default function ContactsPage() {
     link.click();
     document.body.removeChild(link);
   };
+
+  return (
     <div className="mx-auto w-full max-w-[1400px] px-4 py-8 sm:px-6 lg:px-8 h-full min-h-[calc(100vh-theme(spacing.16))] flex flex-col">
       <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
