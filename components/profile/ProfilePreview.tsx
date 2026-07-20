@@ -412,6 +412,7 @@ export function ProfilePreview({
         onClose={() => setIsExchangeModalOpen(false)}
         profileName={displayName}
         profileId={profile.id}
+        trafficSource={source}
         onSuccess={() => setShowSuccessBubble(true)}
       />
 

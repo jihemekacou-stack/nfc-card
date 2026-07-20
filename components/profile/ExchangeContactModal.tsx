@@ -9,9 +9,10 @@ interface ExchangeContactModalProps {
   profileName: string;
   onSuccess: () => void;
   profileId: string;
+  trafficSource?: string;
 }
 
-export function ExchangeContactModal({ isOpen, onClose, profileName, onSuccess, profileId }: ExchangeContactModalProps) {
+export function ExchangeContactModal({ isOpen, onClose, profileName, onSuccess, profileId, trafficSource }: ExchangeContactModalProps) {
   const [showOptional, setShowOptional] = useState(false);
   const [loading, setLoading] = useState(false);
   const [accepted, setAccepted] = useState(false);
@@ -54,7 +55,7 @@ export function ExchangeContactModal({ isOpen, onClose, profileName, onSuccess, 
           phone: formData.phone,
           company: formData.company,
           message: formData.message,
-          source: "exchange"
+          source: trafficSource || "exchange"
         }),
       });
 

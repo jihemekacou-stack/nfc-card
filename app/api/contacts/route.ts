@@ -56,6 +56,15 @@ export async function POST(req: Request) {
       },
     });
 
+    await prisma.analyticsEvent.create({
+      data: {
+        profileId: ownerProfileId,
+        type: "CONTACT_ADDED",
+        source: source || "exchange",
+        metadata: { contactId: contact.id }
+      }
+    });
+
     return NextResponse.json(contact);
   } catch (error: unknown) {
     console.error("Error creating contact:", error);

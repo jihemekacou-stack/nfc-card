@@ -36,14 +36,14 @@ export default function StatsPage() {
   const contacts = metrics.contacts || 0;
 
   const clickRate = views ? Math.round((clicks / views) * 100) : 0;
-  const downloadRate = clicks ? Math.round((downloads / clicks) * 100) : 0;
-  const contactRate = clicks ? Math.round((contacts / clicks) * 100) : 0;
+  const downloadRate = views ? Math.round((downloads / views) * 100) : 0;
+  const contactRate = views ? Math.round((contacts / views) * 100) : 0;
 
   const funnelData = [
     { label: "Vues du profil", sub: "Toutes les personnes ayant ouvert votre page", color: "bg-blue-500", percent: "100%", width: "100%", detail: "" },
     { label: "Clics sur les liens", sub: "A cliqué sur une section ou un lien", color: "bg-purple-500", percent: `${clickRate}%`, width: `${Math.max(clickRate, 2)}%`, detail: `${clickRate}% des vues` },
-    { label: "Téléchargements (vCard)", sub: "A téléchargé votre carte de visite", color: "bg-orange-500", percent: `${downloadRate}%`, width: `${Math.max(downloadRate, 2)}%`, detail: `${downloadRate}% des clics` },
-    { label: "Nouveaux contacts", sub: "A rempli le formulaire d'échange", color: "bg-emerald-500", percent: `${contactRate}%`, width: `${Math.max(contactRate, 2)}%`, detail: `${contactRate}% des clics` },
+    { label: "Téléchargements (vCard)", sub: "A téléchargé votre carte de visite", color: "bg-orange-500", percent: `${downloadRate}%`, width: `${Math.max(downloadRate, 2)}%`, detail: `${downloadRate}% des vues` },
+    { label: "Nouveaux contacts", sub: "A rempli le formulaire d'échange", color: "bg-emerald-500", percent: `${contactRate}%`, width: `${Math.max(contactRate, 2)}%`, detail: `${contactRate}% des vues` },
   ];
 
   // Sources calculations
