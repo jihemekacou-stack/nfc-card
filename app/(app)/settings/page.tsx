@@ -2,8 +2,10 @@
 
 import { User, Zap, Lock, Eye, MonitorSmartphone } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useProfile } from "@/lib/contexts/ProfileContext";
 
 export default function SettingsPage() {
+  const { profile } = useProfile();
   const [isPublic, setIsPublic] = useState(true);
   const [autoOpenForm, setAutoOpenForm] = useState(false);
   const [hideBrand, setHideBrand] = useState(false);
@@ -36,7 +38,7 @@ export default function SettingsPage() {
               <span className="bg-gray-50 dark:bg-gray-800 px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 border-r border-gray-200 dark:border-gray-700">
                 {baseUrl}/
               </span>
-              <input type="text" defaultValue="jean-marc" className="w-full bg-white dark:bg-gray-950 px-4 py-3 text-sm text-gray-900 dark:text-white focus:outline-none" />
+              <input type="text" defaultValue={profile?.slug || ""} className="w-full bg-white dark:bg-gray-950 px-4 py-3 text-sm text-gray-900 dark:text-white focus:outline-none" />
             </div>
           </div>
 
