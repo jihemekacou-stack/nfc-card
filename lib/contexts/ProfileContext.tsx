@@ -2,7 +2,6 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode, useRef } from "react";
 import { useSession } from "next-auth/react";
-import { mockProfile } from "@/lib/data/mock";
 import { Profile } from "@/lib/types";
 
 export type ContactItem = {
@@ -32,7 +31,7 @@ const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 const defaultContacts: ContactItem[] = [];
 
-const emptyProfile: Profile = {
+const emptyProfile = {
   id: "",
   userId: "",
   slug: "",
@@ -43,9 +42,6 @@ const emptyProfile: Profile = {
   avatarUrl: "",
   coverUrl: "",
   logoUrl: "",
-  theme: "light",
-  color: "blue",
-  layout: "modern",
   publicEmail: "",
   publicPhone: "",
   publicWhatsApp: "",
@@ -55,7 +51,7 @@ const emptyProfile: Profile = {
   isPrimary: true,
   visibility: "public",
   plan: "free",
-};
+} as unknown as Profile;
 
 export function ProfileProvider({ 
   children, 
