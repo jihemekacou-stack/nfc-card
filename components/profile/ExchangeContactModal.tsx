@@ -59,14 +59,15 @@ export function ExchangeContactModal({ isOpen, onClose, profileName, onSuccess, 
       });
 
       if (!res.ok) {
-        throw new Error("Failed to save contact");
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to save contact");
       }
 
       onSuccess();
       onClose();
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert("Une erreur est survenue lors de l'enregistrement de vos informations.");
+      alert(`Une erreur est survenue : ${error.message || "Erreur inconnue"}`);
     } finally {
       setLoading(false);
     }
@@ -86,7 +87,7 @@ export function ExchangeContactModal({ isOpen, onClose, profileName, onSuccess, 
 
         <div className="p-6 overflow-y-auto max-h-[80vh] no-scrollbar">
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-            Swap contact details with {profileName}.
+            Échanger les coordonnées avec {profileName}.
           </p>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
