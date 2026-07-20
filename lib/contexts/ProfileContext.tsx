@@ -72,7 +72,7 @@ export function ProfileProvider({
     if (initialData) return;
 
     if (status === "authenticated") {
-      fetch("/api/profile/me")
+      fetch("/api/profile/me", { cache: "no-store" })
         .then((res) => res.json())
         .then((data) => {
           if (data.profile) {

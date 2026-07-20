@@ -154,7 +154,7 @@ export function ProfilePreview({
           <div className="relative">
             <div className={`h-[120px] w-[120px] rounded-full border-[4px] ${isDark ? 'border-[#1a1f36]' : 'border-white'} overflow-hidden shadow-sm bg-gray-200 dark:bg-gray-800 flex items-center justify-center`}>
               {avatar ? (
-                <img src={avatar} alt={displayName} className="h-full w-full object-cover" />
+                <img src={avatar} alt={displayName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
               ) : (
                 <User className="h-12 w-12 text-gray-400" />
               )}

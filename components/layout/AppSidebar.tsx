@@ -107,9 +107,9 @@ export function AppSidebar() {
             <div className="flex items-center gap-3 overflow-hidden">
               <div className="h-8 w-8 rounded-full bg-gray-800 flex-shrink-0 flex items-center justify-center text-xs font-bold text-white border border-gray-700 overflow-hidden">
                 {session?.user?.image ? (
-                  <img src={session.user.image} alt="Avatar" className="h-full w-full object-cover" />
+                  <img src={session.user.image} alt="Avatar" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                 ) : profile.avatarUrl ? (
-                  <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
+                  <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                 ) : (
                   (session?.user?.name || profile.displayName || 'U').charAt(0).toUpperCase()
                 )}

@@ -40,7 +40,7 @@ export function ProfileSummaryCard() {
       <div className="absolute -top-14 left-6 h-[116px] w-[116px] rounded-full border-[4px] border-white dark:border-gray-950 bg-gray-200 dark:bg-gray-800 shadow-sm overflow-hidden z-10">
         {avatar ? (
           /* eslint-disable-next-line @next/next/no-img-element */
-          <img src={avatar} alt="Avatar" className="h-full w-full object-cover" />
+          <img src={avatar} alt="Avatar" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
         ) : (
           <div className="h-full w-full flex items-center justify-center bg-gray-200 dark:bg-gray-800">
             <svg className="h-12 w-12 text-white dark:text-gray-500" fill="currentColor" viewBox="0 0 24 24">
