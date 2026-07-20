@@ -22,8 +22,7 @@ export async function GET(
       include: {
         sections: {
           orderBy: { sortOrder: 'asc' }
-        },
-        contacts: true,
+        }
       }
     });
 

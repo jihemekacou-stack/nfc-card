@@ -9,7 +9,7 @@ import { ProfilePreview } from "@/components/profile/ProfilePreview";
 import { ImageCropper } from "@/components/profile/ImageCropper";
 
 export default function EditProfilePage() {
-  const { profile: contextProfile, setProfile, contacts: contextContacts, setContacts } = useProfile();
+  const { profile: contextProfile, setProfile, contacts: contextContacts, setContacts, sections, saveProfileData } = useProfile();
   
   const [profile, setLocalProfile] = useState(contextProfile);
   const [contacts, setLocalContacts] = useState(contextContacts);
@@ -48,15 +48,20 @@ export default function EditProfilePage() {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsSaving(true);
     setProfile(profile);
     setContacts(contacts);
-    setTimeout(() => {
-      setIsSaving(false);
+    
+    const success = await saveProfileData(profile, contacts, sections);
+    
+    setIsSaving(false);
+    if (success) {
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
-    }, 1500);
+    } else {
+      alert("Erreur lors de la sauvegarde.");
+    }
   };
 
   const handleContactChange = (id: number, key: string, value: string) => {

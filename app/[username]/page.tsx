@@ -1,6 +1,7 @@
 import { ProfilePreview } from "@/components/profile/ProfilePreview";
 import { ProfileProvider } from "@/lib/contexts/ProfileContext";
 import { notFound } from "next/navigation";
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 // Assurez-vous d'utiliser une URL absolue pour le fetch côté serveur
 const getBaseUrl = () => {
@@ -29,12 +30,13 @@ export default async function PublicProfilePage({ params, searchParams }: { para
 
     const initialData = {
       profile: profile,
-      contacts: profile.contacts || [],
+      contacts: (Array.isArray(profile.contactItems) ? profile.contactItems : []),
       sections: profile.sections || []
     };
 
     return (
       <ProfileProvider initialData={initialData}>
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />}
         <main className="w-full min-h-screen bg-[#f4f6f8] flex items-center justify-center sm:p-4">
           <div className="w-full sm:max-w-[400px] h-screen sm:h-[800px] sm:rounded-[40px] sm:overflow-hidden sm:shadow-2xl relative bg-white sm:border-[8px] sm:border-black flex flex-col">
             {/* Top notch pour simulation sur Desktop */}

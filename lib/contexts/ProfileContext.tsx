@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { mockProfile } from "@/lib/data/mock";
 import { Profile } from "@/lib/types";
@@ -24,6 +24,8 @@ type ProfileContextType = {
   sections: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setSections: (sections: any[]) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  saveProfileData: (p: Profile, c: ContactItem[], s: any[]) => Promise<boolean>;
 };
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
@@ -54,16 +56,65 @@ export function ProfileProvider({
         .then((data) => {
           if (data.profile) {
             setProfile((prev) => ({ ...prev, ...data.profile }));
-            if (data.profile.contacts) setContacts(data.profile.contacts);
+            if (data.profile.contactItems && Array.isArray(data.profile.contactItems)) {
+              setContacts(data.profile.contactItems);
+            } else if (data.profile.contacts && data.profile.contacts.length > 0 && data.profile.contacts[0].type) {
+              // Backward compatibility just in case
+              setContacts(data.profile.contacts);
+            }
             if (data.profile.sections) setSections(data.profile.sections);
           }
+          // Set to false after loading from API to allow subsequent user edits to trigger save
+          setTimeout(() => { isFirstFetch.current = false; }, 500);
         })
         .catch((err) => console.error("Failed to load profile", err));
     }
   }, [status, initialData]);
 
+  const isInitialMount = useRef(true);
+  const isFirstFetch = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    // We want to avoid saving the sections right after they are fetched for the first time
+    if (isFirstFetch.current) {
+      return;
+    }
+    
+    if (status === "authenticated" && !initialData && profile.id) {
+      saveProfileData(profile, contacts, sections);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections]);
+
+  const saveProfileData = async (newProfile: Profile, newContacts: ContactItem[], newSections: any[]) => {
+    try {
+      const res = await fetch("/api/profile/me", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          profile: newProfile,
+          contacts: newContacts,
+          sections: newSections,
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to save profile");
+      const data = await res.json();
+      if (data.profile) {
+        setProfile((prev) => ({ ...prev, ...data.profile }));
+      }
+      return true;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
+  };
+
   return (
-    <ProfileContext.Provider value={{ profile, setProfile, contacts, setContacts, sections, setSections }}>
+    <ProfileContext.Provider value={{ profile, setProfile, contacts, setContacts, sections, setSections, saveProfileData }}>
       {children}
     </ProfileContext.Provider>
   );

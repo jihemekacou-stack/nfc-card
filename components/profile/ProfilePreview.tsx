@@ -9,6 +9,7 @@ import { useState, useEffect, useRef } from "react";
 import { socialNetworks } from "./SectionModals";
 import { ShareModal } from "./ShareModal";
 import { downloadVCF } from "@/lib/utils/vcf";
+import { sendGAEvent } from '@next/third-parties/google';
 
 export function ProfilePreview({ 
   previewTheme = 'light',
@@ -75,11 +76,13 @@ export function ProfilePreview({
     if (isPublicView && profile?.id && !hasTrackedView.current) {
       hasTrackedView.current = true;
       trackEvent('VIEW');
+      sendGAEvent('event', 'VIEW', { profileId: profile.id, source: source });
     }
   }, [isPublicView, profile?.id, source]);
 
   const handleVCardDownload = () => {
     trackEvent('VCARD_DOWNLOAD');
+    sendGAEvent('event', 'VCARD_DOWNLOAD', { profileId: profile?.id });
     downloadVCF(profile, displayContacts);
   };
 
@@ -236,7 +239,10 @@ export function ProfilePreview({
                 href={profile.linkedInUrl || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => trackEvent('LINK_CLICK', { network: 'LinkedIn' })}
+                onClick={() => {
+                  trackEvent('LINK_CLICK', { network: 'LinkedIn' });
+                  sendGAEvent('event', 'LINK_CLICK', { profileId: profile?.id, network: 'LinkedIn' });
+                }}
                 className="flex-1 flex items-center justify-center gap-2 border border-blue-100 bg-blue-50/50 h-[36px] rounded-[14px] hover:bg-blue-50 transition-colors"
               >
                 <div className="h-5 w-5 rounded-full bg-[#0077B5] flex items-center justify-center text-white font-semibold text-[10px]">in</div>
@@ -248,7 +254,10 @@ export function ProfilePreview({
                 href={`https://wa.me/${profile.whatsAppCountryCode?.replace('+','')}${profile.whatsAppNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => trackEvent('LINK_CLICK', { network: 'WhatsApp' })}
+                onClick={() => {
+                  trackEvent('LINK_CLICK', { network: 'WhatsApp' });
+                  sendGAEvent('event', 'LINK_CLICK', { profileId: profile?.id, network: 'WhatsApp' });
+                }}
                 className="flex-1 flex items-center justify-center gap-2 border border-green-100 bg-green-50/50 h-[36px] rounded-[14px] hover:bg-green-50 transition-colors"
               >
                 <div className="h-5 w-5 rounded-full bg-[#25D366] flex items-center justify-center text-white">
@@ -266,7 +275,10 @@ export function ProfilePreview({
             href={personalSite.url} 
             target="_blank" 
             rel="noopener noreferrer" 
-            onClick={() => trackEvent('LINK_CLICK', { url: personalSite.url, title: personalSite.title })}
+            onClick={() => {
+              trackEvent('LINK_CLICK', { url: personalSite.url, title: personalSite.title });
+              sendGAEvent('event', 'LINK_CLICK', { profileId: profile?.id, url: personalSite.url, title: personalSite.title });
+            }}
             className={`w-full flex items-center justify-center gap-2 border ${isDark ? 'border-gray-800 hover:bg-gray-800' : 'border-gray-200 hover:bg-gray-50'} h-[36px] rounded-[14px] mt-4 transition-colors shadow-sm`}
           >
             <Globe className="h-4 w-4" />
@@ -292,7 +304,10 @@ export function ProfilePreview({
                     href={item.url} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    onClick={() => trackEvent('LINK_CLICK', { url: item.url, title: item.title })}
+                    onClick={() => {
+                      trackEvent('LINK_CLICK', { url: item.url, title: item.title });
+                      sendGAEvent('event', 'LINK_CLICK', { profileId: profile?.id, url: item.url, title: item.title });
+                    }}
                     className="flex items-center gap-3 bg-white dark:bg-[#1a1f36] border border-gray-100 dark:border-gray-800 rounded-2xl py-[7px] px-3 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
                   >
                     <div className={`h-10 w-10 shrink-0 rounded-full flex items-center justify-center overflow-hidden ${network?.color || 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'}`}>

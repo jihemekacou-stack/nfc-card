@@ -79,6 +79,7 @@ model Profile {
   isPrimary           Boolean  @default(true)
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
+  contactItems        Json?    @default("[]")
 
   user                User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   sections            ProfileSection[]
