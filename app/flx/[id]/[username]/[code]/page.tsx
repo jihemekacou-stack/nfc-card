@@ -5,8 +5,9 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 
 import { prisma } from "@/lib/auth";
 
-export default async function PublicProfilePage({ params }: { params: { username: string } }) {
+export default async function PublicProfilePage({ params, searchParams }: { params: { username: string }, searchParams: { source?: string } }) {
   const { username } = params;
+  const source = searchParams?.source || 'nfc'; // default source to 'nfc' for [code] route
 
   try {
     const profile = await prisma.profile.findFirst({
@@ -55,7 +56,7 @@ export default async function PublicProfilePage({ params }: { params: { username
             <div className="hidden sm:block absolute top-0 inset-x-0 h-6 bg-black z-20 rounded-b-2xl mx-16"></div>
             
             <div className="flex-1 w-full overflow-y-auto no-scrollbar relative bg-white">
-              <ProfilePreview />
+              <ProfilePreview isPublicView={true} source={source} />
             </div>
           </div>
         </main>

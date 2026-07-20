@@ -23,8 +23,11 @@ export async function GET() {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
-    // Try Google Analytics if configured
-    if (process.env.GA_PROPERTY_ID && process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
+    // For real-time dashboard accuracy, we prioritize the local DB tracking.
+    // Google Analytics takes 24-48h to populate the Data API.
+    const useGA = false; // Set to true if you want to enforce GA usage
+
+    if (useGA && process.env.GA_PROPERTY_ID && process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
       try {
         const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
         const analyticsDataClient = new BetaAnalyticsDataClient({ credentials });
