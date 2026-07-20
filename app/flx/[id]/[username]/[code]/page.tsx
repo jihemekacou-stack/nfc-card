@@ -35,6 +35,7 @@ export default async function PublicProfilePage({ params }: { params: { username
       profile.displayName = profile.user?.name || "Nouvel Utilisateur";
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const initialData: any = {
       profile: profile,
       contacts: (Array.isArray(profile.contactItems) ? profile.contactItems : []),
