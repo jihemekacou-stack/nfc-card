@@ -21,6 +21,43 @@ export default function ContactsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editData, setEditData] = useState<Partial<Contact>>({});
+
+  const handleDeleteContact = async () => {
+    if (!selectedContact) return;
+    try {
+      const res = await fetch(`/api/contacts/${selectedContact.id}`, { method: 'DELETE' });
+      if (res.ok) {
+        setContacts(contacts.filter(c => c.id !== selectedContact.id));
+        setSelectedContact(null);
+        setIsDeleteModalOpen(false);
+      }
+    } catch (err) {
+      console.error("Delete failed", err);
+    }
+  };
+
+  const handleUpdateContact = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedContact) return;
+    try {
+      const res = await fetch(`/api/contacts/${selectedContact.id}`, { 
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editData)
+      });
+      if (res.ok) {
+        const { contact } = await res.json();
+        setContacts(contacts.map(c => c.id === contact.id ? contact : c));
+        setSelectedContact(contact);
+        setIsEditModalOpen(false);
+      }
+    } catch (err) {
+      console.error("Update failed", err);
+    }
+  };
 
   useEffect(() => {
     fetch("/api/contacts")
@@ -208,10 +245,19 @@ END:VCARD`;
                 </div>
               </div>
               <div className="flex gap-2">
-                <button className="flex h-8 w-8 items-center justify-center text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full transition-colors border border-gray-100 dark:border-gray-700">
+                <button 
+                  onClick={() => {
+                    setEditData(selectedContact);
+                    setIsEditModalOpen(true);
+                  }}
+                  className="flex h-8 w-8 items-center justify-center text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full transition-colors border border-gray-100 dark:border-gray-700"
+                >
                   <Edit2 className="w-3.5 h-3.5" />
                 </button>
-                <button className="flex h-8 w-8 items-center justify-center text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full transition-colors border border-gray-100 dark:border-gray-700">
+                <button 
+                  onClick={() => setIsDeleteModalOpen(true)}
+                  className="flex h-8 w-8 items-center justify-center text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full transition-colors border border-gray-100 dark:border-gray-700"
+                >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
                 <button onClick={() => setSelectedContact(null)} className="flex h-8 w-8 items-center justify-center text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full transition-colors border border-gray-100 dark:border-gray-700">
@@ -310,6 +356,82 @@ END:VCARD`;
         )}
 
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && selectedContact && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm" onClick={() => setIsDeleteModalOpen(false)}></div>
+          <div className="relative z-10 w-full max-w-sm rounded-[32px] bg-white dark:bg-gray-900 shadow-2xl p-6 text-center animate-in fade-in zoom-in-95 duration-200">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+              <Trash2 className="h-6 w-6 text-red-600 dark:text-red-400" />
+            </div>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Supprimer le contact ?</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+              Êtes-vous sûr de vouloir supprimer {selectedContact.firstName} {selectedContact.lastName} de vos contacts ? Cette action est irréversible.
+            </p>
+            <div className="flex gap-3">
+              <button onClick={() => setIsDeleteModalOpen(false)} className="flex-1 rounded-2xl bg-gray-100 dark:bg-gray-800 py-3 text-sm font-bold text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                Annuler
+              </button>
+              <button onClick={handleDeleteContact} className="flex-1 rounded-2xl bg-red-600 py-3 text-sm font-bold text-white hover:bg-red-700 transition-colors">
+                Supprimer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Contact Modal */}
+      {isEditModalOpen && selectedContact && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm" onClick={() => setIsEditModalOpen(false)}></div>
+          <div className="relative z-10 w-full max-w-md max-h-[90vh] overflow-y-auto rounded-[32px] bg-white dark:bg-gray-900 shadow-2xl p-6 animate-in fade-in zoom-in-95 duration-200 no-scrollbar">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Modifier le contact</h3>
+              <button onClick={() => setIsEditModalOpen(false)} className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <form onSubmit={handleUpdateContact} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-gray-500 uppercase">Prénom</label>
+                  <input type="text" required value={editData.firstName || ''} onChange={e => setEditData({...editData, firstName: e.target.value})} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors" />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-gray-500 uppercase">Nom</label>
+                  <input type="text" value={editData.lastName || ''} onChange={e => setEditData({...editData, lastName: e.target.value})} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors" />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-gray-500 uppercase">Email</label>
+                <input type="email" value={editData.email || ''} onChange={e => setEditData({...editData, email: e.target.value})} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-gray-500 uppercase">Téléphone</label>
+                <input type="tel" value={editData.phone || ''} onChange={e => setEditData({...editData, phone: e.target.value})} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-gray-500 uppercase">Entreprise</label>
+                <input type="text" value={editData.company || ''} onChange={e => setEditData({...editData, company: e.target.value})} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-gray-500 uppercase">Poste</label>
+                <input type="text" value={editData.jobTitle || ''} onChange={e => setEditData({...editData, jobTitle: e.target.value})} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-gray-500 uppercase">Message</label>
+                <textarea rows={3} value={editData.message || ''} onChange={e => setEditData({...editData, message: e.target.value})} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors resize-none" />
+              </div>
+              <div className="pt-2">
+                <button type="submit" className="w-full rounded-2xl bg-violet-600 py-3 text-sm font-bold text-white hover:bg-violet-700 transition-colors shadow-md">
+                  Enregistrer les modifications
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

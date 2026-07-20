@@ -83,7 +83,7 @@ export function ShareModal({ isOpen, onClose, profileUrl }: ShareModalProps) {
           <div className="bg-white p-3 rounded-3xl shadow-sm border border-gray-100 mt-1 mb-3">
             <QRCodeSVG 
               id="qr-code-svg"
-              value={profileUrl} 
+              value={`${profileUrl}?source=qr`} 
               size={150} 
               level="H"
               includeMargin={false}
