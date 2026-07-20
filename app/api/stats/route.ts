@@ -4,15 +4,16 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/auth';
 import { BetaAnalyticsDataClient } from '@google-analytics/data';
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const userId = (session?.user as { id: string })?.id;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const profile = await prisma.profile.findUnique({
-      where: { userId: session.user.id }
+      where: { userId }
     });
 
     if (!profile) {
@@ -55,7 +56,7 @@ export async function GET(request: Request) {
         let contacts = 0;
         let clicks = 0;
         let downloads = 0;
-        const sources: any = {};
+        const sources: Record<string, number> = {};
 
         response.rows?.forEach(row => {
           const eventName = row.dimensionValues?.[0]?.value;
@@ -98,7 +99,7 @@ export async function GET(request: Request) {
     const clicks = events.filter(e => e.type === 'LINK_CLICK').length;
     const downloads = events.filter(e => e.type === 'VCARD_DOWNLOAD').length;
 
-    const sources = events.reduce((acc: any, event) => {
+    const sources = events.reduce((acc: Record<string, number>, event) => {
       if (event.type === 'VIEW') {
         const source = event.source || 'direct';
         acc[source] = (acc[source] || 0) + 1;

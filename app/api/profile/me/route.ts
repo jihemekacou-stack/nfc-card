@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions, prisma } from '@/lib/auth';
+import { Prisma } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 
@@ -96,11 +97,11 @@ export async function PUT(req: Request) {
       if (sections.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await prisma.profileSection.createMany({
-          data: sections.map((s: any, index: number) => ({
+          data: sections.map((s: { type?: string; title?: string; isActive?: boolean; [key: string]: unknown }, index: number) => ({
             profileId: existingProfile.id,
             type: s.type || 'text',
             title: s.title || s.type || 'Section',
-            content: s,
+            content: s as Prisma.InputJsonValue,
             sortOrder: index,
             isActive: s.isActive !== undefined ? s.isActive : true
           }))

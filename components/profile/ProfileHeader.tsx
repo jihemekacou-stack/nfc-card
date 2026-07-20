@@ -18,8 +18,8 @@ export function ProfileHeader() {
   }, []);
 
   const profileUrl = cardCode 
-    ? `${baseUrl || 'https://flx.id'}/${profile?.slug || profile?.id}/${cardCode}`
-    : `${baseUrl || 'https://flx.id'}/${profile?.slug || profile?.id || 'jihemekacou'}`;
+    ? `${baseUrl || 'https://flx.id'}/FLX/${profile?.id}/${profile?.slug || profile?.displayName?.replace(/\\s+/g, '-').toLowerCase() || 'user'}/${cardCode}`
+    : `${baseUrl || 'https://flx.id'}/FLX/${profile?.id}/${profile?.slug || profile?.displayName?.replace(/\\s+/g, '-').toLowerCase() || 'user'}`;
 
   return (
     <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 py-6 md:py-8">

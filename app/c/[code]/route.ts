@@ -28,8 +28,9 @@ export async function GET(
       return NextResponse.redirect(new URL('/login?message=carte_non_activee', request.url));
     }
 
-    // Redirect to the profile URL (using the slug)
-    return NextResponse.redirect(new URL(`/${card.profile.slug}?source=nfc`, request.url));
+    // Redirect to the profile URL
+    const username = card.profile.slug || card.profile.displayName?.replace(/\\s+/g, '-').toLowerCase() || 'user';
+    return NextResponse.redirect(new URL(`/FLX/${card.profile.id}/${username}?source=nfc`, request.url));
   } catch (error) {
     console.error('Erreur lors de la redirection de la carte:', error);
     return new NextResponse('Erreur serveur', { status: 500 });
