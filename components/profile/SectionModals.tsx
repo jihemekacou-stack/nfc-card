@@ -22,7 +22,7 @@ export const socialNetworks = [
   { id: "facebook", name: "Facebook", imageSrc: "/facebook.png", color: "bg-[#1877F2] text-white", inputLabel: "URL", inputPlaceholder: "https://facebook.com/..." },
   { id: "twitter", name: "Twitter", imageSrc: "/twitter.png", color: "bg-black dark:bg-white dark:text-black text-white", inputLabel: "Nom d'utilisateur", inputPlaceholder: "Nom d'utilisateur" },
   { id: "linkedin", name: "LinkedIn", icon: IconLinkedIn, color: "bg-[#0A66C2] text-white", inputLabel: "URL", inputPlaceholder: "https://linkedin.com/in/..." },
-  { id: "tiktok", name: "Tiktok", imageSrc: "/tic-tac(2).png", color: "bg-black dark:bg-white dark:text-black text-white", inputLabel: "Nom d'utilisateur", inputPlaceholder: "Nom d'utilisateur" },
+  { id: "tiktok", name: "Tiktok", imageSrc: "/Tiktok.png", color: "bg-black dark:bg-white dark:text-black text-white", inputLabel: "Nom d'utilisateur", inputPlaceholder: "Nom d'utilisateur" },
   { id: "snapchat", name: "Snapchat", imageSrc: "/snapchat.png", color: "bg-[#FFFC00] text-black", inputLabel: "Nom d'utilisateur", inputPlaceholder: "Nom d'utilisateur" },
   { id: "youtube", name: "Youtube", imageSrc: "/youtube.png", color: "bg-[#FF0000] text-white", inputLabel: "URL", inputPlaceholder: "https://youtube.com/..." },
   { id: "whatsapp", name: "WhatsApp", icon: IconWhatsApp, color: "bg-[#25D366] text-white", inputLabel: "Contact", inputPlaceholder: "+225..." },
