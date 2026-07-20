@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, User, ChevronLeft, ChevronRight, Users, Filter, Download, Plus, Mail, Phone, Trash2, Edit2, DownloadCloud, X, Home, Briefcase, MoreVertical } from "lucide-react";
+import { Search, User, ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Users, Filter, Download, Plus, Mail, Phone, Trash2, Edit2, DownloadCloud, X, Home, Briefcase, MoreVertical } from "lucide-react";
 
 interface Contact {
   id: string;
@@ -13,6 +13,7 @@ interface Contact {
   jobTitle: string | null;
   message: string | null;
   source: string;
+  tags: string[];
   createdAt: string;
 }
 
@@ -24,6 +25,9 @@ export default function ContactsPage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editData, setEditData] = useState<Partial<Contact>>({});
+  const [showOptional, setShowOptional] = useState(false);
+  const [isAddingTag, setIsAddingTag] = useState(false);
+  const [newTag, setNewTag] = useState("");
 
   const handleDeleteContact = async () => {
     if (!selectedContact) return;
@@ -56,6 +60,50 @@ export default function ContactsPage() {
       }
     } catch (err) {
       console.error("Update failed", err);
+    }
+  };
+
+  const handleAddTag = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!selectedContact || !newTag.trim()) {
+      setIsAddingTag(false);
+      return;
+    }
+    const updatedTags = [...(selectedContact.tags || []), newTag.trim()];
+    try {
+      const res = await fetch(`/api/contacts/${selectedContact.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tags: updatedTags })
+      });
+      if (res.ok) {
+        const { contact } = await res.json();
+        setContacts(contacts.map(c => c.id === contact.id ? contact : c));
+        setSelectedContact(contact);
+        setNewTag("");
+        setIsAddingTag(false);
+      }
+    } catch (err) {
+      console.error("Tag update failed", err);
+    }
+  };
+
+  const handleRemoveTag = async (tagToRemove: string) => {
+    if (!selectedContact) return;
+    const updatedTags = (selectedContact.tags || []).filter(t => t !== tagToRemove);
+    try {
+      const res = await fetch(`/api/contacts/${selectedContact.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tags: updatedTags })
+      });
+      if (res.ok) {
+        const { contact } = await res.json();
+        setContacts(contacts.map(c => c.id === contact.id ? contact : c));
+        setSelectedContact(contact);
+      }
+    } catch (err) {
+      console.error("Tag remove failed", err);
     }
   };
 
@@ -247,7 +295,16 @@ END:VCARD`;
               <div className="flex gap-2">
                 <button 
                   onClick={() => {
-                    setEditData(selectedContact);
+                    setEditData({
+                      firstName: selectedContact.firstName,
+                      lastName: selectedContact.lastName,
+                      email: selectedContact.email || "",
+                      phone: selectedContact.phone || "",
+                      company: selectedContact.company || "",
+                      jobTitle: selectedContact.jobTitle || "",
+                      message: selectedContact.message || ""
+                    });
+                    setShowOptional(false);
                     setIsEditModalOpen(true);
                   }}
                   className="flex h-8 w-8 items-center justify-center text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full transition-colors border border-gray-100 dark:border-gray-700"
@@ -312,18 +369,43 @@ END:VCARD`;
 
             <div className="flex flex-col border-t border-gray-100 dark:border-gray-800 py-6">
               <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Tags</h4>
-              <div className="flex items-center gap-3">
-                <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                  <Plus className="w-3 h-3" /> Add tag
-                </button>
-                <span className="text-sm text-gray-500">No tags assigned</span>
+              <div className="flex flex-wrap items-center gap-2">
+                {selectedContact.tags && selectedContact.tags.length > 0 ? (
+                  selectedContact.tags.map((tag, idx) => (
+                    <span key={idx} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-100 dark:bg-violet-900/30 text-xs font-medium text-violet-700 dark:text-violet-400">
+                      {tag}
+                      <button onClick={() => handleRemoveTag(tag)} className="text-violet-500 hover:text-violet-800 dark:hover:text-violet-200">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  ))
+                ) : (
+                  !isAddingTag && <span className="text-sm text-gray-500">No tags assigned</span>
+                )}
+                
+                {isAddingTag ? (
+                  <form onSubmit={handleAddTag} className="flex items-center gap-2">
+                    <input 
+                      type="text" 
+                      autoFocus
+                      value={newTag}
+                      onChange={e => setNewTag(e.target.value)}
+                      onBlur={() => handleAddTag()}
+                      placeholder="Nouveau tag"
+                      className="rounded-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-3 py-1.5 text-xs text-gray-900 dark:text-white focus:outline-none focus:border-violet-500"
+                    />
+                  </form>
+                ) : (
+                  <button onClick={() => setIsAddingTag(true)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <Plus className="w-3 h-3" /> Add tag
+                  </button>
+                )}
               </div>
             </div>
 
             <div className="flex flex-col border-t border-gray-100 dark:border-gray-800 py-6">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Notes</h4>
-                <button className="text-sm font-semibold text-blue-600 hover:text-blue-700">+ Ajouter une note</button>
               </div>
               <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800">
                 <div className="flex items-start justify-between">
@@ -385,50 +467,96 @@ END:VCARD`;
       {isEditModalOpen && selectedContact && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm" onClick={() => setIsEditModalOpen(false)}></div>
-          <div className="relative z-10 w-full max-w-md max-h-[90vh] overflow-y-auto rounded-[32px] bg-white dark:bg-gray-900 shadow-2xl p-6 animate-in fade-in zoom-in-95 duration-200 no-scrollbar">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Modifier le contact</h3>
+          <div className="relative z-10 w-full max-w-[450px] max-h-[90vh] overflow-hidden rounded-[32px] bg-white dark:bg-gray-900 shadow-2xl flex flex-col animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between p-6 pb-4 border-b border-gray-100 dark:border-gray-800">
+              <h3 className="text-[19px] font-bold text-gray-900 dark:text-white">Modifier le contact</h3>
               <button onClick={() => setIsEditModalOpen(false)} className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <form onSubmit={handleUpdateContact} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-xs font-bold text-gray-500 uppercase">Prénom</label>
-                  <input type="text" required value={editData.firstName || ''} onChange={e => setEditData({...editData, firstName: e.target.value})} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors" />
+            <div className="p-6 overflow-y-auto max-h-[80vh] no-scrollbar">
+              <form onSubmit={handleUpdateContact} className="flex flex-col gap-4">
+                <div className="flex gap-4">
+                  <input 
+                    type="text" 
+                    required
+                    placeholder="Prénom*" 
+                    value={editData.firstName || ''}
+                    onChange={(e) => setEditData({...editData, firstName: e.target.value})}
+                    className="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 px-4 py-3.5 text-[15px] text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors"
+                  />
+                  <input 
+                    type="text" 
+                    placeholder="Nom" 
+                    value={editData.lastName || ''}
+                    onChange={(e) => setEditData({...editData, lastName: e.target.value})}
+                    className="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 px-4 py-3.5 text-[15px] text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors"
+                  />
                 </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-bold text-gray-500 uppercase">Nom</label>
-                  <input type="text" value={editData.lastName || ''} onChange={e => setEditData({...editData, lastName: e.target.value})} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors" />
+
+                <input 
+                  type="email" 
+                  placeholder="E-mail" 
+                  value={editData.email || ''}
+                  onChange={(e) => setEditData({...editData, email: e.target.value})}
+                  className="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 px-4 py-3.5 text-[15px] text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors"
+                />
+
+                <input 
+                  type="tel" 
+                  placeholder="Téléphone" 
+                  value={editData.phone || ''}
+                  onChange={(e) => setEditData({...editData, phone: e.target.value})}
+                  className="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 px-4 py-3.5 text-[15px] text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors"
+                />
+
+                <div className="flex flex-col gap-2 mt-2">
+                  <button 
+                    type="button" 
+                    onClick={() => setShowOptional(!showOptional)}
+                    className="flex items-center justify-between text-[15px] font-medium text-gray-700 dark:text-gray-300 py-2 px-1 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
+                  >
+                    <span>Informations complémentaires</span>
+                    {showOptional ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+                  </button>
+
+                  {showOptional && (
+                    <div className="flex flex-col gap-4 pt-2 animate-in slide-in-from-top-2 duration-200">
+                      <input 
+                        type="text" 
+                        placeholder="Poste" 
+                        value={editData.jobTitle || ''}
+                        onChange={(e) => setEditData({...editData, jobTitle: e.target.value})}
+                        className="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 px-4 py-3.5 text-[15px] text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors"
+                      />
+
+                      <input 
+                        type="text" 
+                        placeholder="Entreprise" 
+                        value={editData.company || ''}
+                        onChange={(e) => setEditData({...editData, company: e.target.value})}
+                        className="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 px-4 py-3.5 text-[15px] text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors"
+                      />
+
+                      <textarea 
+                        placeholder="Message ou note" 
+                        rows={3}
+                        value={editData.message || ''}
+                        onChange={(e) => setEditData({...editData, message: e.target.value})}
+                        className="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 px-4 py-3.5 text-[15px] text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors resize-none"
+                      />
+                    </div>
+                  )}
                 </div>
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-gray-500 uppercase">Email</label>
-                <input type="email" value={editData.email || ''} onChange={e => setEditData({...editData, email: e.target.value})} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors" />
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-gray-500 uppercase">Téléphone</label>
-                <input type="tel" value={editData.phone || ''} onChange={e => setEditData({...editData, phone: e.target.value})} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors" />
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-gray-500 uppercase">Entreprise</label>
-                <input type="text" value={editData.company || ''} onChange={e => setEditData({...editData, company: e.target.value})} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors" />
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-gray-500 uppercase">Poste</label>
-                <input type="text" value={editData.jobTitle || ''} onChange={e => setEditData({...editData, jobTitle: e.target.value})} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors" />
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-gray-500 uppercase">Message</label>
-                <textarea rows={3} value={editData.message || ''} onChange={e => setEditData({...editData, message: e.target.value})} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors resize-none" />
-              </div>
-              <div className="pt-2">
-                <button type="submit" className="w-full rounded-2xl bg-violet-600 py-3 text-sm font-bold text-white hover:bg-violet-700 transition-colors shadow-md">
+
+                <button 
+                  type="submit"
+                  className="w-full rounded-full bg-violet-600 py-4 text-[15px] font-bold text-white hover:bg-violet-700 transition-colors shadow-md mt-4"
+                >
                   Enregistrer les modifications
                 </button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       )}

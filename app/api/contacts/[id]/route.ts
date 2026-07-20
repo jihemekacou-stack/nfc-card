@@ -36,6 +36,7 @@ export async function PUT(
         company: body.company,
         jobTitle: body.jobTitle,
         message: body.message,
+        tags: body.tags !== undefined ? body.tags : undefined,
       }
     });
 

@@ -114,6 +114,7 @@ model Contact {
   jobTitle       String?
   message        String?  @db.Text
   source         String   @default("manual") // 'scan' | 'manual' | 'exchange' | 'import'
+  tags           String[] @default([])
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
