@@ -79,6 +79,7 @@ export function ProfilePreview({
       trackEvent('VIEW');
       sendGAEvent('event', 'VIEW', { profileId: profile.id, source: source });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPublicView, profile?.id, source]);
 
   const handleVCardDownload = () => {

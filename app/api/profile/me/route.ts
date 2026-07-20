@@ -96,6 +96,7 @@ export async function PUT(req: Request) {
       if (sections.length > 0) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await prisma.profileSection.createMany({
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           data: sections.map((s: any, index: number) => ({
             profileId: existingProfile.id,
             type: s.type || 'text',
