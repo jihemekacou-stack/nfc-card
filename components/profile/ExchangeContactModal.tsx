@@ -65,9 +65,9 @@ export function ExchangeContactModal({ isOpen, onClose, profileName, onSuccess, 
 
       onSuccess();
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      alert(`Une erreur est survenue : ${error.message || "Erreur inconnue"}`);
+      alert(`Une erreur est survenue : ${error instanceof Error ? error.message : "Erreur inconnue"}`);
     } finally {
       setLoading(false);
     }
@@ -169,7 +169,7 @@ export function ExchangeContactModal({ isOpen, onClose, profileName, onSuccess, 
                 </div>
               </div>
               <span className="text-[14px] text-gray-700 dark:text-gray-300 leading-snug">
-                J'accepte de partager mes informations et j'accepte la <a href="#" className="text-[#0066FF] hover:underline">Politique de confidentialité</a>
+                J&apos;accepte de partager mes informations et j&apos;accepte la <a href="#" className="text-[#0066FF] hover:underline">Politique de confidentialité</a>
               </span>
             </label>
 

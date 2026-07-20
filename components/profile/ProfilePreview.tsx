@@ -62,7 +62,6 @@ export function ProfilePreview({
   const hasTrackedView = useRef(false);
 
   // Use actual sections, no mock data
-  const displaySections = sections;
 
   const trackEvent = async (type: string, metadata: any = {}) => {
     if (!isPublicView || !profile?.id) return;
