@@ -22,12 +22,23 @@ export async function GET(
       include: {
         sections: {
           orderBy: { sortOrder: 'asc' }
+        },
+        contacts: true,
+        user: {
+          select: { email: true, name: true, image: true }
         }
       }
     });
 
     if (!profile) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+    }
+
+    // Appliquer les valeurs de fallback de l'utilisateur si le profil est incomplet
+    if (!profile.publicEmail && profile.user?.email) profile.publicEmail = profile.user.email;
+    if (!profile.avatarUrl && profile.user?.image) profile.avatarUrl = profile.user.image;
+    if (!profile.displayName || profile.displayName === "Nouvel Utilisateur") {
+      profile.displayName = profile.user?.name || "Nouvel Utilisateur";
     }
 
     return NextResponse.json({ profile });

@@ -1,10 +1,26 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { ArrowLeft, ExternalLink, Share2 } from "lucide-react";
 import Link from "next/link";
 import { ProfilePreview } from "@/components/profile/ProfilePreview";
+import { useProfile } from "@/lib/contexts/ProfileContext";
+import { ShareModal } from "@/components/profile/ShareModal";
 
 export default function ProfilePreviewPage() {
+  const [showShareModal, setShowShareModal] = useState(false);
+  const { profile } = useProfile();
+  
+  const [baseUrl, setBaseUrl] = useState('');
+  useEffect(() => {
+    setBaseUrl(window.location.origin);
+  }, []);
+
+  const cardCode = profile?.cards?.[0]?.code;
+  const pseudo = profile?.slug || 'profil';
+  const profileUrl = cardCode 
+    ? `${baseUrl || 'https://flexcardci.com'}/flx/${profile?.id}/${pseudo}/${cardCode}`
+    : `${baseUrl || 'https://flexcardci.com'}/flx/${profile?.id}/${pseudo}`;
 
   return (
     <div className="max-w-3xl mx-auto px-4 md:px-8 pb-12 w-full pt-6">
@@ -16,16 +32,30 @@ export default function ProfilePreviewPage() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Aperçu direct</h1>
         </div>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2 text-[14px] font-medium text-gray-900 dark:text-gray-100 shadow-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+          <button 
+            onClick={() => setShowShareModal(true)}
+            className="flex items-center gap-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2 text-[14px] font-medium text-gray-900 dark:text-gray-100 shadow-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
+          >
             <Share2 className="w-4 h-4" />
             <span className="hidden sm:inline">Partager</span>
           </button>
-          <button className="flex items-center gap-2 rounded-full bg-violet-600 px-5 py-2 text-[14px] font-medium text-white shadow-sm transition-colors hover:bg-violet-700">
+          <a 
+            href={profileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 rounded-full bg-violet-600 px-5 py-2 text-[14px] font-medium text-white shadow-sm transition-colors hover:bg-violet-700"
+          >
             <ExternalLink className="w-4 h-4" />
             <span className="hidden sm:inline">Ouvrir le lien</span>
-          </button>
+          </a>
         </div>
       </div>
+
+      <ShareModal 
+        isOpen={showShareModal} 
+        onClose={() => setShowShareModal(false)} 
+        profileUrl={profileUrl} 
+      />
 
       <div className="flex justify-center">
         {/* Mobile Mockup */}
