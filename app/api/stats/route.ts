@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/auth';
@@ -6,7 +6,7 @@ import { BetaAnalyticsDataClient } from '@google-analytics/data';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -94,9 +94,24 @@ export async function GET() {
       }
     }
 
+    const searchParams = request.nextUrl.searchParams;
+    const period = searchParams.get('period') || '30d';
+
+    const startDate = new Date();
+    if (period === '7d') {
+      startDate.setDate(startDate.getDate() - 7);
+    } else if (period === 'year') {
+      startDate.setFullYear(startDate.getFullYear() - 1);
+    } else {
+      startDate.setDate(startDate.getDate() - 30);
+    }
+
     // Fallback to local DB tracking
     const events = await prisma.analyticsEvent.findMany({
-      where: { profileId: profile.id },
+      where: { 
+        profileId: profile.id,
+        createdAt: { gte: startDate }
+      },
       orderBy: { createdAt: 'desc' }
     });
 
@@ -113,6 +128,42 @@ export async function GET() {
       return acc;
     }, {});
 
+    // Generate timeline
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const timelineMap: Record<string, any> = {};
+    const isYear = period === 'year';
+    const numSteps = isYear ? 12 : (period === '7d' ? 7 : 30);
+    
+    // Pre-fill timeline with 0s
+    for (let i = numSteps - 1; i >= 0; i--) {
+      const d = new Date();
+      if (isYear) {
+        d.setMonth(d.getMonth() - i);
+        const dateKey = d.toLocaleDateString('fr-FR', { month: 'short', year: '2-digit' });
+        timelineMap[dateKey] = { date: dateKey, views: 0, contacts: 0, clicks: 0, sortKey: d.getTime() };
+      } else {
+        d.setDate(d.getDate() - i);
+        const dateKey = d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' });
+        timelineMap[dateKey] = { date: dateKey, views: 0, contacts: 0, clicks: 0, sortKey: d.getTime() };
+      }
+    }
+
+    events.forEach(e => {
+      const d = new Date(e.createdAt);
+      const dateKey = isYear 
+        ? d.toLocaleDateString('fr-FR', { month: 'short', year: '2-digit' })
+        : d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' });
+        
+      if (timelineMap[dateKey]) {
+        if (e.type === 'VIEW') timelineMap[dateKey].views++;
+        if (e.type === 'CONTACT_ADDED') timelineMap[dateKey].contacts++;
+        if (e.type === 'LINK_CLICK') timelineMap[dateKey].clicks++;
+      }
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+    const timeline = Object.values(timelineMap).sort((a: any, b: any) => a.sortKey - b.sortKey).map(({ sortKey, ...rest }) => rest);
+
     return NextResponse.json({
       metrics: {
         views,
@@ -121,6 +172,7 @@ export async function GET() {
         downloads
       },
       sources,
+      timeline,
       events: events.slice(0, 50), // Return 50 most recent events for the table
       usingGA: false
     });

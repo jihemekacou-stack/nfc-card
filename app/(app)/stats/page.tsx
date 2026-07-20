@@ -8,9 +8,11 @@ export default function StatsPage() {
   const [stats, setStats] = useState<any>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(true);
+  const [period, setPeriod] = useState("30d");
 
   useEffect(() => {
-    fetch('/api/stats')
+    setLoading(true);
+    fetch('/api/stats?period=' + period)
       .then(res => res.json())
       .then(data => {
         setStats(data);
@@ -20,13 +22,81 @@ export default function StatsPage() {
         console.error('Failed to load stats:', err);
         setLoading(false);
       });
-  }, []);
+  }, [period]);
 
   const metrics = stats?.metrics || { views: 0, contacts: 0, clicks: 0, downloads: 0 };
   const sources = stats?.sources || {};
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const totalSources = Object.values(sources).reduce((a: any, b: any) => a + b, 0) || 1; // avoid division by zero
   const events = stats?.events || [];
+  const timeline = stats?.timeline || [];
+
+  // Funnel calculations
+  const views = metrics.views || 0;
+  const clicks = metrics.clicks || 0;
+  const downloads = metrics.downloads || 0;
+  const contacts = metrics.contacts || 0;
+
+  const clickRate = views ? Math.round((clicks / views) * 100) : 0;
+  const downloadRate = clicks ? Math.round((downloads / clicks) * 100) : 0;
+  const contactRate = clicks ? Math.round((contacts / clicks) * 100) : 0;
+
+  const funnelData = [
+    { label: "Vues du profil", sub: "Toutes les personnes ayant ouvert votre page", color: "bg-blue-500", percent: "100%", width: "100%", detail: "" },
+    { label: "Clics sur les liens", sub: "A cliqué sur une section ou un lien", color: "bg-purple-500", percent: `${clickRate}%`, width: `${Math.max(clickRate, 2)}%`, detail: `${clickRate}% des vues` },
+    { label: "Téléchargements (vCard)", sub: "A téléchargé votre carte de visite", color: "bg-orange-500", percent: `${downloadRate}%`, width: `${Math.max(downloadRate, 2)}%`, detail: `${downloadRate}% des clics` },
+    { label: "Nouveaux contacts", sub: "A rempli le formulaire d'échange", color: "bg-emerald-500", percent: `${contactRate}%`, width: `${Math.max(contactRate, 2)}%`, detail: `${contactRate}% des clics` },
+  ];
+
+  // Sources calculations
+  const nfc = sources.nfc || 0;
+  const qr = sources.qr || 0;
+  const direct = sources.direct || 0;
+  const wallet = sources.wallet || 0;
+  const totalSources = Math.max(nfc + qr + direct + wallet, 1); // avoid division by zero
+  
+  const sourcesData = {
+    nfcPct: (nfc / totalSources) * 100,
+    qrPct: (qr / totalSources) * 100,
+    directPct: (direct / totalSources) * 100,
+    walletPct: (wallet / totalSources) * 100,
+  };
+
+  // Timeline calculations
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const maxViews = Math.max(...timeline.map((t: any) => t.views), 1);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const maxContacts = Math.max(...timeline.map((t: any) => t.contacts), 1);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const maxClicks = Math.max(...timeline.map((t: any) => t.clicks), 1);
+  const maxVal = Math.max(maxViews, maxContacts, maxClicks, 5); // at least 5 for Y-axis scaling
+
+  const xStep = 100 / Math.max(timeline.length - 1, 1);
+  const renderPath = (key: 'views'|'contacts'|'clicks', color: string) => {
+    if (timeline.length === 0) return null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const points = timeline.map((t: any, i: number) => {
+      const x = i * xStep;
+      const y = 100 - (t[key] / maxVal) * 100;
+      return `${x},${y}`;
+    }).join(' L ');
+    return <path d={`M ${points}`} fill="none" stroke={color} strokeWidth="3" className="transition-all duration-1000 ease-out" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />;
+  };
+
+  const slices = [
+    { pct: sourcesData.nfcPct, color: "#3b82f6" },
+    { pct: sourcesData.qrPct, color: "#f97316" },
+    { pct: sourcesData.directPct, color: "#a855f7" },
+    { pct: sourcesData.walletPct, color: "#10b981" },
+  ];
+  let offset = 0;
+  const C = 2 * Math.PI * 16;
+  const pieSlices = slices.map(s => {
+    if (s.pct === 0) return null;
+    const dash = `${(s.pct / 100) * C} ${C}`;
+    const off = -offset;
+    offset += (s.pct / 100) * C;
+    return <circle key={s.color} cx="18" cy="18" r="16" fill="transparent" stroke={s.color} strokeWidth="3" strokeDasharray={dash} strokeDashoffset={off} className="transition-all duration-1000 ease-out" />;
+  });
+
   return (
     <div className="mx-auto w-full max-w-[1400px] px-4 py-8 sm:px-6 lg:px-8 flex flex-col gap-8">
       
@@ -37,10 +107,14 @@ export default function StatsPage() {
           <p className="text-sm text-gray-500 dark:text-gray-400">Analysez l&apos;impact de votre carte de visite numérique.</p>
         </div>
         <div className="flex items-center gap-3">
-          <select className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-2.5 text-sm font-bold text-gray-700 dark:text-gray-200 shadow-sm focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors">
-            <option>30 derniers jours</option>
-            <option>7 derniers jours</option>
-            <option>Cette année</option>
+          <select 
+            value={period}
+            onChange={(e) => setPeriod(e.target.value)}
+            className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-2.5 text-sm font-bold text-gray-700 dark:text-gray-200 shadow-sm focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors"
+          >
+            <option value="30d">30 derniers jours</option>
+            <option value="7d">7 derniers jours</option>
+            <option value="year">Cette année</option>
           </select>
         </div>
       </div>
@@ -86,27 +160,37 @@ export default function StatsPage() {
           <div className="flex-1 relative w-full h-[300px] min-h-[300px] flex items-end justify-between border-b border-gray-100 dark:border-gray-800 pb-8 mt-auto">
              {/* Y Axis labels & grid lines */}
              <div className="absolute left-0 top-0 w-full flex items-center">
-               <span className="text-[10px] font-bold text-gray-300 dark:text-gray-700 w-6">10</span>
+               <span className="text-[10px] font-bold text-gray-300 dark:text-gray-700 w-6">{maxVal}</span>
                <div className="flex-1 h-px bg-gray-100 dark:bg-gray-800/50 dashed"></div>
              </div>
              <div className="absolute left-0 top-1/2 w-full flex items-center -translate-y-1/2">
-               <span className="text-[10px] font-bold text-gray-300 dark:text-gray-700 w-6">5</span>
+               <span className="text-[10px] font-bold text-gray-300 dark:text-gray-700 w-6">{Math.round(maxVal/2)}</span>
                <div className="flex-1 h-px bg-gray-100 dark:bg-gray-800/50 dashed"></div>
              </div>
              <div className="absolute left-0 bottom-8 w-full flex items-center">
                <span className="text-[10px] font-bold text-gray-300 dark:text-gray-700 w-6">0</span>
              </div>
              
-             {/* Flat Line Graph representing 0 activity */}
-             <div className="absolute left-8 right-4 bottom-8 h-1 rounded-full bg-gray-200 dark:bg-gray-800"></div>
+             {/* Dynamic SVG Line Graph */}
+             <div className="absolute left-8 right-4 bottom-8 top-0">
+               <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 100">
+                 {renderPath('views', '#3b82f6')}
+                 {renderPath('contacts', '#10b981')}
+                 {renderPath('clicks', '#a855f7')}
+               </svg>
+             </div>
              
              {/* X Axis labels (Dates en FR) */}
              <div className="absolute bottom-0 left-8 right-4 flex justify-between text-[10px] font-bold text-gray-400">
-               <span>11 Juin</span>
-               <span>18 Juin</span>
-               <span>25 Juin</span>
-               <span>02 Juil</span>
-               <span>09 Juil</span>
+               {timeline.length > 0 ? (
+                 <>
+                   <span>{timeline[0]?.date}</span>
+                   {timeline.length > 2 && <span>{timeline[Math.floor(timeline.length / 2)]?.date}</span>}
+                   <span>{timeline[timeline.length - 1]?.date}</span>
+                 </>
+               ) : (
+                 <span>Aujourd&apos;hui</span>
+               )}
              </div>
           </div>
         </div>
@@ -121,12 +205,7 @@ export default function StatsPage() {
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">Comment les visiteurs interagissent avec votre profil.</p>
           
           <div className="space-y-7">
-            {[
-              { label: "Vues du profil", sub: "Toutes les personnes ayant ouvert votre page", color: "bg-blue-500", percent: "0%" },
-              { label: "Clics sur les liens", sub: "A cliqué sur une section ou un lien", color: "bg-purple-500", percent: "0%", detail: "0% des vues" },
-              { label: "Téléchargements (vCard)", sub: "A téléchargé votre carte de visite", color: "bg-orange-500", percent: "0%", detail: "0% des clics" },
-              { label: "Nouveaux contacts", sub: "A rempli le formulaire d'échange", color: "bg-emerald-500", percent: "0%", detail: "0% des clics" },
-            ].map((item, i) => (
+            {funnelData.map((item, i) => (
               <div key={i} className="relative">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-4">
@@ -144,7 +223,9 @@ export default function StatsPage() {
                   </div>
                 </div>
                 {/* Progress bar background (empty state) */}
-                <div className="h-2 w-full rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden"></div>
+                <div className="h-2 w-full rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                  <div className={`h-full ${item.color} rounded-full transition-all duration-1000 ease-out`} style={{ width: item.width }}></div>
+                </div>
               </div>
             ))}
           </div>
@@ -159,7 +240,8 @@ export default function StatsPage() {
             {/* Elegant Donut Chart SVG Placeholder */}
             <div className="relative h-40 w-40 shrink-0">
               <svg viewBox="0 0 36 36" className="h-full w-full rotate-[-90deg]">
-                <circle cx="18" cy="18" r="16" fill="transparent" stroke="currentColor" strokeWidth="3" className="text-gray-100 dark:text-gray-800" strokeDasharray="100 100" />
+                <circle cx="18" cy="18" r="16" fill="transparent" stroke="currentColor" strokeWidth="3" className="text-gray-100 dark:text-gray-800" />
+                {pieSlices}
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-3xl font-extrabold text-gray-900 dark:text-white">{metrics.views}</span>
