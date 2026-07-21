@@ -17,9 +17,11 @@ interface Contact {
   createdAt: string;
 }
 
+let cachedContacts: Contact[] | null = null;
+
 export default function ContactsPage() {
-  const [contacts, setContacts] = useState<Contact[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [contacts, setContacts] = useState<Contact[]>(cachedContacts || []);
+  const [loading, setLoading] = useState(!cachedContacts);
   const [search, setSearch] = useState("");
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -34,7 +36,9 @@ export default function ContactsPage() {
     try {
       const res = await fetch(`/api/contacts/${selectedContact.id}`, { method: 'DELETE' });
       if (res.ok) {
-        setContacts(contacts.filter(c => c.id !== selectedContact.id));
+        const newContacts = contacts.filter(c => c.id !== selectedContact.id);
+        setContacts(newContacts);
+        cachedContacts = newContacts;
         setSelectedContact(null);
         setIsDeleteModalOpen(false);
       }
@@ -54,7 +58,9 @@ export default function ContactsPage() {
       });
       if (res.ok) {
         const { contact } = await res.json();
-        setContacts(contacts.map(c => c.id === contact.id ? contact : c));
+        const newContacts = contacts.map(c => c.id === contact.id ? contact : c);
+        setContacts(newContacts);
+        cachedContacts = newContacts;
         setSelectedContact(contact);
         setIsEditModalOpen(false);
       }
@@ -78,7 +84,9 @@ export default function ContactsPage() {
       });
       if (res.ok) {
         const { contact } = await res.json();
-        setContacts(contacts.map(c => c.id === contact.id ? contact : c));
+        const newContacts = contacts.map(c => c.id === contact.id ? contact : c);
+        setContacts(newContacts);
+        cachedContacts = newContacts;
         setSelectedContact(contact);
         setNewTag("");
         setIsAddingTag(false);
@@ -99,7 +107,9 @@ export default function ContactsPage() {
       });
       if (res.ok) {
         const { contact } = await res.json();
-        setContacts(contacts.map(c => c.id === contact.id ? contact : c));
+        const newContacts = contacts.map(c => c.id === contact.id ? contact : c);
+        setContacts(newContacts);
+        cachedContacts = newContacts;
         setSelectedContact(contact);
       }
     } catch (err) {
@@ -113,6 +123,7 @@ export default function ContactsPage() {
       .then((data) => {
         if (data.contacts) {
           setContacts(data.contacts);
+          cachedContacts = data.contacts;
         }
         setLoading(false);
       })
@@ -222,11 +233,12 @@ END:VCARD`;
             </div>
           ) : filteredContacts.length > 0 ? (
             <div className="flex-1 overflow-y-auto no-scrollbar">
-              {filteredContacts.map((contact) => (
+              {filteredContacts.map((contact, i) => (
                 <div 
                   key={contact.id} 
                   onClick={() => setSelectedContact(contact)}
-                  className={`flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800 cursor-pointer transition-colors ${selectedContact?.id === contact.id ? 'bg-violet-50 dark:bg-violet-900/10' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'}`}
+                  className={`flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800 cursor-pointer transition-colors animate-in fade-in slide-in-from-bottom-2 duration-300 ${selectedContact?.id === contact.id ? 'bg-violet-50 dark:bg-violet-900/10' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'}`}
+                  style={{ animationDelay: `${Math.min(i * 50, 500)}ms`, animationFillMode: 'both' }}
                 >
                   <div className="flex items-center gap-4">
                     <div className="h-10 w-10 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-700 dark:text-violet-400 font-bold">

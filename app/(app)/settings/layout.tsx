@@ -7,9 +7,6 @@ import clsx from "clsx";
 
 const settingsNav = [
   { href: "/settings", label: "Profil", icon: User },
-  { href: "/settings/form", label: "Formulaire", icon: FileText },
-  { href: "/settings/domain", label: "Domaine", icon: Globe },
-  { href: "/settings/marketing", label: "Marketing", icon: Megaphone },
   { href: "/settings/account", label: "Compte", icon: Settings },
 ];
 

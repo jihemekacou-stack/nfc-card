@@ -5,11 +5,32 @@ import { useState, useEffect } from "react";
 import { useProfile } from "@/lib/contexts/ProfileContext";
 
 export default function SettingsPage() {
-  const { profile } = useProfile();
+  const { profile, updateProfile } = useProfile();
   const [isPublic, setIsPublic] = useState(true);
-  const [autoOpenForm, setAutoOpenForm] = useState(false);
   const [hideBrand, setHideBrand] = useState(false);
   const [baseUrl, setBaseUrl] = useState('flx.id');
+  const [slug, setSlug] = useState("");
+
+  useEffect(() => {
+    if (profile?.slug) setSlug(profile.slug);
+  }, [profile?.slug]);
+
+  const handleSlugUpdate = async (newSlug: string) => {
+    if (newSlug === profile?.slug) return;
+    try {
+      const res = await fetch('/api/profile/me', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profile: { slug: newSlug } })
+      });
+      if (res.ok) {
+        if (updateProfile) updateProfile({ slug: newSlug });
+      }
+    } catch (e) {
+      console.error(e);
+      setSlug(profile?.slug || "");
+    }
+  };
 
   useEffect(() => {
     setBaseUrl(window.location.host.replace('www.', ''));
@@ -38,7 +59,13 @@ export default function SettingsPage() {
               <span className="bg-gray-50 dark:bg-gray-800 px-4 py-3 text-sm font-medium text-gray-500 dark:text-gray-400 border-r border-gray-200 dark:border-gray-700">
                 {baseUrl}/
               </span>
-              <input type="text" defaultValue={profile?.slug || ""} className="w-full bg-white dark:bg-gray-950 px-4 py-3 text-sm text-gray-900 dark:text-white focus:outline-none" />
+              <input 
+                type="text" 
+                value={slug} 
+                onChange={(e) => setSlug(e.target.value)}
+                onBlur={(e) => handleSlugUpdate(e.target.value)}
+                className="w-full bg-white dark:bg-gray-950 px-4 py-3 text-sm text-gray-900 dark:text-white focus:outline-none" 
+              />
             </div>
           </div>
 
@@ -63,10 +90,6 @@ export default function SettingsPage() {
                   </svg>
                 </div>
               </div>
-              <button className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-yellow-100 to-yellow-50 dark:from-yellow-900/30 dark:to-yellow-900/10 border border-yellow-200 dark:border-yellow-700/50 px-4 py-3 text-xs font-bold text-yellow-700 dark:text-yellow-500 transition-transform hover:scale-105 active:scale-95 shadow-sm">
-                <Zap className="h-4 w-4 fill-yellow-500 text-yellow-500" />
-                Débloquer Pro
-              </button>
             </div>
           </div>
         </div>
@@ -94,21 +117,7 @@ export default function SettingsPage() {
             </button>
           </div>
 
-          <hr className="border-gray-100 dark:border-gray-800" />
-
-          {/* Auto open contact form */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-            <div className="flex-1">
-              <label className="text-sm font-bold text-gray-900 dark:text-gray-200 block mb-1">Ouverture automatique du formulaire</label>
-              <p className="text-xs text-gray-500 dark:text-gray-400 max-w-md">Afficher automatiquement la modale de collecte de contact lorsqu&apos;un visiteur ouvre votre profil pour la première fois.</p>
-            </div>
-            <button 
-              onClick={() => setAutoOpenForm(!autoOpenForm)}
-              className={`relative inline-flex h-8 w-14 shrink-0 items-center rounded-full transition-colors ${autoOpenForm ? 'bg-violet-600' : 'bg-gray-200 dark:bg-gray-700'}`}
-            >
-              <span className={`inline-block h-6 w-6 transform rounded-full bg-white shadow-md transition-transform ${autoOpenForm ? 'translate-x-7' : 'translate-x-1'}`} />
-            </button>
-          </div>
+          {/* End Public Profile */}
 
         </div>
       </section>

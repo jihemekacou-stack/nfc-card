@@ -149,7 +149,7 @@ export function ProfilePreview({
       </div>
 
       {/* Main Card */}
-      <div className={`${isDark ? 'bg-[#1a1f36] text-white' : 'bg-white text-gray-900'} pt-14 pb-8 px-6 -mt-12 relative z-10 w-full min-h-[400px] flex-1`}>
+      <div className={`${isDark ? 'bg-[#1a1f36] text-white' : 'bg-white text-gray-900'} pt-14 pb-8 px-6 -mt-12 relative z-10 w-full min-h-[400px] flex-1 animate-in fade-in slide-in-from-bottom-4 duration-500`}>
         
         {/* Avatar */}
         <div className="absolute -top-16 left-6 flex">
@@ -193,14 +193,14 @@ export function ProfilePreview({
         <div className="flex items-center gap-3 mt-4">
           <button 
             onClick={() => setIsExchangeModalOpen(true)}
-            className="flex-1 flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white h-[44px] px-4 rounded-xl font-semibold text-[15px] transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white h-[44px] px-4 rounded-xl font-semibold text-[15px] transition-all hover:scale-[1.02] active:scale-[0.98] shadow-sm hover:shadow-md"
           >
             <User className="h-5 w-5" />
             Échanger le contact
           </button>
           <button 
             onClick={handleVCardDownload}
-            className="h-[44px] w-[44px] shrink-0 flex items-center justify-center border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+            className="h-[44px] w-[44px] shrink-0 flex items-center justify-center border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:scale-[1.05] active:scale-[0.95]"
           >
             <Download className="h-5 w-5 text-gray-700 dark:text-gray-300" />
           </button>
@@ -293,7 +293,7 @@ export function ProfilePreview({
               trackEvent('LINK_CLICK', { url: personalSite.url, title: personalSite.title });
               sendGAEvent('event', 'LINK_CLICK', { profileId: profile?.id, url: personalSite.url, title: personalSite.title });
             }}
-            className={`w-full flex items-center justify-center gap-2 border ${isDark ? 'border-gray-800 hover:bg-gray-800' : 'border-gray-200 hover:bg-gray-50'} h-[36px] rounded-[14px] mt-4 transition-colors shadow-sm`}
+            className={`w-full flex items-center justify-center gap-2 border ${isDark ? 'border-gray-800 hover:bg-gray-800' : 'border-gray-200 hover:bg-gray-50'} h-[36px] rounded-[14px] mt-4 transition-all hover:scale-[1.01] active:scale-[0.99] shadow-sm`}
           >
             <Globe className="h-4 w-4" />
             <span className="font-semibold text-[15px]">{personalSite.title || 'Notre site'}</span>
@@ -322,7 +322,7 @@ export function ProfilePreview({
                       trackEvent('LINK_CLICK', { url: item.url, title: item.title });
                       sendGAEvent('event', 'LINK_CLICK', { profileId: profile?.id, url: item.url, title: item.title });
                     }}
-                    className="flex items-center gap-3 bg-white dark:bg-[#1a1f36] border border-gray-100 dark:border-gray-800 rounded-2xl py-[7px] px-3 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+                    className="flex items-center gap-3 bg-white dark:bg-[#1a1f36] border border-gray-100 dark:border-gray-800 rounded-2xl py-[7px] px-3 shadow-sm hover:shadow-md transition-all hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
                   >
                     <div className={`h-10 w-10 shrink-0 rounded-full flex items-center justify-center overflow-hidden ${network?.color || 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300'}`}>
                       {network?.imageSrc ? (
