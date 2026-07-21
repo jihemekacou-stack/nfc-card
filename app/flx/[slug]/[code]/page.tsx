@@ -5,16 +5,16 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 
 import { prisma } from "@/lib/auth";
 
-export default async function PublicProfilePage({ params, searchParams }: { params: { username: string }, searchParams: { [key: string]: string | string[] | undefined } }) {
-  const { username } = params;
-  const source = searchParams?.source as string | undefined;
+export default async function PublicProfilePage({ params, searchParams }: { params: { slug: string }, searchParams: { source?: string } }) {
+  const { slug } = params;
+  const source = searchParams?.source || 'nfc'; // default source to 'nfc' for [code] route
 
   try {
     const profile = await prisma.profile.findFirst({
       where: {
         OR: [
-          { slug: username },
-          { id: username }
+          { slug: slug },
+          { id: slug }
         ]
       },
       include: {

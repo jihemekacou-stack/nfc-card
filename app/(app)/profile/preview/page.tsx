@@ -19,8 +19,8 @@ export default function ProfilePreviewPage() {
   const cardCode = profile?.cards?.[0]?.code;
   const pseudo = profile?.slug || 'profil';
   const profileUrl = cardCode 
-    ? `${baseUrl || 'https://flexcardci.com'}/flx/${profile?.id}/${pseudo}/${cardCode}`
-    : `${baseUrl || 'https://flexcardci.com'}/flx/${profile?.id}/${pseudo}`;
+    ? `${baseUrl || 'https://flexcardci.com'}/flx/${pseudo}/${cardCode}`
+    : `${baseUrl || 'https://flexcardci.com'}/flx/${pseudo}`;
 
   return (
     <div className="max-w-3xl mx-auto px-4 md:px-8 pb-12 w-full pt-6">

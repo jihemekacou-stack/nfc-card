@@ -19,8 +19,8 @@ export function ProfileHeader() {
 
   const pseudo = profile?.slug || 'profil';
   const profileUrl = cardCode 
-    ? `${baseUrl || 'https://flexcardci.com'}/flx/${profile?.id}/${pseudo}/${cardCode}`
-    : `${baseUrl || 'https://flexcardci.com'}/flx/${profile?.id}/${pseudo}`;
+    ? `${baseUrl || 'https://flexcardci.com'}/flx/${pseudo}/${cardCode}`
+    : `${baseUrl || 'https://flexcardci.com'}/flx/${pseudo}`;
 
   return (
     <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 py-6 md:py-8">

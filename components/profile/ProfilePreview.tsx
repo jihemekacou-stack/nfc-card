@@ -55,8 +55,8 @@ export function ProfilePreview({
 
   const pseudo = profile?.slug || 'profil';
   const profileUrl = cardCode 
-    ? `${baseUrl || 'https://flexcardci.com'}/flx/${profile?.id}/${pseudo}/${cardCode}`
-    : `${baseUrl || 'https://flexcardci.com'}/flx/${profile?.id}/${pseudo}`;
+    ? `${baseUrl || 'https://flexcardci.com'}/flx/${pseudo}/${cardCode}`
+    : `${baseUrl || 'https://flexcardci.com'}/flx/${pseudo}`;
 
   // Analytics tracking
   const hasTrackedView = useRef(false);
