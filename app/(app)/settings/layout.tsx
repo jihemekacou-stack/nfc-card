@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { User, FileText, Globe, Megaphone, Settings } from "lucide-react";
+import { User, Settings } from "lucide-react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 

@@ -1,11 +1,11 @@
 "use client";
 
-import { User, Zap, Lock, Eye, MonitorSmartphone } from "lucide-react";
+import { User, Lock, Eye, MonitorSmartphone } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useProfile } from "@/lib/contexts/ProfileContext";
 
 export default function SettingsPage() {
-  const { profile, updateProfile } = useProfile();
+  const { profile, setProfile } = useProfile();
   const [isPublic, setIsPublic] = useState(true);
   const [hideBrand, setHideBrand] = useState(false);
   const [baseUrl, setBaseUrl] = useState('flx.id');
@@ -24,7 +24,7 @@ export default function SettingsPage() {
         body: JSON.stringify({ profile: { slug: newSlug } })
       });
       if (res.ok) {
-        if (updateProfile) updateProfile({ slug: newSlug });
+        if (setProfile) setProfile({ ...profile, slug: newSlug });
       }
     } catch (e) {
       console.error(e);
