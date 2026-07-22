@@ -3,46 +3,59 @@ import type { NextRequest } from 'next/server';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 
-// Initialize the Redis client and Ratelimit
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || '',
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || '',
-});
+// Safely initialize the Redis client and Ratelimit
+const url = process.env.UPSTASH_REDIS_REST_URL;
+const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
-// Create a new ratelimiter, that allows 20 requests per 10 seconds
-const ratelimit = new Ratelimit({
-  redis: redis,
-  limiter: Ratelimit.slidingWindow(20, '10 s'),
-  analytics: true,
-});
+let ratelimit: Ratelimit | null = null;
+
+if (url && token) {
+  const redis = new Redis({ url, token });
+  ratelimit = new Ratelimit({
+    redis: redis,
+    limiter: Ratelimit.slidingWindow(20, '10 s'),
+    analytics: true,
+  });
+}
 
 export async function middleware(request: NextRequest) {
-  const ip = request.ip || request.headers.get('x-forwarded-for') || '127.0.0.1';
-
-  // Apply rate limiting
-  const { success, limit, reset, remaining } = await ratelimit.limit(ip);
-
-  // Return a 429 Too Many Requests response if the limit is exceeded
-  if (!success) {
-    return new NextResponse('Too Many Requests / Trop de requêtes', {
-      status: 429,
-      headers: {
-        'X-RateLimit-Limit': limit.toString(),
-        'X-RateLimit-Remaining': remaining.toString(),
-        'X-RateLimit-Reset': reset.toString(),
-      },
-    });
+  // If env variables are missing, bypass rate limiting instead of crashing
+  if (!ratelimit) {
+    return NextResponse.next();
   }
 
-  // Continue to the requested route
-  const res = NextResponse.next();
-  
-  // Optionally, add rate limit info to headers on successful requests
-  res.headers.set('X-RateLimit-Limit', limit.toString());
-  res.headers.set('X-RateLimit-Remaining', remaining.toString());
-  res.headers.set('X-RateLimit-Reset', reset.toString());
+  try {
+    const ip = request.ip || request.headers.get('x-forwarded-for') || '127.0.0.1';
 
-  return res;
+    // Apply rate limiting
+    const { success, limit, reset, remaining } = await ratelimit.limit(ip);
+
+    // Return a 429 Too Many Requests response if the limit is exceeded
+    if (!success) {
+      return new NextResponse('Too Many Requests / Trop de requêtes', {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': limit.toString(),
+          'X-RateLimit-Remaining': remaining.toString(),
+          'X-RateLimit-Reset': reset.toString(),
+        },
+      });
+    }
+
+    // Continue to the requested route
+    const res = NextResponse.next();
+    
+    // Optionally, add rate limit info to headers on successful requests
+    res.headers.set('X-RateLimit-Limit', limit.toString());
+    res.headers.set('X-RateLimit-Remaining', remaining.toString());
+    res.headers.set('X-RateLimit-Reset', reset.toString());
+
+    return res;
+  } catch (error) {
+    console.error('Rate limiting error:', error);
+    // In case of any error with Redis, let the user access the site to avoid downtime
+    return NextResponse.next();
+  }
 }
 
 // Matcher to apply rate limiting to routes, avoiding static assets
