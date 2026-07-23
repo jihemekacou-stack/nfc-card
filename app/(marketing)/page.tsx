@@ -19,11 +19,11 @@ export default function Home() {
 
       {/* Features Section */}
       <section className="w-full max-w-7xl px-6 py-24 flex flex-col lg:flex-row items-stretch gap-16">
-        <div className="flex-1">
+        <div className="flex-1 text-center lg:text-left flex flex-col items-center lg:items-start">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-6">
-            Réinventez le partage de<br />coordonnées en un simple<br />toucher ou scan !
+            Réinventez le partage de<br className="hidden lg:block" />coordonnées en un simple<br className="hidden lg:block" />toucher ou scan !
           </h2>
-          <p className="text-gray-600 mb-12 text-sm leading-relaxed max-w-md">
+          <p className="text-gray-600 mb-12 text-sm leading-relaxed max-w-md mx-auto lg:mx-0">
             Grâce à la technologie Near Field Communication (NFC) la carte connectée est reliée à votre profil digital en ligne. Ce profil est modifiable gratuitement et sans limite sur une plateforme sécurisée et auditée régulièrement.
           </p>
           
@@ -78,7 +78,7 @@ export default function Home() {
               style={{ background: 'radial-gradient(circle, rgba(167, 139, 250, 0.4) 0%, rgba(109, 40, 217, 0.4) 40%, rgba(0,0,0,0) 70%)' }}
             />
             
-            <div className="relative h-64 w-80 flex items-center justify-center">
+            <div className="relative h-64 w-80 md:h-96 md:w-[480px] mb-12 flex items-center justify-center transition-all duration-300">
               <Image src="/Elite.png" alt="Flexcard Élite" fill className="object-contain scale-[1.25] hover:scale-[1.35] transition-transform duration-300 relative z-10" />
             </div>
           </div>
