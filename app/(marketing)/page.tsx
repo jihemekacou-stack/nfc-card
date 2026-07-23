@@ -71,8 +71,16 @@ export default function Home() {
         <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-violet-900 to-black pointer-events-none" />
         
         <div className="relative z-10 flex flex-col items-center">
-          <div className="relative h-64 w-80 mb-12 flex items-center justify-center">
-            <Image src="/Elite.png" alt="Flexcard Élite" fill className="object-contain scale-[1.25] hover:scale-[1.35] transition-transform duration-300" />
+          <div className="relative mb-12 flex items-center justify-center">
+            {/* Dégradé radial (deux tons de violet) derrière la carte */}
+            <div 
+              className="absolute inset-0 -m-24 rounded-full blur-[60px] opacity-70 pointer-events-none"
+              style={{ background: 'radial-gradient(circle, rgba(167, 139, 250, 0.4) 0%, rgba(109, 40, 217, 0.4) 40%, rgba(0,0,0,0) 70%)' }}
+            />
+            
+            <div className="relative h-64 w-80 flex items-center justify-center">
+              <Image src="/Elite.png" alt="Flexcard Élite" fill className="object-contain scale-[1.25] hover:scale-[1.35] transition-transform duration-300 relative z-10" />
+            </div>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
             Oubliez tout ce que vous connaissez<br />des partages de coordonnées
