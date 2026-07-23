@@ -47,7 +47,7 @@ export default function Home() {
             <div className="absolute right-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-pink-500/60 rounded-full blur-[100px] md:blur-[120px]" />
           </div>
 
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10 h-full w-full pointer-events-none" />
+
           
           {/* Main Mockup */}
           <div className="relative w-72 md:w-80 h-[550px] md:h-[650px] z-10 hover:scale-[1.02] transition-transform duration-700">
