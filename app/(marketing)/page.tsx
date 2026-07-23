@@ -41,16 +41,16 @@ export default function Home() {
         {/* Phone Mockup Section */}
         <div className="mt-16 w-full max-w-5xl relative flex justify-center">
           
-          {/* Blue & Pink Radial Gradients Behind Phone */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-[600px] pointer-events-none -z-10 flex items-center justify-center opacity-80">
-            <div className="absolute left-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-blue-500/40 rounded-full blur-[100px] md:blur-[120px]" />
-            <div className="absolute right-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-pink-500/40 rounded-full blur-[100px] md:blur-[120px]" />
+          {/* Violet & Pink Radial Gradients Behind Phone */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-[600px] pointer-events-none z-0 flex items-center justify-center opacity-100">
+            <div className="absolute left-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-violet-500/60 rounded-full blur-[100px] md:blur-[120px]" />
+            <div className="absolute right-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-pink-500/60 rounded-full blur-[100px] md:blur-[120px]" />
           </div>
 
           <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10 h-full w-full pointer-events-none" />
           
           {/* Main Mockup */}
-          <div className="relative w-72 md:w-80 h-[550px] md:h-[650px] z-0 hover:scale-[1.02] transition-transform duration-700">
+          <div className="relative w-72 md:w-80 h-[550px] md:h-[650px] z-10 hover:scale-[1.02] transition-transform duration-700">
             <Image src="/iphone.png" alt="iPhone Flexcard" fill className="object-cover object-top drop-shadow-2xl rounded-[3rem]" priority />
           </div>
 
