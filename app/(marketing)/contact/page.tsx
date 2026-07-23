@@ -1,5 +1,6 @@
 import { MessageCircle, Mail, FormInput } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { ContactForm } from "@/components/marketing/ContactForm";
 
 export default function ContactPage() {
