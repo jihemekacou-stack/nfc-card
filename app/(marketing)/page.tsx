@@ -70,19 +70,19 @@ export default function Home() {
         {/* Abstract shapes placeholder */}
         <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-violet-900 to-black pointer-events-none" />
         
-        <div className="relative z-10 flex flex-col items-center">
-          <div className="relative mb-12 flex items-center justify-center">
+        <div className="relative z-10 flex flex-col items-center gap-8">
+          <div className="relative flex items-center justify-center">
             {/* Dégradé radial (deux tons de violet) derrière la carte */}
             <div 
               className="absolute inset-0 -m-24 rounded-full blur-[60px] opacity-70 pointer-events-none"
               style={{ background: 'radial-gradient(circle, rgba(167, 139, 250, 0.4) 0%, rgba(109, 40, 217, 0.4) 40%, rgba(0,0,0,0) 70%)' }}
             />
             
-            <div className="relative h-64 w-80 md:h-80 md:w-[400px] mb-6 flex items-center justify-center transition-all duration-300">
+            <div className="relative h-64 w-80 md:h-80 md:w-[400px] flex items-center justify-center transition-all duration-300">
               <Image src="/Elite.png" alt="Flexcard Élite" fill className="object-contain scale-[1.25] hover:scale-[1.35] transition-transform duration-300 relative z-10" />
             </div>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-white">
             Oubliez tout ce que vous connaissez<br />des partages de coordonnées
           </h2>
           <Link href="/login" className="rounded-full bg-violet-600 px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700">
@@ -102,8 +102,13 @@ export default function Home() {
             <h3 className="text-3xl font-bold text-violet-900 text-left relative z-10 leading-tight">Une <span className="text-violet-600">carte</span><br/>à votre <span className="text-violet-600">image</span></h3>
             <div className="absolute right-0 bottom-0 text-gray-300 w-32 h-32 bg-white/50 rounded-tl-full flex items-center justify-center">[Img]</div>
           </div>
-          <div className="bg-indigo-50 rounded-3xl p-8 h-64 flex flex-col items-start justify-center relative overflow-hidden">
-            <h3 className="text-3xl font-bold text-indigo-900 text-left relative z-10 leading-tight">Une <span className="text-indigo-600">carte</span>, des<br/><span className="text-pink-500">possibilités<br/>infinies</span>.</h3>
+          <div className="bg-gray-50 border border-gray-100 rounded-3xl p-8 h-64 flex flex-col items-start justify-center relative overflow-hidden">
+            <h3 className="text-3xl font-bold text-gray-900 text-left relative z-10 leading-tight">
+              Une carte, des<br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-black via-violet-600 to-red-600">
+                possibilités<br/>infinies.
+              </span>
+            </h3>
           </div>
           <div className="bg-rose-50 rounded-3xl p-8 h-64 flex items-center justify-center relative overflow-hidden">
              <h3 className="text-2xl font-bold text-rose-900 z-10">Vos données<br/>sécurisées.</h3>
