@@ -81,8 +81,8 @@ export default function HowItWorksPage() {
             </p>
           </div>
           
-          <div className="flex-1 w-full h-[300px] bg-gray-100 rounded-3xl flex items-center justify-center text-gray-400 overflow-hidden">
-            [Image: Personne scannant une carte]
+          <div className="flex-1 w-full h-[300px] md:h-[400px] bg-gray-100 rounded-3xl flex items-center justify-center overflow-hidden relative hover:scale-[1.02] transition-transform duration-500">
+            <Image src="/compatibilite.png" alt="Compatibilité NFC" fill className="object-cover" />
           </div>
         </div>
       </section>

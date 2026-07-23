@@ -96,7 +96,7 @@ export default function Home() {
               Une carte<br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-red-600">à votre image</span>
             </h3>
-            <div className="absolute right-0 md:right-8 top-8 w-40 md:w-56 h-[150%]">
+            <div className="absolute -right-6 md:right-8 top-16 md:top-8 w-32 md:w-56 h-[150%]">
                <Image src="/iphone.png" alt="iPhone Flexcard" fill className="object-contain object-top" />
             </div>
           </div>
