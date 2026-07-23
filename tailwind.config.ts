@@ -19,6 +19,15 @@ const config: Config = {
           accent: "var(--sidebar-accent)",
         },
       },
+      keyframes: {
+        scroll: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(calc(-100% - 4rem))" },
+        },
+      },
+      animation: {
+        scroll: "scroll 20s linear infinite",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

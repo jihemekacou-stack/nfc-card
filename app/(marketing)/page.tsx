@@ -5,55 +5,105 @@ import { CheckCircle2 } from "lucide-react";
 export default function Home() {
   return (
     <div className="flex flex-col items-center">
-      
-      {/* Hero Section */}
-      <section className="w-full aspect-video relative">
-        <Image 
-          src="/Landing page.jpg" 
-          alt="Landing page" 
-          fill
-          className="object-cover" 
-          priority 
-        />
+      {/* Hero Section (SaaS Style) */}
+      <section className="w-full pt-32 pb-20 relative flex flex-col items-center text-center px-6 overflow-hidden">
+        {/* Background Gradients */}
+        <div className="absolute top-0 inset-x-0 h-[800px] pointer-events-none -z-10 flex justify-center overflow-hidden">
+          <div className="w-[1000px] h-[600px] bg-violet-200/40 rounded-full blur-[100px] translate-y-[-20%]" />
+        </div>
+
+        {/* Small Pill Tag */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-100/80 text-violet-700 font-semibold text-sm mb-8 shadow-sm border border-violet-200/50">
+          <span className="w-2 h-2 rounded-full bg-violet-600 animate-pulse" />
+          Meilleure carte de visite connectée
+        </div>
+
+        {/* Big Title */}
+        <h1 className="text-5xl md:text-7xl font-bold text-gray-900 leading-[1.1] max-w-4xl relative z-10">
+          Réinventez le partage de coordonnées avec
+          <br className="hidden md:block" />
+          <span className="inline-block bg-violet-600 text-white px-6 py-2 rounded-2xl mx-3 shadow-lg shadow-violet-500/30 transform -rotate-2 relative mt-4 md:mt-0">
+            <span className="relative z-10">Flexcard</span>
+            <div className="absolute -top-4 -left-6 w-12 h-12 bg-violet-100 rounded-full flex items-center justify-center shadow-md animate-bounce hidden md:flex">
+              <span className="text-violet-600 text-[10px] font-bold px-2 py-1 rounded bg-white shadow-sm rotate-12">Contact</span>
+            </div>
+            <div className="absolute -bottom-6 -right-8 w-16 h-8 bg-blue-100 rounded-full flex items-center justify-center shadow-md animate-pulse hidden md:flex">
+              <span className="text-blue-600 text-[10px] font-bold">Sans app</span>
+            </div>
+          </span>
+        </h1>
+
+        {/* Paragraph */}
+        <p className="mt-8 text-gray-600 text-lg md:text-xl max-w-2xl leading-relaxed">
+          Grâce à la technologie Near Field Communication (NFC) la carte connectée est reliée à votre profil digital en ligne. Simple, gratuit et illimité.
+        </p>
+
+        {/* Phone Mockup Section */}
+        <div className="mt-16 w-full max-w-5xl relative flex justify-center">
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10 h-full w-full" />
+          
+          {/* Main Mockup */}
+          <div className="relative w-72 md:w-80 h-[550px] md:h-[650px] z-0 hover:scale-[1.02] transition-transform duration-700">
+            <Image src="/iphone.png" alt="iPhone Flexcard" fill className="object-cover object-top drop-shadow-2xl rounded-[3rem]" priority />
+          </div>
+
+          {/* Floating UI Elements (Desktop Only) */}
+          <div className="hidden md:block absolute top-32 left-10 lg:left-20 bg-white/90 backdrop-blur-sm p-4 rounded-2xl shadow-xl border border-gray-100 w-56 animate-[bounce_4s_infinite] hover:scale-105 transition-transform z-20">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center">
+                <CheckCircle2 className="w-5 h-5 text-violet-600" />
+              </div>
+              <div>
+                <span className="block font-semibold text-gray-800 text-sm">Nouveau contact</span>
+                <span className="block text-xs text-gray-500">Ajouté avec succès</span>
+              </div>
+            </div>
+            <div className="flex justify-between items-center text-xs text-gray-500 mt-2">
+              <span>Aujourd'hui</span>
+              <span className="text-green-500 font-bold">+1 partagé</span>
+            </div>
+          </div>
+
+          <div className="hidden md:block absolute bottom-40 right-10 lg:right-20 bg-white/90 backdrop-blur-sm p-4 rounded-2xl shadow-xl border border-gray-100 w-64 animate-[bounce_5s_infinite] hover:scale-105 transition-transform z-20">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                <span className="text-blue-600 font-bold text-[10px]">NFC</span>
+              </div>
+              <div>
+                <span className="block font-semibold text-gray-800 text-sm">Scan rapide</span>
+                <span className="block text-xs text-gray-500">Prêt à transmettre</span>
+              </div>
+            </div>
+            <div className="w-full bg-gray-100 h-2 rounded-full mt-3 overflow-hidden">
+              <div className="bg-violet-500 h-full w-[80%] rounded-full" />
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* Features Section */}
-      <section className="w-full max-w-4xl mx-auto px-6 py-24 flex flex-col items-center gap-12 text-center">
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-snug">
-          Réinventez le partage de coordonnées<br className="hidden md:block" /> en un simple toucher ou scan !
-        </h2>
-        <p className="text-gray-600 text-base md:text-lg leading-relaxed max-w-2xl">
-          Grâce à la technologie Near Field Communication (NFC) la carte connectée est reliée à votre profil digital en ligne. Ce profil est modifiable gratuitement et sans limite sur une plateforme sécurisée et auditée régulièrement.
-        </p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full mt-4 text-left">
-          <div className="flex flex-col items-center md:items-start text-center md:text-left bg-gray-50 p-6 rounded-3xl">
-            <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
-              <CheckCircle2 className="h-5 w-5 text-violet-600" />
-              <h4 className="font-bold text-gray-900 text-base md:text-lg">Connectivité</h4>
-            </div>
-            <p className="text-sm text-gray-500">Vos informations partagées au contact d&apos;un smartphone.</p>
+      {/* Trusted By Section (Scrolling Logos) */}
+      <section className="w-full py-12 bg-white overflow-hidden border-b border-gray-50">
+        <p className="text-center text-gray-500 font-medium mb-10">Ils nous font confiance (+2000 entreprises)</p>
+        <div className="flex w-full overflow-hidden relative">
+          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
+          <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
+          
+          {/* Logo Track */}
+          <div className="flex animate-scroll whitespace-nowrap gap-16 items-center shrink-0 w-max px-8">
+            <span className="text-3xl font-bold text-gray-800 flex items-center gap-2"><div className="w-6 h-6 bg-black rounded-sm rotate-45"/>TechCorp</span>
+            <span className="text-3xl font-bold text-gray-800 flex items-center gap-2"><div className="w-6 h-6 border-4 border-black rounded-full"/>Innovate.io</span>
+            <span className="text-3xl font-bold text-gray-800 flex items-center gap-2"><div className="w-6 h-6 bg-black rounded-full"/>GlobalNet</span>
+            <span className="text-3xl font-bold text-gray-800 flex items-center gap-2"><div className="w-6 h-6 border-4 border-black rounded-tr-xl rounded-bl-xl"/>Nexus Group</span>
+            <span className="text-3xl font-bold text-gray-800 flex items-center gap-2"><div className="w-6 h-6 border-y-4 border-black"/>FutureVision</span>
+            <span className="text-3xl font-bold text-gray-800 flex items-center gap-2"><div className="w-6 h-6 bg-black rounded-tl-xl rounded-br-xl"/>AlphaLabs</span>
           </div>
-          <div className="flex flex-col items-center md:items-start text-center md:text-left bg-gray-50 p-6 rounded-3xl">
-            <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
-              <CheckCircle2 className="h-5 w-5 text-violet-600" />
-              <h4 className="font-bold text-gray-900 text-base md:text-lg">Compatibilité</h4>
-            </div>
-            <p className="text-sm text-gray-500">Transférez vos données sur iPhone et Android.</p>
-          </div>
-          <div className="flex flex-col items-center md:items-start text-center md:text-left bg-gray-50 p-6 rounded-3xl">
-            <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
-              <CheckCircle2 className="h-5 w-5 text-violet-600" />
-              <h4 className="font-bold text-gray-900 text-base md:text-lg">Longévité</h4>
-            </div>
-            <p className="text-sm text-gray-500">Votre carte utilisable pendant des années.</p>
-          </div>
-          <div className="flex flex-col items-center md:items-start text-center md:text-left bg-gray-50 p-6 rounded-3xl">
-            <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
-              <CheckCircle2 className="h-5 w-5 text-violet-600" />
-              <h4 className="font-bold text-gray-900 text-base md:text-lg">Personnalisé</h4>
-            </div>
-            <p className="text-sm text-gray-500">Toutes nos cartes sont personnalisables à souhait.</p>
+          <div className="flex animate-scroll whitespace-nowrap gap-16 items-center shrink-0 w-max px-8 ml-16">
+            <span className="text-3xl font-bold text-gray-800 flex items-center gap-2"><div className="w-6 h-6 bg-black rounded-sm rotate-45"/>TechCorp</span>
+            <span className="text-3xl font-bold text-gray-800 flex items-center gap-2"><div className="w-6 h-6 border-4 border-black rounded-full"/>Innovate.io</span>
+            <span className="text-3xl font-bold text-gray-800 flex items-center gap-2"><div className="w-6 h-6 bg-black rounded-full"/>GlobalNet</span>
+            <span className="text-3xl font-bold text-gray-800 flex items-center gap-2"><div className="w-6 h-6 border-4 border-black rounded-tr-xl rounded-bl-xl"/>Nexus Group</span>
+            <span className="text-3xl font-bold text-gray-800 flex items-center gap-2"><div className="w-6 h-6 border-y-4 border-black"/>FutureVision</span>
+            <span className="text-3xl font-bold text-gray-800 flex items-center gap-2"><div className="w-6 h-6 bg-black rounded-tl-xl rounded-br-xl"/>AlphaLabs</span>
           </div>
         </div>
       </section>
