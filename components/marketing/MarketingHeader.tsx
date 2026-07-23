@@ -11,7 +11,7 @@ export function MarketingHeader() {
 
   return (
     <div className="sticky top-4 z-50 px-4 md:px-6 w-full flex justify-center">
-      <header className="w-full max-w-4xl bg-white/95 backdrop-blur-md border border-gray-200 rounded-full shadow-sm transition-all duration-300">
+      <header className="w-full max-w-5xl bg-white/95 backdrop-blur-md border border-gray-200 rounded-full shadow-sm transition-all duration-300">
         <div className="flex h-16 items-center justify-between px-6 relative">
           
           {/* Left: Burger Menu Toggle (Mobile Only) */}
@@ -41,9 +41,12 @@ export function MarketingHeader() {
           </nav>
 
           {/* Actions Desktop */}
-          <div className="hidden md:flex items-center justify-end w-auto shrink-0">
-            <Link href="/login" className="bg-violet-600 text-white hover:bg-violet-700 transition-colors px-6 py-2 rounded-full font-medium text-sm shadow-sm">
-              S&apos;inscrire / Se connecter
+          <div className="hidden md:flex items-center justify-end w-auto shrink-0 gap-3">
+            <Link href="/login" className="text-gray-600 hover:text-gray-900 font-medium text-sm px-2">
+              Se connecter
+            </Link>
+            <Link href="/register" className="bg-violet-600 text-white hover:bg-violet-700 transition-colors px-5 py-2 rounded-full font-medium text-sm shadow-sm">
+              S&apos;inscrire
             </Link>
           </div>
 

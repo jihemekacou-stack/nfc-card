@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Phone, CreditCard } from "lucide-react";
 
 export default function Home() {
   return (
@@ -8,9 +8,7 @@ export default function Home() {
       {/* Hero Section (SaaS Style) */}
       <section className="w-full pt-32 pb-20 relative flex flex-col items-center text-center px-6 overflow-hidden">
         {/* Background Gradients */}
-        <div className="absolute top-0 inset-x-0 h-[800px] pointer-events-none -z-10 flex justify-center overflow-hidden">
-          <div className="w-[1000px] h-[600px] bg-violet-200/40 rounded-full blur-[100px] translate-y-[-20%]" />
-        </div>
+        <div className="absolute inset-0 pointer-events-none -z-10 bg-white" />
 
         {/* Small Pill Tag */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-100/80 text-violet-700 font-semibold text-sm mb-8 shadow-sm border border-violet-200/50">
@@ -24,8 +22,10 @@ export default function Home() {
           <br className="hidden md:block" />
           <span className="inline-block bg-violet-600 text-white px-6 py-2 rounded-2xl mx-3 shadow-lg shadow-violet-500/30 transform -rotate-2 relative mt-4 md:mt-0">
             <span className="relative z-10">Flexcard</span>
-            <div className="absolute -top-4 -left-6 w-12 h-12 bg-violet-100 rounded-full flex items-center justify-center shadow-md animate-bounce hidden md:flex">
-              <span className="text-violet-600 text-[10px] font-bold px-2 py-1 rounded bg-white shadow-sm rotate-12">Contact</span>
+            <div className="absolute -top-4 -left-6 w-auto px-4 h-10 bg-violet-200/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg animate-bounce hidden md:flex border border-violet-300/50">
+              <span className="text-violet-800 text-xs font-bold flex items-center gap-1.5">
+                <Phone className="w-3.5 h-3.5" /> Contact
+              </span>
             </div>
             <div className="absolute -bottom-6 -right-8 w-16 h-8 bg-blue-100 rounded-full flex items-center justify-center shadow-md animate-pulse hidden md:flex">
               <span className="text-blue-600 text-[10px] font-bold">Sans app</span>
@@ -40,7 +40,14 @@ export default function Home() {
 
         {/* Phone Mockup Section */}
         <div className="mt-16 w-full max-w-5xl relative flex justify-center">
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10 h-full w-full" />
+          
+          {/* Blue & Pink Radial Gradients Behind Phone */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-[600px] pointer-events-none -z-10 flex items-center justify-center opacity-80">
+            <div className="absolute left-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-blue-500/40 rounded-full blur-[100px] md:blur-[120px]" />
+            <div className="absolute right-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-pink-500/40 rounded-full blur-[100px] md:blur-[120px]" />
+          </div>
+
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10 h-full w-full pointer-events-none" />
           
           {/* Main Mockup */}
           <div className="relative w-72 md:w-80 h-[550px] md:h-[650px] z-0 hover:scale-[1.02] transition-transform duration-700">
@@ -67,7 +74,7 @@ export default function Home() {
           <div className="hidden md:block absolute bottom-40 right-10 lg:right-20 bg-white/90 backdrop-blur-sm p-4 rounded-2xl shadow-xl border border-gray-100 w-64 animate-[bounce_5s_infinite] hover:scale-105 transition-transform z-20">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                <span className="text-blue-600 font-bold text-[10px]">NFC</span>
+                <CreditCard className="w-5 h-5 text-blue-600" />
               </div>
               <div>
                 <span className="block font-semibold text-gray-800 text-sm">Scan rapide</span>
