@@ -66,7 +66,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex justify-between items-center text-xs text-gray-500 mt-2">
-              <span>Aujourd'hui</span>
+              <span>Aujourd&apos;hui</span>
               <span className="text-green-500 font-bold">+1 partagé</span>
             </div>
           </div>
