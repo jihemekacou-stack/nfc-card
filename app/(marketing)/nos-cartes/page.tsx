@@ -52,12 +52,12 @@ export default function OffersPage() {
             <p className="text-[11px] text-gray-500 leading-relaxed mb-8 h-12">
               D&apos;un simple toucher, partagez instantanément des informations de contact, des médias sociaux, des sites web, des fichiers, des vidéos et plus encore.
             </p>
-            <div className="relative w-full h-48 mb-6 overflow-hidden">
+            <div className="relative w-full h-48 mb-6">
               <Image 
                 src="/Elite.png" 
                 alt="Carte Élite" 
                 fill 
-                className="object-contain" 
+                className="object-contain scale-[1.35] drop-shadow-2xl hover:scale-[1.45] transition-transform duration-300" 
               />
             </div>
             <ul className="w-full space-y-4 mb-8 text-[12px] font-medium text-gray-700 flex-1">
@@ -86,12 +86,12 @@ export default function OffersPage() {
             <p className="text-[11px] text-gray-500 leading-relaxed mb-8 h-12">
               D&apos;un simple toucher, partagez instantanément des informations de contact, des médias sociaux, des sites web, des fichiers, des vidéos et plus encore.
             </p>
-            <div className="relative w-full h-48 mb-6 overflow-hidden">
+            <div className="relative w-full h-48 mb-6">
               <Image 
                 src="/Pro.png" 
                 alt="Carte Pro" 
                 fill 
-                className="object-contain" 
+                className="object-contain scale-[1.35] drop-shadow-2xl hover:scale-[1.45] transition-transform duration-300" 
               />
             </div>
             <ul className="w-full space-y-4 mb-8 text-[12px] font-medium text-gray-700 flex-1">
