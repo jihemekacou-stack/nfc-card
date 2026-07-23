@@ -1,14 +1,29 @@
-// Imports removed
+"use client";
+
+import Image from "next/image";
+import { useState } from "react";
+import { OrderModal } from "@/components/marketing/OrderModal";
 
 export default function OffersPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("");
+
+  const handleOrderClick = (planName: string) => {
+    setSelectedPlan(planName);
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="flex flex-col items-center pb-24">
       {/* Hero Banner */}
-      <div className="relative w-full h-80 bg-gray-200 flex items-center justify-center overflow-hidden">
+      <div className="relative w-full h-[400px] bg-gray-200 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gray-800/40 z-10" />
-        <div className="absolute inset-0 flex items-center justify-center text-gray-500 bg-gray-300">
-           [Image de fond: Personne avec téléphone]
-        </div>
+        <Image
+          src="/Nos cartes.png"
+          alt="Nos cartes"
+          fill
+          className="object-cover"
+        />
         <h1 className="relative z-20 text-4xl md:text-5xl font-bold text-white text-center">
           Découvrez nos<br />Offres
         </h1>
@@ -34,19 +49,27 @@ export default function OffersPage() {
             <div className="w-full text-center py-1 bg-gray-100 rounded-md text-[11px] font-bold text-gray-800 mb-6">
               Démarrage calme
             </div>
-            <p className="text-[11px] text-gray-500 leading-relaxed mb-6 h-12">
+            <p className="text-[11px] text-gray-500 leading-relaxed mb-8 h-12">
               D&apos;un simple toucher, partagez instantanément des informations de contact, des médias sociaux, des sites web, des fichiers, des vidéos et plus encore.
             </p>
-            <div className="w-full h-40 bg-black rounded-xl mb-6 border-2 border-gray-900 flex items-center justify-center text-gray-600 text-xs">
-              [Visuel Carte Élite]
+            <div className="relative w-full h-48 mb-6 overflow-hidden">
+              <Image 
+                src="/Elite.png" 
+                alt="Carte Élite" 
+                fill 
+                className="object-contain" 
+              />
             </div>
             <ul className="w-full space-y-4 mb-8 text-[12px] font-medium text-gray-700 flex-1">
               <li>Partage illimité</li>
               <li>Modification d&apos;informations à tout moment</li>
-              <li>Carte premium</li>
-              <li>Statistiques</li>
+              <li>Carte premium standard</li>
+              <li>Statistiques de base</li>
             </ul>
-            <button className="w-full rounded-full bg-violet-500 py-3 text-sm font-bold text-white hover:bg-violet-600 transition-colors">
+            <button 
+              onClick={() => handleOrderClick("ÉLITE")}
+              className="w-full rounded-full bg-violet-500 py-3 text-sm font-bold text-white hover:bg-violet-600 transition-colors"
+            >
               Commande votre carte
             </button>
           </div>
@@ -60,19 +83,28 @@ export default function OffersPage() {
             <div className="w-full text-center py-1 bg-gray-100 rounded-md text-[11px] font-bold text-gray-800 mb-6">
               Des connexions raffinées
             </div>
-            <p className="text-[11px] text-gray-500 leading-relaxed mb-6 h-12">
+            <p className="text-[11px] text-gray-500 leading-relaxed mb-8 h-12">
               D&apos;un simple toucher, partagez instantanément des informations de contact, des médias sociaux, des sites web, des fichiers, des vidéos et plus encore.
             </p>
-            <div className="w-full h-40 bg-yellow-400 rounded-xl mb-6 border-2 border-yellow-500 flex items-center justify-center text-yellow-900 text-xs overflow-hidden">
-               [Visuel Carte Pro]
+            <div className="relative w-full h-48 mb-6 overflow-hidden">
+              <Image 
+                src="/Pro.png" 
+                alt="Carte Pro" 
+                fill 
+                className="object-contain" 
+              />
             </div>
             <ul className="w-full space-y-4 mb-8 text-[12px] font-medium text-gray-700 flex-1">
               <li>Partage illimité</li>
               <li>Modification d&apos;informations à tout moment</li>
-              <li>Carte premium</li>
-              <li>Statistiques</li>
+              <li className="font-bold">Design de carte 100% personnalisé</li>
+              <li className="font-bold">Profils multiples (Pro et Perso)</li>
+              <li className="font-bold">Statistiques avancées</li>
             </ul>
-            <button className="w-full rounded-full bg-violet-500 py-3 text-sm font-bold text-white hover:bg-violet-600 transition-colors">
+            <button 
+              onClick={() => handleOrderClick("PRO")}
+              className="w-full rounded-full bg-violet-500 py-3 text-sm font-bold text-white hover:bg-violet-600 transition-colors"
+            >
               Commande votre carte
             </button>
           </div>
@@ -99,6 +131,12 @@ export default function OffersPage() {
 
         </div>
       </div>
+      
+      <OrderModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        planName={selectedPlan} 
+      />
     </div>
   );
 }

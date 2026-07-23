@@ -1,4 +1,5 @@
 import { FAQ } from "@/components/marketing/FAQ";
+import Image from "next/image";
 
 export default function HowItWorksPage() {
   return (
@@ -6,9 +7,12 @@ export default function HowItWorksPage() {
       {/* Hero Banner */}
       <div className="relative w-full h-[400px] bg-gray-200 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gray-800/40 z-10" />
-        <div className="absolute inset-0 flex items-center justify-center text-gray-500 bg-gray-300">
-           [Image de fond: Deux personnes avec téléphone]
-        </div>
+        <Image
+          src="/Comment ça marche.png"
+          alt="Comment ça marche"
+          fill
+          className="object-cover"
+        />
         <h1 className="relative z-20 text-4xl md:text-5xl font-bold text-white text-center">
           Comment ça marche ?
         </h1>

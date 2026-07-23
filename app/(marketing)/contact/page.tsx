@@ -1,6 +1,6 @@
-import { FAQ } from "@/components/marketing/FAQ";
 import { MessageCircle, Mail, FormInput } from "lucide-react";
 import Link from "next/link";
+import { ContactForm } from "@/components/marketing/ContactForm";
 
 export default function ContactPage() {
   return (
@@ -30,25 +30,7 @@ export default function ContactPage() {
             </div>
             
             {/* Form */}
-            <form className="flex flex-col gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
-                <input type="text" className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input type="email" className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                <textarea rows={4} className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"></textarea>
-              </div>
-              <div>
-                <button type="button" className="rounded-full bg-violet-500 px-8 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-600">
-                  Soumettre
-                </button>
-              </div>
-            </form>
+            <ContactForm />
           </div>
         </div>
         
@@ -60,23 +42,9 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* FAQ Banner */}
-      <div className="w-full h-64 bg-amber-700/80 relative flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-center opacity-30 text-white text-[15rem] font-bold">
-           ? ? ?
-        </div>
-        <h2 className="relative z-10 text-5xl font-bold text-white text-center">
-          Foire Aux Questions
-        </h2>
-      </div>
-
-      {/* FAQ Accordion and Assistance Cards */}
+      {/* Assistance Cards */}
       <section className="w-full bg-gray-50 py-24 px-6 flex flex-col items-center">
         <div className="w-full max-w-4xl">
-          <div className="mb-24">
-             <FAQ />
-          </div>
-          
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Assistance en ligne</h2>
             <p className="text-sm text-gray-600 max-w-lg mx-auto">
@@ -91,7 +59,7 @@ export default function ContactPage() {
               </div>
               <h3 className="font-bold text-gray-900 mb-4">Chat en ligne</h3>
               <p className="text-xs text-gray-500 mb-6 flex-1">Obtenez un support rapide et efficace via WhatsApp.</p>
-              <Link href="#" className="text-sm font-semibold text-gray-900 underline decoration-gray-300 underline-offset-4 hover:decoration-gray-900">
+              <Link href="https://wa.me/2250100640854" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-gray-900 underline decoration-gray-300 underline-offset-4 hover:decoration-gray-900">
                 Chat
               </Link>
             </div>
