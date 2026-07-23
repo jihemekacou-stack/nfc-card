@@ -22,7 +22,7 @@ export function MarketingHeader() {
         <div className="flex items-center gap-3">
           <Link 
             href="/login" 
-            className="rounded-full px-5 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:text-violet-600 hover:bg-gray-50"
+            className="hidden md:inline-flex rounded-full px-5 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:text-violet-600 hover:bg-gray-50"
           >
             Se connecter
           </Link>

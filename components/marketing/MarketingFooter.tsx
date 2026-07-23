@@ -18,7 +18,6 @@ export function MarketingFooter() {
           <Link href="/a-propos" className="hover:text-white transition-colors">A propos</Link>
           <Link href="/comment-ca-marche" className="hover:text-white transition-colors">Comment ça marche ?</Link>
           <Link href="/cgv" className="hover:text-white transition-colors">Politique de confidentialité CGV</Link>
-          <Link href="/faq" className="hover:text-white transition-colors">Foire aux questions</Link>
           <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
         </div>
 
@@ -28,7 +27,7 @@ export function MarketingFooter() {
             <Image src="/LogoB.png" alt="Flexcard" width={100} height={35} className="object-contain" />
           </Link>
           <p className="text-[10px] text-gray-500">
-            Copyright 2021-2023 Ahouy. Tous droits réservés
+            Copyright 2021-2023. Tous droits réservés
           </p>
         </div>
       </div>

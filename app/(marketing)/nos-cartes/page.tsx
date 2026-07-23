@@ -70,7 +70,7 @@ export default function OffersPage() {
               onClick={() => handleOrderClick("ÉLITE")}
               className="w-full rounded-full bg-violet-500 py-3 text-sm font-bold text-white hover:bg-violet-600 transition-colors"
             >
-              Commande votre carte
+              Commandez votre carte
             </button>
           </div>
 
@@ -105,7 +105,7 @@ export default function OffersPage() {
               onClick={() => handleOrderClick("PRO")}
               className="w-full rounded-full bg-violet-500 py-3 text-sm font-bold text-white hover:bg-violet-600 transition-colors"
             >
-              Commande votre carte
+              Commandez votre carte
             </button>
           </div>
 

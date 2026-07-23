@@ -51,7 +51,7 @@ export default function HowItWorksPage() {
 
           <div className="pt-8">
             <button className="rounded-full bg-violet-500 px-8 py-3 text-sm font-bold text-white shadow-sm hover:bg-violet-600 transition-colors">
-              Commande votre carte
+              Commandez votre carte
             </button>
           </div>
         </div>
