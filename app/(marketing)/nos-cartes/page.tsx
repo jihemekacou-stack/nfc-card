@@ -57,7 +57,7 @@ export default function OffersPage() {
                 src="/Elite.png" 
                 alt="Carte Élite" 
                 fill 
-                className="object-contain scale-[1.35] drop-shadow-2xl hover:scale-[1.45] transition-transform duration-300" 
+                className="object-contain scale-[1.35] mix-blend-multiply hover:scale-[1.45] transition-transform duration-300" 
               />
             </div>
             <ul className="w-full space-y-4 mb-8 text-[12px] font-medium text-gray-700 flex-1">
