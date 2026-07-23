@@ -66,11 +66,11 @@ export default function Home() {
       </section>
 
       {/* Black Section */}
-      <section className="w-full bg-black text-center py-12 md:py-20 px-6 relative overflow-hidden">
+      <section className="w-full bg-black text-center py-10 md:py-12 px-6 relative overflow-hidden">
         {/* Abstract shapes placeholder */}
         <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-violet-900 to-black pointer-events-none" />
         
-        <div className="relative z-10 flex flex-col items-center gap-8">
+        <div className="relative z-10 flex flex-col items-center gap-10 md:gap-12">
           <div className="relative flex items-center justify-center">
             {/* Dégradé radial (deux tons de violet) derrière la carte */}
             <div 
@@ -97,12 +97,12 @@ export default function Home() {
           Vous connecter,<br />de taaaannnt de façons
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-purple-50 rounded-3xl p-8 h-64 flex flex-col items-start justify-center relative overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="col-span-1 md:col-span-1 lg:col-span-1 bg-purple-50 rounded-3xl p-8 h-64 flex flex-col items-start justify-center relative overflow-hidden">
             <h3 className="text-3xl font-bold text-violet-900 text-left relative z-10 leading-tight">Une <span className="text-violet-600">carte</span><br/>à votre <span className="text-violet-600">image</span></h3>
             <div className="absolute right-0 bottom-0 text-gray-300 w-32 h-32 bg-white/50 rounded-tl-full flex items-center justify-center">[Img]</div>
           </div>
-          <div className="bg-gray-50 border border-gray-100 rounded-3xl p-8 h-64 flex flex-col items-start justify-center relative overflow-hidden">
+          <div className="col-span-1 md:col-span-1 lg:col-span-2 bg-gray-50 border border-gray-100 rounded-3xl p-8 h-64 flex flex-col items-start justify-center relative overflow-hidden">
             <h3 className="text-3xl font-bold text-gray-900 text-left relative z-10 leading-tight">
               Une carte, des<br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-black via-violet-600 to-red-600">
@@ -110,18 +110,16 @@ export default function Home() {
               </span>
             </h3>
           </div>
-          <div className="bg-rose-50 rounded-3xl p-8 h-64 flex items-center justify-center relative overflow-hidden">
+          <div className="col-span-1 md:col-span-1 lg:col-span-1 bg-rose-50 rounded-3xl p-8 h-64 flex items-center justify-center relative overflow-hidden">
              <h3 className="text-2xl font-bold text-rose-900 z-10">Vos données<br/>sécurisées.</h3>
           </div>
-          <div className="bg-gray-100 rounded-3xl p-4 h-64 flex flex-row items-center justify-center gap-4 relative overflow-hidden">
-             <div className="relative w-1/2 h-full">
-                <Image src="/vos-donnees-1.png" alt="Données sécurisées 1" fill className="object-contain drop-shadow-lg" />
-             </div>
-             <div className="relative w-1/2 h-full">
-                <Image src="/vos-donnees-2.png" alt="Données sécurisées 2" fill className="object-contain drop-shadow-lg" />
-             </div>
+          <div className="col-span-1 md:col-span-1 lg:col-span-1 bg-gray-100 rounded-3xl overflow-hidden h-64 relative">
+             <Image src="/vos-donnees-1.png" alt="Données sécurisées 1" fill className="object-cover" />
           </div>
-          <div className="col-span-1 md:col-span-2 bg-green-900 rounded-3xl p-12 h-80 flex items-center justify-center relative overflow-hidden">
+          <div className="col-span-1 md:col-span-2 lg:col-span-1 bg-gray-100 rounded-3xl overflow-hidden h-64 relative">
+             <Image src="/vos-donnees-2.png" alt="Données sécurisées 2" fill className="object-cover" />
+          </div>
+          <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-green-900 rounded-3xl p-12 h-80 flex items-center justify-center relative overflow-hidden">
              <Image src="/environnement.png" alt="Respect de l'environnement" fill className="object-cover opacity-80" />
              <div className="absolute inset-0 bg-black/20" />
              <h3 className="text-4xl md:text-5xl font-bold text-white z-10 relative text-center">Respect de l&apos;environnement</h3>
