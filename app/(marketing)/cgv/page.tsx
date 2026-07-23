@@ -13,7 +13,7 @@ export default function CGVPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-semibold mb-4">2. Nos Produits</h2>
         <p className="mb-4 text-gray-600 leading-relaxed">
-          Nous proposons des cartes NFC intelligentes (Elite, Pro) pour le partage de coordonnées. Les caractéristiques et prix de ces produits sont détaillés sur la page "Nos Cartes".
+          Nous proposons des cartes NFC intelligentes (Elite, Pro) pour le partage de coordonnées. Les caractéristiques et prix de ces produits sont détaillés sur la page &quot;Nos Cartes&quot;.
         </p>
       </section>
 
