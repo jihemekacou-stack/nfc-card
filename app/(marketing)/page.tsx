@@ -18,50 +18,43 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="w-full max-w-7xl px-6 py-24 flex flex-col lg:flex-row items-stretch gap-16">
-        <div className="flex-1 text-center lg:text-left flex flex-col items-center lg:items-start">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-snug mb-6">
-            Réinventez le partage de <br className="hidden lg:block" />coordonnées en un simple <br className="hidden lg:block" />toucher ou scan !
-          </h2>
-          <p className="text-gray-600 mb-12 text-sm leading-relaxed max-w-md mx-auto lg:mx-0">
-            Grâce à la technologie Near Field Communication (NFC) la carte connectée est reliée à votre profil digital en ligne. Ce profil est modifiable gratuitement et sans limite sur une plateforme sécurisée et auditée régulièrement.
-          </p>
-          
-          <div className="grid grid-cols-2 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <CheckCircle2 className="h-4 w-4 text-violet-600" />
-                <h4 className="font-bold text-gray-900 text-sm">Connectivité</h4>
-              </div>
-              <p className="text-xs text-gray-500">Vos informations partagées au contact d&apos;un smartphone.</p>
-            </div>
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <CheckCircle2 className="h-4 w-4 text-violet-600" />
-                <h4 className="font-bold text-gray-900 text-sm">Compatibilité</h4>
-              </div>
-              <p className="text-xs text-gray-500">Transférez vos données sur iPhone et Android.</p>
-            </div>
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <CheckCircle2 className="h-4 w-4 text-violet-600" />
-                <h4 className="font-bold text-gray-900 text-sm">Longévité</h4>
-                </div>
-              <p className="text-xs text-gray-500">Votre carte utilisable pendant des années.</p>
-            </div>
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <CheckCircle2 className="h-4 w-4 text-violet-600" />
-                <h4 className="font-bold text-gray-900 text-sm">Personnalisé</h4>
-              </div>
-              <p className="text-xs text-gray-500">Toutes nos cartes sont personnalisables à souhait.</p>
-            </div>
-          </div>
-        </div>
+      <section className="w-full max-w-4xl mx-auto px-6 py-24 flex flex-col items-center gap-12 text-center">
+        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-snug">
+          Réinventez le partage de coordonnées<br className="hidden md:block" /> en un simple toucher ou scan !
+        </h2>
+        <p className="text-gray-600 text-base md:text-lg leading-relaxed max-w-2xl">
+          Grâce à la technologie Near Field Communication (NFC) la carte connectée est reliée à votre profil digital en ligne. Ce profil est modifiable gratuitement et sans limite sur une plateforme sécurisée et auditée régulièrement.
+        </p>
         
-        {/* Image for Card and Phone */}
-        <div className="flex-1 relative w-full rounded-2xl flex items-center justify-center overflow-hidden">
-           <Image src="/imageC.png" alt="Carte Flexcard + Téléphone" fill className="object-contain" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full mt-4 text-left">
+          <div className="flex flex-col items-center md:items-start text-center md:text-left bg-gray-50 p-6 rounded-3xl">
+            <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
+              <CheckCircle2 className="h-5 w-5 text-violet-600" />
+              <h4 className="font-bold text-gray-900 text-base md:text-lg">Connectivité</h4>
+            </div>
+            <p className="text-sm text-gray-500">Vos informations partagées au contact d&apos;un smartphone.</p>
+          </div>
+          <div className="flex flex-col items-center md:items-start text-center md:text-left bg-gray-50 p-6 rounded-3xl">
+            <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
+              <CheckCircle2 className="h-5 w-5 text-violet-600" />
+              <h4 className="font-bold text-gray-900 text-base md:text-lg">Compatibilité</h4>
+            </div>
+            <p className="text-sm text-gray-500">Transférez vos données sur iPhone et Android.</p>
+          </div>
+          <div className="flex flex-col items-center md:items-start text-center md:text-left bg-gray-50 p-6 rounded-3xl">
+            <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
+              <CheckCircle2 className="h-5 w-5 text-violet-600" />
+              <h4 className="font-bold text-gray-900 text-base md:text-lg">Longévité</h4>
+            </div>
+            <p className="text-sm text-gray-500">Votre carte utilisable pendant des années.</p>
+          </div>
+          <div className="flex flex-col items-center md:items-start text-center md:text-left bg-gray-50 p-6 rounded-3xl">
+            <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
+              <CheckCircle2 className="h-5 w-5 text-violet-600" />
+              <h4 className="font-bold text-gray-900 text-base md:text-lg">Personnalisé</h4>
+            </div>
+            <p className="text-sm text-gray-500">Toutes nos cartes sont personnalisables à souhait.</p>
+          </div>
         </div>
       </section>
 
@@ -79,7 +72,7 @@ export default function Home() {
             />
             
             <div className="relative h-64 w-80 md:h-80 md:w-[400px] translate-y-6 flex items-center justify-center transition-all duration-300">
-              <Image src="/Elite.png" alt="Flexcard Élite" fill className="object-contain scale-[1.25] hover:scale-[1.35] transition-transform duration-300 relative z-10" />
+              <Image src="/Elite.png" alt="Flexcard Élite" fill className="object-contain scale-[1.38] hover:scale-[1.48] transition-transform duration-300 relative z-10" />
             </div>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-[40px]">
@@ -103,7 +96,7 @@ export default function Home() {
               Une carte<br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-red-600">à votre image</span>
             </h3>
-            <div className="absolute -right-8 md:-right-16 top-8 w-48 md:w-64 h-[150%]">
+            <div className="absolute right-0 md:right-8 top-8 w-40 md:w-56 h-[150%]">
                <Image src="/iphone.png" alt="iPhone Flexcard" fill className="object-contain object-top" />
             </div>
           </div>
