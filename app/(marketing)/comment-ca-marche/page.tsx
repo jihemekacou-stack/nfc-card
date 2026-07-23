@@ -8,7 +8,7 @@ export default function HowItWorksPage() {
       <div className="relative w-full h-[400px] bg-gray-200 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gray-800/40 z-10" />
         <Image
-          src="/Comment ça marche.png"
+          src="/comment-ca-marche-bg.png"
           alt="Comment ça marche"
           fill
           className="object-cover"
@@ -57,13 +57,8 @@ export default function HowItWorksPage() {
         </div>
 
         {/* Right Phone Mockup */}
-        <div className="flex-1 w-full max-w-sm">
-           <div className="h-[600px] w-full bg-gray-100 rounded-[3rem] border-8 border-gray-900 flex items-center justify-center text-gray-400 shadow-2xl relative overflow-hidden">
-             [Image: Mockup Téléphone avec Profil]
-             <div className="absolute top-10 -left-20 w-48 h-32 bg-black rounded-xl border border-gray-800 flex items-center justify-center text-white shadow-xl rotate-[-15deg]">
-               [Carte Flexcard]
-             </div>
-           </div>
+        <div className="flex-1 w-full max-w-sm relative h-[500px] md:h-[600px] hover:scale-[1.02] transition-transform duration-500">
+           <Image src="/imageC.png" alt="Mockup Téléphone" fill className="object-contain" />
         </div>
       </section>
 

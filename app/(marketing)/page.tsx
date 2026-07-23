@@ -91,7 +91,7 @@ export default function Home() {
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-          <div className="col-span-1 md:col-span-1 lg:col-span-4 bg-gray-50 rounded-3xl p-8 md:p-10 h-64 md:h-72 flex flex-col items-start justify-center relative overflow-hidden">
+          <div className="col-span-1 md:col-span-1 lg:col-span-4 bg-gray-50 rounded-3xl p-8 md:p-10 h-64 md:h-72 flex flex-col items-start justify-center relative overflow-hidden hover:scale-[1.02] hover:shadow-xl transition-all duration-300">
             <h3 className="text-3xl md:text-4xl font-bold text-indigo-950 text-left relative z-10 leading-tight">
               Une carte<br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-red-600">à votre image</span>
@@ -100,7 +100,7 @@ export default function Home() {
                <Image src="/iphone.png" alt="iPhone Flexcard" fill className="object-contain object-top" />
             </div>
           </div>
-          <div className="col-span-1 md:col-span-1 lg:col-span-2 bg-gray-50 rounded-3xl p-8 md:p-10 h-64 md:h-72 flex flex-col items-start justify-center relative overflow-hidden">
+          <div className="col-span-1 md:col-span-1 lg:col-span-2 bg-gray-50 rounded-3xl p-8 md:p-10 h-64 md:h-72 flex flex-col items-start justify-center relative overflow-hidden hover:scale-[1.02] hover:shadow-xl transition-all duration-300">
             <h3 className="text-3xl md:text-4xl font-bold text-indigo-950 text-left relative z-10 leading-tight">
               Une carte, des<br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-red-600">
@@ -108,17 +108,17 @@ export default function Home() {
               </span>
             </h3>
           </div>
-          <div className="col-span-1 md:col-span-1 lg:col-span-2 bg-rose-50 rounded-3xl p-8 h-64 flex items-center justify-center relative overflow-hidden">
+          <div className="col-span-1 md:col-span-1 lg:col-span-2 bg-rose-50 rounded-3xl p-8 h-64 flex items-center justify-center relative overflow-hidden hover:scale-[1.02] hover:shadow-xl transition-all duration-300">
              <h3 className="text-2xl font-bold text-rose-900 z-10">Vos données<br/>sécurisées.</h3>
           </div>
-          <div className="col-span-1 md:col-span-1 lg:col-span-2 bg-gray-100 rounded-3xl overflow-hidden h-64 relative">
-             <Image src="/vos-donnees-1.png" alt="Données sécurisées 1" fill className="object-cover" />
+          <div className="col-span-1 md:col-span-1 lg:col-span-2 bg-gray-100 rounded-3xl overflow-hidden h-64 relative group hover:scale-[1.02] hover:shadow-xl transition-all duration-300">
+             <Image src="/vos-donnees-1.png" alt="Données sécurisées 1" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
           </div>
-          <div className="col-span-1 md:col-span-2 lg:col-span-2 bg-gray-100 rounded-3xl overflow-hidden h-64 relative">
-             <Image src="/vos-donnees-2.png" alt="Données sécurisées 2" fill className="object-cover" />
+          <div className="col-span-1 md:col-span-2 lg:col-span-2 bg-gray-100 rounded-3xl overflow-hidden h-64 relative group hover:scale-[1.02] hover:shadow-xl transition-all duration-300">
+             <Image src="/vos-donnees-2.png" alt="Données sécurisées 2" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
           </div>
-          <div className="col-span-1 md:col-span-2 lg:col-span-6 bg-green-900 rounded-3xl p-12 h-80 flex items-center justify-center relative overflow-hidden">
-             <Image src="/environnement.png" alt="Respect de l'environnement" fill className="object-cover opacity-80" />
+          <div className="col-span-1 md:col-span-2 lg:col-span-6 bg-green-900 rounded-3xl p-12 h-80 flex items-center justify-center relative overflow-hidden group hover:scale-[1.01] hover:shadow-2xl transition-all duration-500">
+             <Image src="/environnement.png" alt="Respect de l'environnement" fill className="object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-700" />
              <div className="absolute inset-0 bg-black/20" />
              <h3 className="text-4xl md:text-5xl font-bold text-white z-10 relative text-center">Respect de l&apos;environnement</h3>
           </div>
