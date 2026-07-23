@@ -70,19 +70,19 @@ export default function Home() {
         {/* Abstract shapes placeholder */}
         <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-violet-900 to-black pointer-events-none" />
         
-        <div className="relative z-10 flex flex-col items-center gap-10 md:gap-12">
-          <div className="relative flex items-center justify-center">
+        <div className="relative z-10 flex flex-col items-center">
+          <div className="relative flex items-center justify-center mb-[40px]">
             {/* Dégradé radial (deux tons de violet) derrière la carte */}
             <div 
               className="absolute inset-0 -m-24 rounded-full blur-[60px] opacity-70 pointer-events-none"
               style={{ background: 'radial-gradient(circle, rgba(167, 139, 250, 0.4) 0%, rgba(109, 40, 217, 0.4) 40%, rgba(0,0,0,0) 70%)' }}
             />
             
-            <div className="relative h-64 w-80 md:h-80 md:w-[400px] flex items-center justify-center transition-all duration-300">
+            <div className="relative h-64 w-80 md:h-80 md:w-[400px] translate-y-6 flex items-center justify-center transition-all duration-300">
               <Image src="/Elite.png" alt="Flexcard Élite" fill className="object-contain scale-[1.25] hover:scale-[1.35] transition-transform duration-300 relative z-10" />
             </div>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-[40px]">
             Oubliez tout ce que vous connaissez<br />des partages de coordonnées
           </h2>
           <Link href="/login" className="rounded-full bg-violet-600 px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700">
@@ -93,21 +93,21 @@ export default function Home() {
 
       {/* Grid Features */}
       <section className="w-full max-w-5xl px-6 py-24 text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-12">
+        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-12">
           Vous connecter,<br />de taaaannnt de façons
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-          <div className="col-span-1 md:col-span-1 lg:col-span-3 bg-gray-50 rounded-3xl p-8 md:p-10 h-64 md:h-72 flex flex-col items-start justify-center relative overflow-hidden">
+          <div className="col-span-1 md:col-span-1 lg:col-span-4 bg-gray-50 rounded-3xl p-8 md:p-10 h-64 md:h-72 flex flex-col items-start justify-center relative overflow-hidden">
             <h3 className="text-3xl md:text-4xl font-bold text-indigo-950 text-left relative z-10 leading-tight">
               Une carte<br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-red-600">à votre image</span>
             </h3>
-            <div className="absolute -right-2 top-8 w-40 md:w-56 h-[150%]">
+            <div className="absolute -right-8 md:-right-16 top-8 w-48 md:w-64 h-[150%]">
                <Image src="/iphone.png" alt="iPhone Flexcard" fill className="object-contain object-top" />
             </div>
           </div>
-          <div className="col-span-1 md:col-span-1 lg:col-span-3 bg-gray-50 rounded-3xl p-8 md:p-10 h-64 md:h-72 flex flex-col items-start justify-center relative overflow-hidden">
+          <div className="col-span-1 md:col-span-1 lg:col-span-2 bg-gray-50 rounded-3xl p-8 md:p-10 h-64 md:h-72 flex flex-col items-start justify-center relative overflow-hidden">
             <h3 className="text-3xl md:text-4xl font-bold text-indigo-950 text-left relative z-10 leading-tight">
               Une carte, des<br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-red-600">
