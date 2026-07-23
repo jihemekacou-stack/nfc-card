@@ -31,7 +31,8 @@ export async function sendContactEmail(formData: FormData) {
     }
 
     return { success: true, data };
-  } catch (err: any) {
-    return { error: err.message || "Erreur inattendue lors de l'envoi de l'email." };
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Erreur inattendue lors de l'envoi de l'email.";
+    return { error: errorMessage };
   }
 }
