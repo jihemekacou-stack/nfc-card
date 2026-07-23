@@ -36,9 +36,7 @@ export default function ContactPage() {
         
         {/* Image */}
         <div className="flex-1 h-[600px] bg-gray-100 rounded-[2rem] overflow-hidden relative">
-           <div className="absolute inset-0 flex items-center justify-center text-gray-400 bg-gray-200">
-             [Image: Personne tapant sur son téléphone]
-           </div>
+           <Image src="/contact-img.png" alt="Contactez-nous" fill className="object-cover" />
         </div>
       </section>
 
