@@ -71,11 +71,11 @@ export default function Home() {
         <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-violet-900 to-black pointer-events-none" />
         
         <div className="relative z-10 flex flex-col items-center">
-          <div className="h-48 w-80 bg-gray-900/50 border border-gray-800 rounded-2xl mb-12 flex items-center justify-center text-gray-500 shadow-2xl backdrop-blur-sm">
-            [Image: Flexcard Sombre]
+          <div className="relative h-64 w-80 mb-12 flex items-center justify-center">
+            <Image src="/Elite.png" alt="Flexcard Élite" fill className="object-contain scale-[1.25] hover:scale-[1.35] transition-transform duration-300" />
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
-            Oubliez tout ce que vous connaissez<br />des partage de coordonnées
+            Oubliez tout ce que vous connaissez<br />des partages de coordonnées
           </h2>
           <Link href="/login" className="rounded-full bg-violet-600 px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700">
             Se connecter
